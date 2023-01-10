@@ -34,7 +34,7 @@ public struct MapMonster
 ////////////////////////////////////////////////////////////////////////////////
 public class CreateMap : MonoBehaviour
 {
-    public const float tileSize = 3.55f;
+    public const float tileSize = 2.4f;
 
     [SerializeField]
     private List<TextAsset> mapChunkData = new List<TextAsset>();

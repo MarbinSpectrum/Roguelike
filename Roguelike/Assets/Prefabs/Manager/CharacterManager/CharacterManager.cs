@@ -43,8 +43,5 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             character.buttonInput = ButtonInput.Up;
         else if (Input.GetKeyDown(KeyCode.DownArrow))
             character.buttonInput = ButtonInput.Down;
-        else if (Input.GetKeyDown(KeyCode.Space))
-            character.buttonInput = ButtonInput.Attack;
-
     }
 }

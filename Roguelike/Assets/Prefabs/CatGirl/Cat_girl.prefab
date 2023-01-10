@@ -119,6 +119,7 @@ MonoBehaviour:
   animator: {fileID: 1410027969481209122}
   spriteRenderer: {fileID: 1410027969481209132}
   moveSpeed: 0.2
+  attackRange: 3
 --- !u!1 &1410027969667967604
 GameObject:
   m_ObjectHideFlags: 0

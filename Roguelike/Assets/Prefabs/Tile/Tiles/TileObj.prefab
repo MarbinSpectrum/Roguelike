@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4927293199331455121}
   - component: {fileID: 4927293199331455127}
   - component: {fileID: 4927293199331455126}
+  - component: {fileID: 8318452522870970442}
   m_Layer: 0
   m_Name: TileObj
   m_TagString: Untagged
@@ -103,11 +104,11 @@ MonoBehaviour:
   m_SelfShadows: 1
   m_ApplyToSortingLayers: 00000000a7673d5c0bc9ffdd
   m_ShapePath:
-  - {x: -1.78, y: -1.78, z: 0}
-  - {x: 1.78, y: -1.78, z: 0}
-  - {x: 1.78, y: 1.78, z: 0}
-  - {x: -1.78, y: 1.78, z: 0}
-  m_ShapePathHash: -83288955
+  - {x: -1.2, y: -1.2, z: 0}
+  - {x: 1.2, y: -1.2, z: 0}
+  - {x: 1.2, y: 1.2, z: 0}
+  - {x: -1.2, y: 1.2, z: 0}
+  m_ShapePathHash: -121925371
   m_Mesh: {fileID: 0}
   m_InstanceId: 30048
 --- !u!114 &4927293199331455126
@@ -132,6 +133,34 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   IsTile: 1
+  tileType: 0
+  IsRun: 0
   tileSprite: {fileID: 4927293199331455121}
   tileManager: {fileID: -6416525219886379139, guid: f923c37c5ae46b54bbf74fa5141018f8, type: 3}
   shadowCaster2D: {fileID: 4927293199331455127}
+--- !u!61 &8318452522870970442
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4927293199331455122}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.4615386, y: 2.4615386}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.5555556, y: 3.5555556}
+  m_EdgeRadius: 0

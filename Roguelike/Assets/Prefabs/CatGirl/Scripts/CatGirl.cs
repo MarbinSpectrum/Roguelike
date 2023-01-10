@@ -16,6 +16,8 @@ public class CatGirl : MonoBehaviour
 
     [SerializeField]
     private float moveSpeed = 0.5f;
+    [SerializeField]
+    private int attackRange = 3;
 
     private ButtonInput ButtonInput = ButtonInput.None;
 
@@ -91,97 +93,68 @@ public class CatGirl : MonoBehaviour
 
         MonsterManager monsterManager = MonsterManager.instance;
 
+        int showDic = 0;
+        Vector2Int dic = Vector2Int.zero;
+        bool spriteFiipX = false;
+
         switch (buttonInput)
         {
             case ButtonInput.Left:
-                {
-                    spriteRenderer.flipX = true;
-                    animator.SetInteger("showDic", 0);
-                    if (CanMove(pos.x - 1, pos.y))
-                    {
-                        pos.x -= 1;
-
-                        StartCoroutine(monsterManager.RunMonster());
-                        animator.SetTrigger("run");
-                        Vector3 to = transform.position + new Vector3(-3.55f, 0, 0);
-                        yield return Action2D.MoveTo(transform, to, moveSpeed);
-                        animator.SetTrigger("idle");
-                    }
-                    else
-                    {
-                        StartCoroutine(monsterManager.RunMonster());
-                        animator.SetTrigger("idle");
-                    }
-                }
+                showDic = 0;
+                dic = new Vector2Int(-1, 0);
+                spriteFiipX = true;
                 break;
             case ButtonInput.Right:
-                {
-                    spriteRenderer.flipX = false;
-                    animator.SetInteger("showDic", 0);
-                    if (CanMove(pos.x + 1, pos.y))
-                    {
-                        pos.x += 1;
-
-                        StartCoroutine(monsterManager.RunMonster());
-                        animator.SetTrigger("run");
-                        Vector3 to = transform.position + new Vector3(3.55f, 0, 0);
-                        yield return Action2D.MoveTo(transform, to, moveSpeed);
-                        animator.SetTrigger("idle");
-                    }
-                    else
-                    {
-                        StartCoroutine(monsterManager.RunMonster());
-                        animator.SetTrigger("idle");
-                    }
-                }
+                showDic = 0;
+                dic = new Vector2Int(+1, 0);
+                spriteFiipX = false;
                 break;
             case ButtonInput.Up:
-                {
-                    animator.SetInteger("showDic", 1);
-                    if (CanMove(pos.x, pos.y + 1))
-                    {
-                        pos.y += 1;
-
-                        StartCoroutine(monsterManager.RunMonster());
-                        animator.SetTrigger("run");
-                        Vector3 to = transform.position + new Vector3(0, 3.55f, 0);
-                        yield return Action2D.MoveTo(transform, to, moveSpeed);
-                        animator.SetTrigger("idle");
-                    }
-                    else
-                    {
-                        StartCoroutine(monsterManager.RunMonster());
-                        animator.SetTrigger("idle");
-                    }
-                }
+                showDic = 1;
+                dic = new Vector2Int(0, +1);
+                spriteFiipX = false;
                 break;
             case ButtonInput.Down:
-                {
-                    animator.SetInteger("showDic", 2);
-                    if (CanMove(pos.x, pos.y - 1))
-                    {
-                        pos.y -= 1;
-
-                        StartCoroutine(monsterManager.RunMonster());
-                        animator.SetTrigger("run");
-                        Vector3 to = transform.position + new Vector3(0, -3.55f, 0);
-                        yield return Action2D.MoveTo(transform, to, moveSpeed);
-                        animator.SetTrigger("idle");
-                    }
-                    else
-                    {
-                        StartCoroutine(monsterManager.RunMonster());
-                        animator.SetTrigger("idle");
-                    }
-                }
+                showDic = 2;
+                dic = new Vector2Int(0, -1);
+                spriteFiipX = false;
                 break;
-            case ButtonInput.Attack:
-                {
-                    animator.SetTrigger("attack");
- 
+        }
 
-                }
-                break;
+        animator.SetInteger("showDic", showDic);
+        MonsterObj targetMonster = null;
+        for (int i = 1; i <= attackRange; i++)
+            if (targetMonster == null)
+                targetMonster = monsterManager.IsMonster(pos.x + dic.x * i, pos.y + dic.y * i);
+        if (targetMonster != null)
+        {
+            float gameDis = Vector2.Distance(pos, targetMonster.pos);
+            float duration = 0.1f * gameDis;
+
+            BulletManager bulletManager = BulletManager.instance;
+            bulletManager.FireBullet(pos, targetMonster.pos, duration);
+
+            spriteRenderer.flipX = spriteFiipX;
+            animator.SetTrigger("attack");
+
+            yield return new WaitForSeconds(duration);
+
+            StartCoroutine(monsterManager.RunMonster());
+        }
+        else if (CanMove(pos.x + dic.x, pos.y + dic.y))
+        {
+            pos.x += dic.x;
+            pos.y += dic.y;
+            spriteRenderer.flipX = spriteFiipX;
+            StartCoroutine(monsterManager.RunMonster());
+            animator.SetTrigger("run");
+            Vector3 to = transform.position + new Vector3(dic.x * CreateMap.tileSize, dic.y * CreateMap.tileSize, 0);
+            yield return Action2D.MoveTo(transform, to, moveSpeed);
+            animator.SetTrigger("idle");
+        }
+        else
+        {
+            animator.SetTrigger("idle");
         }
 
         //해당 위치의 블록을 활성화한다.

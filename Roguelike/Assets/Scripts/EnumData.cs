@@ -55,6 +55,5 @@ public enum ButtonInput
     Left,
     Right,
     Up,
-    Down,
-    Attack
+    Down
 }

@@ -8,52 +8,107 @@ using MyLib;
 ////////////////////////////////////////////////////////////////////////////////
 public class MonsterManager : FieldObjectSingleton<MonsterManager>
 {
-    private List<MonsterObj> fieldMonster = new List<MonsterObj>();
-    private HashSet<Vector2Int> isMonseter = new HashSet<Vector2Int>();
-    private Dictionary<Obj, MonsterObj> monsterObjs;
+    private List<MonsterObj> fieldMonster = new List<MonsterObj>();     //필드의 몬스터 목록
+    private HashSet<Vector2Int> moveToPos = new HashSet<Vector2Int>();  //이미 이동하기로 예정된 위치
+    private Dictionary<Obj, MonsterObj> monsterObjs;                    
     private Dictionary<Obj, Sprite> previewSprites;
-    public List<Vector2Int> moveToPos = new List<Vector2Int>();
 
     [SerializeField]
     private List<MonsterData> monsterDatas = new List<MonsterData>();
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 몬스터 정보를 초기화한다.
+    ////////////////////////////////////////////////////////////////////////////////
     private void Init()
     {
         if (previewSprites == null)
             previewSprites = new Dictionary<Obj, Sprite>();
         if (monsterObjs == null)
             monsterObjs = new Dictionary<Obj, MonsterObj>();
+        monsterObjs.Clear();
+        previewSprites.Clear();
         foreach (MonsterData monsterData in monsterDatas)
         {
             Obj monsterType = monsterData.monsterType;
             MonsterObj monsterObj = monsterData.monsterObj;
+            monsterObj.Init(monsterData);
             monsterObjs[monsterType] = monsterObj;
             previewSprites[monsterType] = monsterData.previewSprite;
         }
     }
 
-    public bool IsMonster(int pX,int pY)
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 해당위치로 이동한다고 등록한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void AddMoveToPos(int pX, int pY)
     {
-        if (isMonseter.Contains(new Vector2Int(pX, pY)))
+        moveToPos.Add(new Vector2Int(pX, pY));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 해당위치가 이동하기로한 위치인지 확인한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public bool IsMoveToPos(int pX, int pY)
+    {
+        if (moveToPos.Contains(new Vector2Int(pX, pY)))
             return true;
         return false;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 해당 위치에 몬스터가 있는지 확인한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public MonsterObj IsMonster(int pX,int pY)
+    {
+        foreach(MonsterObj monsterObj in fieldMonster)
+            if (monsterObj.alive)
+                if (monsterObj.pos.x == pX && monsterObj.pos.y == pY)
+                    return monsterObj;
+        return null;
+    }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 플레이어와 가장 가까운 몬스터를 찾는다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public MonsterObj GetClosestMonster()
+    {
+        CharacterManager characterManager = CharacterManager.instance;
+        Vector2 cPos = characterManager.character.transform.position;
+        MonsterObj closestMonster = null;
+
+        float dis = float.MaxValue;
+        foreach (MonsterObj monsterObj in fieldMonster)
+            if (monsterObj.alive)
+            {
+                Vector2 mPos = monsterObj.transform.position;
+                float newDis = Vector2.Distance(cPos, mPos);
+                if (newDis < dis)
+                {
+                    closestMonster = monsterObj;
+                    dis = newDis;
+                }
+
+            }
+        return closestMonster;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 몬스터를 생성한다.
+    ////////////////////////////////////////////////////////////////////////////////
     public IEnumerator runCreateMonster(List<MapMonster> pMapMonsters)
     {
         Init();
-        foreach(MapMonster mapMonster in pMapMonsters)
+
+        fieldMonster.Clear();
+        foreach (MapMonster mapMonster in pMapMonsters)
         {
+            //몬스터가 생성될 정보를 토대로
+            //몬스터 객체를 생성해준다.
             Vector2Int pos = mapMonster.pos;
-            if (isMonseter.Contains(pos))
-                continue;
-            isMonseter.Add(pos);
-
             MonsterObj monsterObj = Instantiate(monsterObjs[mapMonster.monsterType]);
-            monsterObj.pos = pos;
-            monsterObj.transform.position = new Vector3(pos.x * CreateMap.tileSize, pos.y * CreateMap.tileSize, 0);
+            monsterObj.SetPos(pos);
 
+            //몬스터 객체 등록
             fieldMonster.Add(monsterObj);
 
             yield return new WaitForSeconds(0.001f);
@@ -67,19 +122,34 @@ public class MonsterManager : FieldObjectSingleton<MonsterManager>
     {
         MapManager mapManager = MapManager.instance;
 
-        //벽으로할 타일을 체크한다.
-        bool[,] isWall = new bool[mapManager.arrayW, mapManager.arrayH];
+        //이동할 방향의 우선순위를 위해서 각칸마다의 비용을 처리하기 위한 배열
+        int[,] moveCost = new int[mapManager.arrayW, mapManager.arrayH];
 
         for (int x = 0; x < mapManager.arrayW; x++)
             for (int y = 0; y < mapManager.arrayH; y++)
                 if (mapManager.IsWall(x, y))
-                    isWall[x, y] = true;
-        isWall[pFrom.x, pFrom.y] = false;
+                    moveCost[x, y] = 1000;      //벽의 순위는 1000
+                else
+                    moveCost[x, y] = 10;        //빈공간은 10
+        moveCost[pFrom.x, pFrom.y] = 10;
 
-        List<Vector2Int> route = Algorithm.AstartRoute(pFrom, pTo, isWall);
+        foreach(MonsterObj monsterObj in fieldMonster)
+        {
+            if (monsterObj.alive == false)
+            {
+                //살아있지 않으면 위치를 확인하지 않는다.
+                continue;
+            }
+            moveCost[monsterObj.pos.x, monsterObj.pos.y] = 100; //몬스터가 이미존재하는 곳은 100
+        }
+        List<Vector2Int> route = Monster_AStar.AstartRoute(pFrom, pTo, moveCost);
+
         return route;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 몬스터와 몬스터의 경로를 가지고 있는 구조체
+    ////////////////////////////////////////////////////////////////////////////////
     private struct MonsterRoute
     {
         public MonsterObj monsterObj;
@@ -91,6 +161,9 @@ public class MonsterManager : FieldObjectSingleton<MonsterManager>
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 몬스터의 행동을 실행한다.
+    ////////////////////////////////////////////////////////////////////////////////
     public IEnumerator RunMonster()
     {
         moveToPos.Clear();
@@ -102,12 +175,14 @@ public class MonsterManager : FieldObjectSingleton<MonsterManager>
 
         foreach (MonsterObj monsterObj in fieldMonster)
         {
+            //필드의 몬스터와 플레이어의 최단 경로를 구한다.
             List<Vector2Int> route = AstartRoute(monsterObj.pos, characterPos);
             monsterRouteList.Add(new MonsterRoute(monsterObj, route));
         }
 
         monsterRouteList.Sort(delegate (MonsterRoute A, MonsterRoute B)
         {
+            //거리와 가까운 순으로 정렬한다.
             int ASize = A.route != null ? A.route.Count : int.MaxValue;
             int BSize = B.route != null ? B.route.Count : int.MaxValue;
             return ASize.CompareTo(BSize);
@@ -115,53 +190,20 @@ public class MonsterManager : FieldObjectSingleton<MonsterManager>
 
         foreach (MonsterRoute monsterRoute in monsterRouteList)
         {
+            //거리순으로 정렬했기에
+            //가까운 순으로 몬스터의 행동을 처리한다.
             List<Vector2Int> route = monsterRoute.route;
-            if (route == null || route.Count == 0)
-                continue;
-
             MonsterObj monsterObj = monsterRoute.monsterObj;
-
-            if (monsterObj.sleep)
-            {
-                if (monsterObj.range > route.Count)
-                    monsterObj.sleep = false;
-                else
-                    continue;
-            }
-
-            Vector2Int gamePos = route[route.Count - 1];
-
-            if (isMonseter.Contains(gamePos))
-            {
-                //해당위치에 몬스터가 있다.
-                continue;
-            }
-            if (moveToPos.Contains(gamePos))
-            {
-                //해당위치에 몬스터가 이동하기로 했다.
-                continue;
-            }
-            if (gamePos == characterPos)
-            {
-                //캐릭터의 공격범위에 있다.
-                continue;
-            }
-
-
-            //이동위치 갱신
-            isMonseter.Remove(monsterObj.pos);
-            isMonseter.Add(gamePos);
-            moveToPos.Add(gamePos);
-            monsterObj.pos = gamePos;
-
-            //실질적인 이동명령
-            Vector3 toPos = new Vector3(gamePos.x * CreateMap.tileSize, gamePos.y * CreateMap.tileSize, 0);
-            StartCoroutine(MyLib.Action2D.MoveTo(monsterObj.transform, toPos, 0.2f));
+            monsterObj.RunMonster(route);         
         }
 
         yield break;
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 미리보기 이미지를 출력한다.
+    ////////////////////////////////////////////////////////////////////////////////
     public Sprite GetSprite(Obj pObj)
     {
         Init();

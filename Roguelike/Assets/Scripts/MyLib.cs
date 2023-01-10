@@ -55,6 +55,85 @@ namespace MyLib
         #endregion
     }
 
+    #region[PriorityQueue]
+    public class PriorityQueue<T> where T : IComparable<T>
+    {
+        // 힙 트리는 배열로 관리할 수 있다.
+        List<T> _heap = new List<T>();
+
+        public void Push(T data)
+        {
+            // 힙의 맨 끝에 새로운 데이터를 삽입한다.
+            _heap.Add(data);
+
+            int now = _heap.Count - 1;  // 추가한 노드의 위치. 힙의 맨 끝에서 시작.
+
+            // 위로 도장 깨기 시작
+            while (now > 0)
+            {
+                int next = (now - 1) / 2;  // 부모 노드
+                if (_heap[now].CompareTo(_heap[next]) < 0)  // 부모 노드와 비교
+                    break;
+
+                // 두 값을 서로 자리 바꿈
+                T temp = _heap[now];
+                _heap[now] = _heap[next];
+                _heap[next] = temp;
+
+                // 검사 위치로 이동한다.
+                now = next;
+            }
+        }
+
+        public T Pop()  // 최대값(루트)을 뽑아낸다.
+        {
+            // 반환할 데이터를 따로 저장
+            T ret = _heap[0];
+
+            // 마지막 데이터를 루트로 이동시킨다.
+            int lastIndex = _heap.Count - 1;
+            _heap[0] = _heap[lastIndex];
+            _heap.RemoveAt(lastIndex);
+            lastIndex--;
+
+            // 아래로 도장 깨기 시작
+            int now = 0;
+            while (true)
+            {
+                int left = 2 * now + 1;
+                int right = 2 * now + 2;
+
+                int next = now;
+                // 왼쪽 값이 현재값보다 크면, 왼쪽으로 이동
+                if (left <= lastIndex && _heap[next].CompareTo(_heap[left]) < 0)
+                    next = left;
+                // 오른쪽 값이 현재값(왼쪽 이동 포함)보다 크면, 오른쪽으로 이동
+                if (right <= lastIndex && _heap[next].CompareTo(_heap[right]) < 0)
+                    next = right;
+
+                // 왼쪽/오른쪽 모두 현재값보다 작으면 종료
+                if (next == now)
+                    break;
+
+                // 두 값 서로 자리 바꿈
+                T temp = _heap[now];
+                _heap[now] = _heap[next];
+                _heap[next] = temp;
+
+                // 검사 위치로 이동한다.
+                now = next;
+            }
+
+            return ret;
+        }
+
+        public int Count()
+        {
+            return _heap.Count;
+        }
+    }
+    #endregion
+
     public static class Algorithm
     {
         #region[Next_Permutation]
@@ -90,7 +169,7 @@ namespace MyLib
         #endregion
 
         #region[Swap]
-        public static void Swap<T>(ref T a,ref T b)
+        public static void Swap<T>(ref T a, ref T b)
         {
             T temp = a;
             a = b;
@@ -119,9 +198,9 @@ namespace MyLib
 
         #region[CreateRandomList]
         //1~N중에서 중복하지 않는 m개를 뽑는다.
-        public static List<int> CreateRandomList(int n,int m)
+        public static List<int> CreateRandomList(int n, int m)
         {
-            int[] tree = new int[n+1];
+            int[] tree = new int[n + 1];
             List<int> temp = new List<int>();
 
             int Sum(int i)
@@ -170,7 +249,7 @@ namespace MyLib
         #endregion
 
         #region[MakeMaze]
-        public static bool[,] MakeMaze(uint pWidth,uint pHeight)
+        public static bool[,] MakeMaze(uint pWidth, uint pHeight)
         {
             uint mazeW = pWidth * 2 + 1;
             uint mazeH = pHeight * 2 + 1;
@@ -229,95 +308,76 @@ namespace MyLib
         #endregion
 
         #region[A*]
-
-
         //pFrom에서 pTo로 이동하는 경로를 구한다.
-        public struct AStarRoute
+        public struct AstarNode : IComparable<AstarNode>
         {
-            public int w;
+            public float f;
+            public float g;
+            public Vector2Int pos;
             public Vector2Int parents;
-        }
 
+            public AstarNode(float pF,float pG, Vector2Int pPos, Vector2Int pParents)
+            {
+                f = pF;
+                g = pG;
+                pos = pPos;
+                parents = pParents;
+            }
+            public int CompareTo(AstarNode other)
+            {
+                return other.f.CompareTo(f);
+            }
+        }
 
         public static List<Vector2Int> AstartRoute(Vector2Int pFrom, Vector2Int pTo, bool[,] pIsWall)
         {
-            List<Vector2Int> route = null;
-            List<Vector2Int> OpenList = new List<Vector2Int>(); //열린리스트
-            OpenList.Add(pFrom);
-
+            //4방향
+            int[,] offset = { { 0, 1 }, { 0, -1 }, { -1, 0 }, { 1, 0 } };
             int arrayW = pIsWall.GetLength(0);
             int arrayH = pIsWall.GetLength(1);
+            bool[,] isClose = new bool[arrayW, arrayH];
 
-            HashSet<Vector2Int> CloseList = new HashSet<Vector2Int>(); //닫힌리스트
-            AStarRoute[,] Area = new AStarRoute[arrayW, arrayH];
+            List<Vector2Int> route = null;
+            Vector2Int[,] parent = new Vector2Int[arrayW, arrayH];
+
+            PriorityQueue<AstarNode> pq = new PriorityQueue<AstarNode>(); //열린리스트
+            pq.Push(new AstarNode(Mathf.Abs(pFrom.x - pTo.x) + Mathf.Abs(pFrom.y - pTo.y),0, pFrom, pFrom));
+
             bool explore = false;
-            int MinV = 0;
 
-            while (OpenList.Count > 0)
+            while (pq.Count() > 0)
             {
-                int MaxV = int.MaxValue;
+                AstarNode node = pq.Pop();
+                if (isClose[node.pos.x, node.pos.y])
+                    continue;
 
-                //4방향
-                int[,] offset = { { 0, 1 }, { 0, -1 }, { -1, 0 }, { 1, 0 }};
+                isClose[node.pos.x, node.pos.y] = true;
 
-                Vector2Int nowPos = OpenList[MinV];
+                parent[node.pos.x, node.pos.y] = node.parents;
+
+                if (node.pos.x == pTo.x && node.pos.y == pTo.y)
+                {
+                    explore = true;
+                    break;
+                }
 
                 for (int i = 0; i < 4; i++)
                 {
-                    int ax = nowPos.x + offset[i, 0];
-                    int ay = nowPos.y + offset[i, 1];
+                    int ax = node.pos.x + offset[i, 0];
+                    int ay = node.pos.y + offset[i, 1];
                     if (ax < 0 || ay < 0 || ax >= arrayW || ay >= arrayH)
                         continue;
 
-                    if (pIsWall[ax, ay] == false && CloseList.Contains(new Vector2Int(ax, ay)) == false)
-                    {
-                        if (OpenList.Contains(new Vector2Int(ax, ay)))
-                        {
-                            if (Area[ax, ay].w > Area[nowPos.x, nowPos.y].w + 10)
-                            {
-                                Area[ax, ay].w = Area[nowPos.x, nowPos.y].w + 10;
-                                Area[ax, ay].parents = nowPos;
-                            }
-                        }
-                        else
-                        {
-                            OpenList.Add(new Vector2Int(ax, ay));
-                            Area[ax, ay].w = Area[nowPos.x, nowPos.y].w + 10;
-                            Area[ax, ay].parents = nowPos;
-                        }
-                    }
+                    if (pIsWall[ax, ay])
+                        continue;
 
-                    if (OpenList.Contains(pTo))
-                    {
-                        explore = true;
-                        break;
-                    }
-                }
+                    if (isClose[ax, ay])
+                        continue;
 
-                if (explore)
-                    break;
+                    float g = node.g + 10;
+                    float h = 10 * (Mathf.Abs(ax - pTo.x) + Mathf.Abs(ay - pTo.y));
 
-                for (int i = 0; i < OpenList.Count; i++)
-                {
-                    if (i == MinV)
-                    {
-                        CloseList.Add(OpenList[MinV]);
-                        OpenList.RemoveAt(i);
-                        break;
-                    }
-                }
-
-                if (OpenList.Count > 0)
-                {
-                    for (int i = 0; i < OpenList.Count; i++)
-                    {
-                        int tax = (int)Vector2.Distance(OpenList[i], pTo);
-                        if (MaxV > tax + Area[OpenList[i].x, OpenList[i].y].w)
-                        {
-                            MaxV = tax + Area[OpenList[i].x, OpenList[i].y].w;
-                            MinV = i;
-                        }
-                    }
+                    pq.Push(new AstarNode(g + h, g, new Vector2Int(ax, ay), node.pos)); //parent 추가
                 }
             }
 
@@ -332,8 +392,8 @@ namespace MyLib
                     route.Add(new Vector2Int(ax, ay));
                     int bx = ax;
                     int by = ay;
-                    ax = Area[bx, by].parents.x;
-                    ay = Area[bx, by].parents.y;
+                    ax = parent[bx, by].x;
+                    ay = parent[bx, by].y;
                 }
             }
 
@@ -425,6 +485,14 @@ namespace MyLib
                 aroundList.Add(new Vector2Int(newX, newY));
             }
             return aroundList;
+        }
+        #endregion
+
+        #region[GetAngle]
+        public static float GetAngle(Vector2 start, Vector2 end)
+        {
+            Vector2 v2 = end - start;
+            return Mathf.Atan2(v2.y, v2.x) * Mathf.Rad2Deg;
         }
         #endregion
     }

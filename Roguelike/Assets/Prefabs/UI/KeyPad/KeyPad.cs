@@ -27,10 +27,4 @@ public class KeyPad : MonoBehaviour
         CharacterManager characterManager = CharacterManager.instance;
         characterManager.CharactorInputButton(ButtonInput.Down);
     }
-
-    public void PressAttackBtn()
-    {
-        CharacterManager characterManager = CharacterManager.instance;
-        characterManager.CharactorInputButton(ButtonInput.Attack);
-    }
 }
