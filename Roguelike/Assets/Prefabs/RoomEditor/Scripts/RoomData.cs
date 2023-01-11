@@ -8,7 +8,7 @@ using UnityEngine;
 [System.Serializable]
 public class RoomData 
 {
-    public const uint roomSize = 11;
+    public const uint roomSize = 7;
 
     public bool isStartRoom;
     public RoomType roomType;

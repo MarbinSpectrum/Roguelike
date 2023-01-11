@@ -30,18 +30,29 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
     public void CharactorInputButton(ButtonInput pButtonInput)
     {
+        if (character == null)
+            return;
         character.buttonInput = pButtonInput;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow))
             character.buttonInput = ButtonInput.Left;
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.RightArrow))
             character.buttonInput = ButtonInput.Right;
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (Input.GetKey(KeyCode.UpArrow))
             character.buttonInput = ButtonInput.Up;
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (Input.GetKey(KeyCode.DownArrow))
             character.buttonInput = ButtonInput.Down;
+
+        if (Input.GetKeyUp(KeyCode.LeftArrow))
+            character.buttonInput = ButtonInput.None;
+        else if (Input.GetKeyUp(KeyCode.RightArrow))
+            character.buttonInput = ButtonInput.None;
+        else if (Input.GetKeyUp(KeyCode.UpArrow))
+            character.buttonInput = ButtonInput.None;
+        else if (Input.GetKeyUp(KeyCode.DownArrow))
+            character.buttonInput = ButtonInput.None;
     }
 }

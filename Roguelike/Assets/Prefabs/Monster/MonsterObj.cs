@@ -18,6 +18,7 @@ public abstract class MonsterObj : MonoBehaviour
     public bool alive;
     public bool sleep = true;
 
+    public SpriteRenderer monsterSpr;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : pMonsterData기반으로 몬스터를 초기화
@@ -26,7 +27,6 @@ public abstract class MonsterObj : MonoBehaviour
     {
         Init(pMonsterData.hp, pMonsterData.damage, pMonsterData.range, pMonsterData.moveDelay);
     }
-
     public void Init(uint pHp, uint pDamage, uint pRange, uint pMoveDelay)
     {
         sleep = true;
@@ -58,6 +58,12 @@ public abstract class MonsterObj : MonoBehaviour
         MonsterManager monsterManager = MonsterManager.instance;
         CharacterManager characterManager = CharacterManager.instance;
         MapManager mapManager = MapManager.instance;
+
+        if(alive == false)
+        {
+            monsterSpr.enabled = false;
+            return;
+        }
 
         if (sleep)
         {
@@ -124,5 +130,16 @@ public abstract class MonsterObj : MonoBehaviour
         //실질적인 이동명령
         Vector3 toPos = new Vector3(gamePos.x * CreateMap.tileSize, gamePos.y * CreateMap.tileSize, 0);
         StartCoroutine(MyLib.Action2D.MoveTo(transform, toPos, 0.2f));
+    }
+
+    public virtual void Hit(uint pDamage)
+    {
+        if (hp < pDamage)
+            hp = 0;
+        else
+            hp -= pDamage;
+
+        if(hp == 0)
+            alive = false;
     }
 }

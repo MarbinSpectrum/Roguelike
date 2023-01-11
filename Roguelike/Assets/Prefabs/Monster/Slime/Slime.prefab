@@ -95,10 +95,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e933998e7745c9c468bbac1e07194a94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pos: {x: 0, y: 0}
-  sleep: 1
   hp: 5
   damage: 1
   range: 4
   moveDelay: 3
   moveStack: 0
+  pos: {x: 0, y: 0}
+  alive: 0
+  sleep: 1
+  monsterSpr: {fileID: 4206984842400293968}

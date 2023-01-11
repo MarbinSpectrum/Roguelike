@@ -15,6 +15,8 @@ public class MonsterManager : FieldObjectSingleton<MonsterManager>
 
     [SerializeField]
     private List<MonsterData> monsterDatas = new List<MonsterData>();
+    [SerializeField]
+    private int monsterActRange = 10;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 몬스터 정보를 초기화한다.
@@ -173,7 +175,20 @@ public class MonsterManager : FieldObjectSingleton<MonsterManager>
 
         List<MonsterRoute> monsterRouteList = new List<MonsterRoute>();
 
+        List<MonsterObj> runMonsters = new List<MonsterObj>();
+
         foreach (MonsterObj monsterObj in fieldMonster)
+        {
+            if(Vector2.Distance(characterPos,monsterObj.pos) > monsterActRange)
+            {
+                //몬스터 활성화 범위 밖이다.
+                continue;
+            }
+
+            runMonsters.Add(monsterObj);
+        }
+
+        foreach (MonsterObj monsterObj in runMonsters)
         {
             //필드의 몬스터와 플레이어의 최단 경로를 구한다.
             List<Vector2Int> route = AstartRoute(monsterObj.pos, characterPos);

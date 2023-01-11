@@ -4,5 +4,11 @@ using UnityEngine;
 
 public class Slime : MonsterObj
 {
+    public override void Hit(uint pDamage)
+    {
+        base.Hit(pDamage);
 
+        moveStack = 0;
+
+    }
 }

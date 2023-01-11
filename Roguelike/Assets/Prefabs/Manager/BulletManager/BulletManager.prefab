@@ -53,3 +53,5 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   bulletPrefab: {fileID: 4457162050254765264, guid: 294a3710bea751042802df4354599f07, type: 3}
+  shotStartPrefab: {fileID: 1582867784175449292, guid: bdda23608a00c9c46951c4990e18c78e, type: 3}
+  shotEndPrefab: {fileID: 1582867784175449292, guid: 78f1fce989d50394fabce588760f7cde, type: 3}

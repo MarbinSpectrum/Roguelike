@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Stone_Wall_7
   m_EditorClassIdentifier: 
   tile: 108
-  tileSprite: {fileID: -8978432309063002805, guid: 587c18e9411503048a7ed1e826964464, type: 3}
+  tileSprite: {fileID: -8978432309063002805, guid: 7103554d27a08bb418a9f6028e761ac1, type: 3}
   tileType: 101

@@ -2,22 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MyLib;
+using Sirenix.OdinInspector;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// : CatGirl 캐릭터의 스크립트
 ////////////////////////////////////////////////////////////////////////////////
-public class CatGirl : MonoBehaviour
+public class CatGirl : SerializedMonoBehaviour
 {
     [SerializeField]
     private Animator animator;
-
     [SerializeField]
     private SpriteRenderer spriteRenderer;
-
     [SerializeField]
     private float moveSpeed = 0.5f;
     [SerializeField]
     private int attackRange = 3;
+    [SerializeField]
+    private Dictionary<ButtonInput, Transform> bulletPos = new Dictionary<ButtonInput, Transform>();
 
     private ButtonInput ButtonInput = ButtonInput.None;
 
@@ -92,9 +93,11 @@ public class CatGirl : MonoBehaviour
         yield return new WaitUntil(()=> (buttonInput != ButtonInput.None));
 
         MonsterManager monsterManager = MonsterManager.instance;
+        MapManager mapManager = MapManager.instance;
 
         int showDic = 0;
         Vector2Int dic = Vector2Int.zero;
+        Vector3 bPos = bulletPos[buttonInput].position;
         bool spriteFiipX = false;
 
         switch (buttonInput)
@@ -121,23 +124,34 @@ public class CatGirl : MonoBehaviour
                 break;
         }
 
-        animator.SetInteger("showDic", showDic);
+        animator.SetInteger("showDic", showDic); 
         MonsterObj targetMonster = null;
-        for (int i = 1; i <= attackRange; i++)
+        for (int i = 1; i <= attackRange && targetMonster == null; i++)
+        {
+            Vector2Int cPos = new Vector2Int(pos.x + dic.x * i, pos.y + dic.y * i);
+            if (mapManager.IsWall(cPos.x, cPos.y))
+                break;
             if (targetMonster == null)
-                targetMonster = monsterManager.IsMonster(pos.x + dic.x * i, pos.y + dic.y * i);
+                targetMonster = monsterManager.IsMonster(cPos.x, cPos.y);
+        }
+
         if (targetMonster != null)
         {
             float gameDis = Vector2.Distance(pos, targetMonster.pos);
             float duration = 0.1f * gameDis;
 
+            Vector3 to = new Vector3(
+                  dic.x == 0 ? bPos.x : targetMonster.pos.x * CreateMap.tileSize
+                , dic.y == 0 ? bPos.y : targetMonster.pos.y * CreateMap.tileSize, 0);
+
             BulletManager bulletManager = BulletManager.instance;
-            bulletManager.FireBullet(pos, targetMonster.pos, duration);
+            bulletManager.FireBullet(bPos, to, duration);
 
             spriteRenderer.flipX = spriteFiipX;
             animator.SetTrigger("attack");
 
             yield return new WaitForSeconds(duration);
+            targetMonster.Hit(1);
 
             StartCoroutine(monsterManager.RunMonster());
         }
