@@ -25,6 +25,9 @@ public abstract class MonsterObj : MonoBehaviour
     //인식범위
     public uint range;
 
+    //처치시 얻는 경험치
+    public uint exp;
+
     public Vector2Int pos;
     public bool alive;
     public bool sleep = true;
@@ -45,6 +48,7 @@ public abstract class MonsterObj : MonoBehaviour
         range = pMonsterData.range;
         moveDelay = pMonsterData.moveDelay;
         attackDelay = pMonsterData.attackDelay;
+        exp = pMonsterData.exp;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -170,6 +174,10 @@ public abstract class MonsterObj : MonoBehaviour
             hp -= pDamage;
 
         if(hp == 0)
+        {
             alive = false;
+            CharacterManager characterManager = CharacterManager.instance;
+            characterManager.GetExp(exp);
+        }
     }
 }

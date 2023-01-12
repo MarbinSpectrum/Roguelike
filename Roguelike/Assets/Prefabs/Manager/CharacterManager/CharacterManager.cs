@@ -15,6 +15,11 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     private uint maxHp;
     private uint nowHp;
 
+    private uint maxExp;
+    private uint nowExp;
+
+    private uint level;
+
     ////////////////////////////////////////////////////////////////////////////////
     /// : pX,pY에 해당하는 좌표에 캐릭터를 생성한다.
     ////////////////////////////////////////////////////////////////////////////////
@@ -32,9 +37,12 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
         maxHp = 3;
         nowHp = 3;
+        maxExp = 5;
+        nowExp = 0;
 
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateHp(maxHp, nowHp);
+        totalUI.UpdateExp(maxExp, nowExp);
     }
 
     public void CharactorInputButton(ButtonInput pButtonInput)
@@ -53,6 +61,19 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateHp(maxHp, nowHp);
+    }
+
+    public void GetExp(uint pValue)
+    {
+        nowExp += pValue;
+        if(nowExp >= maxExp)
+        {
+            nowExp -= maxExp;
+            maxExp = (uint)(maxExp *1.5f);
+            level += 1;
+        }
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.UpdateExp(maxExp, nowExp);
     }
 
     private void Update()

@@ -17,6 +17,7 @@ MonoBehaviour:
   monsterType: 2000
   hp: 3
   damage: 1
-  moveDelay: 3
   attackDelay: 2
+  moveDelay: 3
   range: 5
+  exp: 2
