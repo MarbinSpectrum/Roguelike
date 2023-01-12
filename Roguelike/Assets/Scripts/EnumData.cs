@@ -48,7 +48,7 @@ public enum Obj
 
     Slime = 1000,
 
-    Tentakle = 2000,
+    Tentacle = 2000,
 }
 
 public enum ButtonInput

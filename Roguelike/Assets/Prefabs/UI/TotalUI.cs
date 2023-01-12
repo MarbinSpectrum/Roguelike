@@ -10,6 +10,10 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
 {
     [SerializeField]
     private GameObject createMap;
+    [SerializeField]
+    private HpBar hpBar;
+    [SerializeField]
+    private ExpBar expBar;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 맵 생성중인지를 표시해줍니다.
@@ -17,5 +21,21 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     public void ShowCreateMap(bool pState)
     {
         createMap.SetActive(pState);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 체력 상태 갱신
+    ////////////////////////////////////////////////////////////////////////////////
+    public void UpdateHp(uint pMaxHp,uint pNowHp)
+    {
+        hpBar.UpdateHp(pMaxHp, pNowHp);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 경험치 상태 갱신
+    ////////////////////////////////////////////////////////////////////////////////
+    public void UpdateExp(uint pMaxExp, uint pNowExp)
+    {
+        expBar.UpdateExp(pMaxExp, pNowExp);
     }
 }

@@ -2,64 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-////////////////////////////////////////////////////////////////////////////////
-/// : 몬스터 오브젝트의 원형
-////////////////////////////////////////////////////////////////////////////////
-public abstract class MonsterObj : MonoBehaviour
+public class Tentacle : MonsterObj
 {
-    //체력
-    public uint hp;
-
-    //데미지
-    public uint damage;
-
-    //공격딜레이
-    public uint attackDelay;
-    public uint attackStack;
-
-    //이동딜레이
-    public uint moveDelay;
-    public uint moveStack;
-
-    //인식범위
-    public uint range;
-
-    public Vector2Int pos;
-    public bool alive;
-    public bool sleep = true;
-    public bool stun;
-
-    public SpriteRenderer monsterSpr;
-
-    ////////////////////////////////////////////////////////////////////////////////
-    /// : pMonsterData기반으로 몬스터를 초기화
-    ////////////////////////////////////////////////////////////////////////////////
-    public void Init(MonsterData pMonsterData)
-    {
-        sleep = true;
-        alive = true;
-
-        hp = pMonsterData.hp;
-        damage = pMonsterData.damage;
-        range = pMonsterData.range;
-        moveDelay = pMonsterData.moveDelay;
-        attackDelay = pMonsterData.attackDelay;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    /// : 몬스터의 위치를 설정해준다.
-    ////////////////////////////////////////////////////////////////////////////////
-    public void SetPos(Vector2Int pPos)
-    {
-        pos = pPos;
-        transform.position = new Vector3(pPos.x * CreateMap.tileSize, pPos.y * CreateMap.tileSize, 0);
-    }
+    [SerializeField]
+    private Animator animator;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 몬스터의 행동을 처리한다.
     ////////////////////////////////////////////////////////////////////////////////
-    public virtual void RunMonster(List<Vector2Int> pRoute)
+    public override void RunMonster(List<Vector2Int> pRoute)
     {
         if (pRoute == null || pRoute.Count == 0)
             return;
@@ -68,19 +19,20 @@ public abstract class MonsterObj : MonoBehaviour
         CharacterManager characterManager = CharacterManager.instance;
         MapManager mapManager = MapManager.instance;
 
-        if(alive == false)
+        if (alive == false)
         {
             monsterSpr.enabled = false;
             return;
         }
 
-        if(stun)
+        if (stun)
         {
             //스턴 상태이다.
             //스턴상태에서 깨어난다.
             //깨어나면서 이동스택과 공격스택이 초기화된다.
             attackStack = 0;
             moveStack = 0;
+
             stun = false;
             return;
         }
@@ -123,12 +75,32 @@ public abstract class MonsterObj : MonoBehaviour
                 return;
             }
 
+            //캐릭터가 공격범위에 있다.
+            //이동하지않고 플레이어를 공격한다.
+            animator.SetTrigger("Attack");
 
+            if (pos.x + 1 == gamePos.x)
+            {
+                //오른쪽에 플레이어가 있다.
+                monsterSpr.flipX = false;
+            }
+            else if (pos.x - 1 == gamePos.x)
+            {
+                //왼쪽에 플레이어가 있다.
+                monsterSpr.flipX = true;
+            }
+            else if (pos.x - 1 == gamePos.y)
+            {
+                //아래쪽에 플레이어가 있다.
+                monsterSpr.flipX = false;
+            }
+            else if (pos.x + 1 == gamePos.y)
+            {
+                //위쪽에 플레이어가 있다.
+                monsterSpr.flipX = false;
+            }
 
-
-
-
-
+            characterManager.Hit(damage);
 
 
 
@@ -139,7 +111,7 @@ public abstract class MonsterObj : MonoBehaviour
             moveStack = 0;
             return;
         }
-        if(moveStack < moveDelay)
+        if (moveStack < moveDelay)
         {
             //이동스택이 다 쌓인후 이동 한다.
             moveStack++;
@@ -151,7 +123,7 @@ public abstract class MonsterObj : MonoBehaviour
         moveStack = 0;
 
         //이동위치 갱신
-        monsterManager.AddMoveToPos(gamePos.x,gamePos.y);
+        monsterManager.AddMoveToPos(gamePos.x, gamePos.y);
         pos = gamePos;
 
         //실질적인 이동명령
@@ -159,17 +131,4 @@ public abstract class MonsterObj : MonoBehaviour
         StartCoroutine(MyLib.Action2D.MoveTo(transform, toPos, 0.2f));
     }
 
-    public virtual void Hit(uint pDamage)
-    {
-        stun = true;
-        moveStack = 0;
-
-        if (hp < pDamage)
-            hp = 0;
-        else
-            hp -= pDamage;
-
-        if(hp == 0)
-            alive = false;
-    }
 }

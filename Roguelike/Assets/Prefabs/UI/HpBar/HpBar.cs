@@ -10,10 +10,10 @@ using Sirenix.OdinInspector;
 public class HpBar : SerializedMonoBehaviour
 {
     [Title("Hp Data")]
-    #region[private int maxHp]
-    private int MaxHp;
-    [ShowInInspector,PropertyOrder(-2)]
-    public int maxHp
+    #region[private uint maxHp]
+    private uint MaxHp;
+    [ShowInInspector, PropertyOrder(-2)]
+    public uint maxHp
     {
         get { return MaxHp; }
         set
@@ -23,10 +23,10 @@ public class HpBar : SerializedMonoBehaviour
         }
     }
     #endregion
-    #region[private int Hp]
-    private int Hp;
+    #region[private uint Hp]
+    private uint Hp;
     [ShowInInspector, PropertyOrder(-1)]
-    public int hp
+    public uint hp
     {
         get { return Hp; }
         set
@@ -104,5 +104,14 @@ public class HpBar : SerializedMonoBehaviour
 
         barMask.sizeDelta = new Vector2(maskWidth, imageHeight);
         hpBar.sizeDelta = new Vector2(hpWidth, imageHeight);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 체력 업데이트
+    ////////////////////////////////////////////////////////////////////////////////
+    public void UpdateHp(uint pMaxHp, uint pNowHp)
+    {
+        maxHp = pMaxHp;
+        hp = pNowHp;
     }
 }

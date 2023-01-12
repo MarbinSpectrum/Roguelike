@@ -323,6 +323,7 @@ public class CreateMap : MonoBehaviour
 
                                 //몬스터 객체 등록
                             case Obj.Slime:
+                            case Obj.Tentacle:
                                 {
                                     monsterList.Add(new MapMonster(obj[i, j], ax, ay));
                                 }

@@ -12,6 +12,9 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
     public CatGirl character;
 
+    private uint maxHp;
+    private uint nowHp;
+
     ////////////////////////////////////////////////////////////////////////////////
     /// : pX,pY에 해당하는 좌표에 캐릭터를 생성한다.
     ////////////////////////////////////////////////////////////////////////////////
@@ -26,6 +29,12 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
         character.gameObject.SetActive(true);
         character.SetPos(pX, pY);
+
+        maxHp = 3;
+        nowHp = 3;
+
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.UpdateHp(maxHp, nowHp);
     }
 
     public void CharactorInputButton(ButtonInput pButtonInput)
@@ -33,6 +42,17 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         if (character == null)
             return;
         character.buttonInput = pButtonInput;
+    }
+
+    public void Hit(uint pDamage)
+    {
+        if (maxHp > pDamage)
+            maxHp -= pDamage;
+        else
+            maxHp = 0;
+
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.UpdateHp(maxHp, nowHp);
     }
 
     private void Update()
