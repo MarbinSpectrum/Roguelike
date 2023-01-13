@@ -14,6 +14,8 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     private HpBar hpBar;
     [SerializeField]
     private ExpBar expBar;
+    [SerializeField]
+    private MiniMapUI miniMap;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 맵 생성중인지를 표시해줍니다.
@@ -37,5 +39,17 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     public void UpdateExp(uint pMaxExp, uint pNowExp)
     {
         expBar.UpdateExp(pMaxExp, pNowExp);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 경험치 상태 갱신
+    ////////////////////////////////////////////////////////////////////////////////
+    public void UpdateMiniMap(Vector2Int pPos)
+    {
+        MapManager mapManager = MapManager.instance;
+        mapManager.UpdateMiniMap(pPos);
+
+        Texture2D miniMapTexture = mapManager.GetMiniMapTexture();
+        miniMap.UpdateMiniMap(miniMapTexture);
     }
 }

@@ -22,6 +22,8 @@ public class MapManager : FieldObjectSingleton<MapManager>
 
     [SerializeField]
     private CreateMap createMap;
+    [SerializeField]
+    private MiniMap miniMap;
 
     [SerializeField]
     private int actSize;
@@ -40,6 +42,8 @@ public class MapManager : FieldObjectSingleton<MapManager>
         ArrayW = tiles.GetLength(0);
         ArrayH = tiles.GetLength(1);
         isActCheck = new bool[arrayW, arrayH];
+
+        yield return miniMap.runCreateMiniMap();
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -100,5 +104,30 @@ public class MapManager : FieldObjectSingleton<MapManager>
         if (tiles[x, y].tileType == TileType.Wall)
             return true;
         return false;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 해당위치(x,y)가 외각벽인지 판독한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public bool IsEdge(int x, int y)
+    {
+        if (x < 0 || y < 0 || x >= arrayW || y >= arrayH)
+            return false;
+        if (tiles[x, y] != null)
+            return false;
+        if (tiles[x, y].isTile != Tile.Null_Tile && tiles[x, y].tileType == TileType.Wall)
+            return true;
+        return false;
+    }
+
+    public void UpdateMiniMap(Vector2Int pPos)
+    {
+        miniMap.UpdateMiniMapPos(pPos);
+    }
+
+
+    public Texture2D GetMiniMapTexture()
+    {
+        return miniMap.GetMiniMapTexture();
     }
 }

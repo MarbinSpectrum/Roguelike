@@ -57,6 +57,12 @@ public class CatGirl : SerializedMonoBehaviour
         pos.x = pX;
         pos.y = pY;
         transform.position = new Vector3(pos.x * CreateMap.tileSize, pos.y * CreateMap.tileSize, 0);
+
+        //미니맵 갱신
+        TotalUI totalUI = TotalUI.instance;
+        for (int x = -3; x <= 3; x++)
+            for (int y = -3; y <= 3; y++)
+                totalUI.UpdateMiniMap(new Vector2Int(pos.x + x, pos.y + y));
     }
 
 
@@ -173,6 +179,12 @@ public class CatGirl : SerializedMonoBehaviour
 
         //해당 위치의 블록을 활성화한다.
         MapManager.instance.ActAreaTile(pos.x, pos.y);
+
+        //미니맵 갱신
+        TotalUI totalUI = TotalUI.instance;
+        for(int x = -3; x <= 3; x++)
+            for(int y = -3; y <= 3; y++)
+                totalUI.UpdateMiniMap(new Vector2Int(pos.x + x, pos.y + y));
 
         ButtonInput = ButtonInput.None;
 
