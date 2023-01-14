@@ -113,19 +113,25 @@ public class MapManager : FieldObjectSingleton<MapManager>
     {
         if (x < 0 || y < 0 || x >= arrayW || y >= arrayH)
             return false;
-        if (tiles[x, y] != null)
+        if (tiles[x, y] == null)
             return false;
-        if (tiles[x, y].isTile != Tile.Null_Tile && tiles[x, y].tileType == TileType.Wall)
+        if (tiles[x, y].isTile != Tile.Null_Tile && 
+            tiles[x, y].tileType == TileType.Wall)
             return true;
         return false;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : pPos의 미니맵을 갱신한다.
+    ////////////////////////////////////////////////////////////////////////////////
     public void UpdateMiniMap(Vector2Int pPos)
     {
         miniMap.UpdateMiniMapPos(pPos);
     }
 
-
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 미니맵 텍스처를 받아온다.
+    ////////////////////////////////////////////////////////////////////////////////
     public Texture2D GetMiniMapTexture()
     {
         return miniMap.GetMiniMapTexture();

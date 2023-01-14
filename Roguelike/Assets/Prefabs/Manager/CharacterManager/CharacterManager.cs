@@ -54,10 +54,10 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
     public void Hit(uint pDamage)
     {
-        if (maxHp > pDamage)
-            maxHp -= pDamage;
+        if (nowHp > pDamage)
+            nowHp -= pDamage;
         else
-            maxHp = 0;
+            nowHp = 0;
 
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateHp(maxHp, nowHp);

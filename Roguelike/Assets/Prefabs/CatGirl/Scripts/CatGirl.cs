@@ -60,9 +60,7 @@ public class CatGirl : SerializedMonoBehaviour
 
         //¹Ì´Ï¸Ê °»½Å
         TotalUI totalUI = TotalUI.instance;
-        for (int x = -3; x <= 3; x++)
-            for (int y = -3; y <= 3; y++)
-                totalUI.UpdateMiniMap(new Vector2Int(pos.x + x, pos.y + y));
+        totalUI.UpdateMiniMap(new Vector2Int(pos.x, pos.y), 4);
     }
 
 
@@ -182,9 +180,7 @@ public class CatGirl : SerializedMonoBehaviour
 
         //¹Ì´Ï¸Ê °»½Å
         TotalUI totalUI = TotalUI.instance;
-        for(int x = -3; x <= 3; x++)
-            for(int y = -3; y <= 3; y++)
-                totalUI.UpdateMiniMap(new Vector2Int(pos.x + x, pos.y + y));
+        totalUI.UpdateMiniMap(new Vector2Int(pos.x, pos.y), 4);
 
         ButtonInput = ButtonInput.None;
 
