@@ -128,7 +128,8 @@ public class CatGirl : SerializedMonoBehaviour
                 break;
         }
 
-        animator.SetInteger("showDic", showDic); 
+        int frontShowDic = animator.GetInteger("showDic");
+        animator.SetInteger("showDic", showDic);
         MonsterObj targetMonster = null;
         for (int i = 1; i <= attackRange && targetMonster == null; i++)
         {
@@ -170,7 +171,7 @@ public class CatGirl : SerializedMonoBehaviour
             yield return Action2D.MoveTo(transform, to, moveSpeed);
             animator.SetTrigger("idle");
         }
-        else
+        else if(frontShowDic != showDic)
         {
             animator.SetTrigger("idle");
         }
