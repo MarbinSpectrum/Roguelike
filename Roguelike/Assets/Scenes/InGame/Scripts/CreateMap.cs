@@ -326,7 +326,13 @@ public class CreateMap : MonoBehaviour
                                     torchManager.AddTorchPos(new Vector2Int(ax, ay));
                                 }
                                 break;
-                                //몬스터 객체 등록
+                            case Obj.Jar:
+                                {
+                                    JarManager jarManager = JarManager.instance;
+                                    jarManager.AddJarPos(new Vector2Int(ax, ay));
+                                }
+                                break;
+                            //몬스터 객체 등록
                             case Obj.Slime:
                             case Obj.Tentacle:
                                 {

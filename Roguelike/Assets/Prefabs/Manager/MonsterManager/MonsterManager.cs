@@ -123,6 +123,7 @@ public class MonsterManager : FieldObjectSingleton<MonsterManager>
     public List<Vector2Int> AstartRoute(Vector2Int pFrom, Vector2Int pTo)
     {
         MapManager mapManager = MapManager.instance;
+        JarManager jarManager = JarManager.instance;
 
         //이동할 방향의 우선순위를 위해서 각칸마다의 비용을 처리하기 위한 배열
         int[,] moveCost = new int[mapManager.arrayW, mapManager.arrayH];
@@ -131,6 +132,8 @@ public class MonsterManager : FieldObjectSingleton<MonsterManager>
             for (int y = 0; y < mapManager.arrayH; y++)
                 if (mapManager.IsWall(x, y))
                     moveCost[x, y] = 1000;      //벽의 순위는 1000
+                else if(jarManager.IsJar(x,y))
+                    moveCost[x, y] = 20;        //항아리가 있는 공간은 20
                 else
                     moveCost[x, y] = 10;        //빈공간은 10
         moveCost[pFrom.x, pFrom.y] = 10;

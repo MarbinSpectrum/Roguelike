@@ -23234,6 +23234,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2537281060744963109, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d1819be652c344e40ad474bd8d71c8e4, type: 3}
     - target: {fileID: 2546872227820049642, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.469999
@@ -23438,6 +23442,14 @@ PrefabInstance:
       propertyPath: tileType
       value: 101
       objectReference: {fileID: 0}
+    - target: {fileID: 3066194089397296968, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: Obj
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 3066194089397296968, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3066194089397296968, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
     - target: {fileID: 3085164999722439770, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_LocalPosition.x
       value: 17.649998
@@ -24602,6 +24614,10 @@ PrefabInstance:
       propertyPath: tileType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5808075024597509189, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d1819be652c344e40ad474bd8d71c8e4, type: 3}
     - target: {fileID: 5824142237611434654, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.0899992
@@ -24738,6 +24754,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoomEditor
       objectReference: {fileID: 0}
+    - target: {fileID: 6422442717419790120, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: Obj
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 6422442717419790120, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 6422442717419790120, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
     - target: {fileID: 6514453234710993387, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.999999

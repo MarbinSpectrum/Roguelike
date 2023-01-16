@@ -19,14 +19,26 @@ public class GetTile : MonoBehaviour
     public TileData tileData12;
     public TileData tileData13;
     public TileData tileData14;
-    public TileData tilefloor;
+    public TileData baseFloor;
+    public List<TileData> tilefloor;
     public TileData nullTile;
 
 
     public TileData GetTileData(TileType[,] pTile)
     {
         if (pTile[1, 1] == TileType.Floor)
-            return tilefloor;
+        {
+            if (Application.isPlaying)
+            {
+                int random = Random.Range(0, 100);
+                if (random >= 10)
+                    return baseFloor;
+                else
+                    return tilefloor[Random.Range(0, tilefloor.Count)];
+            }
+            else
+                return baseFloor;
+        }
         else if (pTile[1, 2] == TileType.Wall &&
             pTile[0, 1] == TileType.Wall &&
             pTile[2, 1] == TileType.Wall &&

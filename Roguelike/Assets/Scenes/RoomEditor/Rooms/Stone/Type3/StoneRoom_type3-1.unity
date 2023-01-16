@@ -20086,6 +20086,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 10.549999
       objectReference: {fileID: 0}
+    - target: {fileID: 138406192106746342, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d1819be652c344e40ad474bd8d71c8e4, type: 3}
     - target: {fileID: 152731709299620536, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -23286,6 +23290,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2537281060744963109, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d1819be652c344e40ad474bd8d71c8e4, type: 3}
     - target: {fileID: 2546872227820049642, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.469999
@@ -23618,6 +23626,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -5.549999
       objectReference: {fileID: 0}
+    - target: {fileID: 3275071402559332018, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: Obj
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 3275071402559332018, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3275071402559332018, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
     - target: {fileID: 3293256304219197611, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -23626,6 +23642,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3297531576607246278, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d1819be652c344e40ad474bd8d71c8e4, type: 3}
     - target: {fileID: 3313235170017999860, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: tileType
       value: 101
@@ -24126,6 +24146,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -5.549999
       objectReference: {fileID: 0}
+    - target: {fileID: 4445395551010877122, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d1819be652c344e40ad474bd8d71c8e4, type: 3}
     - target: {fileID: 4522430045069826602, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_LocalPosition.x
       value: 17.649998
@@ -24322,6 +24346,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5162837672175375823, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: Obj
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 5162837672175375823, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 5162837672175375823, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
     - target: {fileID: 5190052214598687006, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -24802,6 +24834,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoomEditor
       objectReference: {fileID: 0}
+    - target: {fileID: 6297235314713339327, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d1819be652c344e40ad474bd8d71c8e4, type: 3}
+    - target: {fileID: 6328698006234299595, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: Obj
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328698006234299595, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 6328698006234299595, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+    - target: {fileID: 6422442717419790120, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: Obj
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 6422442717419790120, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 6422442717419790120, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
     - target: {fileID: 6507216781395376688, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -26254,6 +26306,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8934180154698287851, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: Obj
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 8934180154698287851, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 8934180154698287851, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
     - target: {fileID: 8949158155989462600, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: tileType
       value: 1

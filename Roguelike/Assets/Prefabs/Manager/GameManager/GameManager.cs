@@ -38,6 +38,9 @@ public class GameManager : FieldObjectSingleton<GameManager>
         MonsterManager monsterManager = MonsterManager.instance;
         yield return monsterManager.runCreateMonster(mapManager.GetMonsterList()); //甘 积己
 
+        JarManager jarManager = JarManager.instance;
+        yield return jarManager.runCreateJarObj(); //亲酒府 积己
+
         totalUI.ShowCreateMap(false);
     }
 }

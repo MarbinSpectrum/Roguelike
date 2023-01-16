@@ -4,7 +4,9 @@ public enum Tile
     Null_Tile = 0,
 
     Stone_Floor_0 = 1,
-
+    Stone_Floor_1 = 2,
+    Stone_Floor_2 = 3,
+    Stone_Floor_3 = 4,
 
     Stone_Wall_0 = 101,
     Stone_Wall_1 = 102,
@@ -47,6 +49,7 @@ public enum Obj
 
     TorchLight = 500,
 
+    Jar = 600,
 
     Slime = 1000,
 

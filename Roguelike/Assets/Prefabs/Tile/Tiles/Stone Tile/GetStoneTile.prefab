@@ -58,5 +58,9 @@ MonoBehaviour:
   tileData12: {fileID: 11400000, guid: ad2d6c53bebb53e49bca690af946a04c, type: 2}
   tileData13: {fileID: 11400000, guid: 85956fb108b1d74488659b3922772498, type: 2}
   tileData14: {fileID: 11400000, guid: 73a67312f614c384aa744d7d846042e0, type: 2}
-  tilefloor: {fileID: 11400000, guid: 8c71d1844e3a1d746855c950312286cf, type: 2}
+  baseFloor: {fileID: 11400000, guid: 8c71d1844e3a1d746855c950312286cf, type: 2}
+  tilefloor:
+  - {fileID: 11400000, guid: 398b63542cf29ac43848298cc9ee2a11, type: 2}
+  - {fileID: 11400000, guid: 409d495baf7f44744a222599a8923491, type: 2}
+  - {fileID: 11400000, guid: 975fe127a80ca6c41b9015788c4fd935, type: 2}
   nullTile: {fileID: 11400000, guid: 87a6c0ebae32bde41a3bbb494b4443bf, type: 2}

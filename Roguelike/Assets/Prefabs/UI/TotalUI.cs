@@ -16,6 +16,8 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     private ExpBar expBar;
     [SerializeField]
     private MiniMapUI miniMap;
+    [SerializeField]
+    private SetingUI setingUI;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 맵 생성중인지를 표시해줍니다.
@@ -102,5 +104,13 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
         //텍스쳐변경
         Texture2D miniMapTexture = mapManager.GetMiniMapTexture();
         miniMap.UpdateMiniMap(miniMapTexture);
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            setingUI.gameObject.SetActive(!setingUI.gameObject.activeSelf);
+        }
     }
 }

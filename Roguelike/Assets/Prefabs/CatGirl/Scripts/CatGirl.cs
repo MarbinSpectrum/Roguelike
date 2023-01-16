@@ -61,6 +61,11 @@ public class CatGirl : SerializedMonoBehaviour
         //미니맵 갱신
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateMiniMap(new Vector2Int(pos.x, pos.y), 4);
+
+        //해당 위치의 블록을 활성화한다.
+        MapManager.instance.ActAreaTile(pos.x, pos.y);
+
+        TorchManager.instance.ActAreaTorch(pos.x, pos.y);
     }
 
 
@@ -130,6 +135,8 @@ public class CatGirl : SerializedMonoBehaviour
 
         int frontShowDic = animator.GetInteger("showDic");
         animator.SetInteger("showDic", showDic);
+
+        //이동 방향에 몬스터가 존재하는지 검사한다.
         MonsterObj targetMonster = null;
         for (int i = 1; i <= attackRange && targetMonster == null; i++)
         {
@@ -138,6 +145,17 @@ public class CatGirl : SerializedMonoBehaviour
                 break;
             if (targetMonster == null)
                 targetMonster = monsterManager.IsMonster(cPos.x, cPos.y);
+        }
+
+        Jar jarObj = null;
+        JarManager jarManager = JarManager.instance;
+        for (int i = 1; i <= attackRange && jarObj == null; i++)
+        {
+            Vector2Int cPos = new Vector2Int(pos.x + dic.x * i, pos.y + dic.y * i);
+            if (mapManager.IsWall(cPos.x, cPos.y))
+                break;
+            if (jarObj == null)
+                jarObj = jarManager.GetJarObj(cPos);
         }
 
         if (targetMonster != null)
@@ -157,6 +175,26 @@ public class CatGirl : SerializedMonoBehaviour
 
             yield return new WaitForSeconds(duration);
             targetMonster.Hit(1);
+
+            StartCoroutine(monsterManager.RunMonster());
+        }
+        else if (jarObj != null)
+        {
+            float gameDis = Vector2.Distance(pos, jarObj.pos);
+            float duration = 0.1f * gameDis;
+
+            Vector3 to = new Vector3(
+                  dic.x == 0 ? bPos.x : jarObj.pos.x * CreateMap.tileSize
+                , dic.y == 0 ? bPos.y : jarObj.pos.y * CreateMap.tileSize, 0);
+
+            BulletManager bulletManager = BulletManager.instance;
+            bulletManager.FireBullet(bPos, to, duration);
+
+            spriteRenderer.flipX = spriteFiipX;
+            animator.SetTrigger("attack");
+
+            yield return new WaitForSeconds(duration);
+            jarObj.RemoveJarObj();
 
             StartCoroutine(monsterManager.RunMonster());
         }

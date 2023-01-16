@@ -18,6 +18,7 @@ public class Tentacle : MonsterObj
         MonsterManager monsterManager = MonsterManager.instance;
         CharacterManager characterManager = CharacterManager.instance;
         MapManager mapManager = MapManager.instance;
+        JarManager jarManager = JarManager.instance;
 
         if (alive == false)
         {
@@ -116,6 +117,13 @@ public class Tentacle : MonsterObj
             //이동스택이 다 쌓인후 이동 한다.
             moveStack++;
             return;
+        }
+
+        if(jarManager.IsJar(gamePos.x, gamePos.y))
+        {
+            //이동위치에 항아리가 있으면 항아리를 부순다.
+            Jar jarObj = jarManager.GetJarObj(gamePos);
+            jarObj.RemoveJarObj();
         }
 
         //이동을 하면 이동스택과 공격스택은 초기화된다.
