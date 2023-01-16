@@ -320,7 +320,12 @@ public class CreateMap : MonoBehaviour
                                     startPosList.Add(new Vector2Int(ax, ay));
                                 }
                                 break;
-
+                            case Obj.TorchLight:
+                                {
+                                    TorchManager torchManager = TorchManager.instance;
+                                    torchManager.AddTorchPos(new Vector2Int(ax, ay));
+                                }
+                                break;
                                 //몬스터 객체 등록
                             case Obj.Slime:
                             case Obj.Tentacle:

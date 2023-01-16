@@ -23438,6 +23438,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3790357590134482301, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: Obj
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 3790357590134482301, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3790357590134482301, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
     - target: {fileID: 3860720060421011460, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -23526,6 +23534,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3992683411291801065, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: Obj
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 3992683411291801065, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3992683411291801065, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
     - target: {fileID: 4029434781062918096, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: tileType
       value: 101
@@ -24090,6 +24106,14 @@ PrefabInstance:
       propertyPath: tileType
       value: 101
       objectReference: {fileID: 0}
+    - target: {fileID: 5584461724217179876, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -7178419115232675305, guid: 7bc9b130c7342e84eb65eb9a151db413, type: 3}
+    - target: {fileID: 5660228772573847152, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -7178419115232675305, guid: 7bc9b130c7342e84eb65eb9a151db413, type: 3}
     - target: {fileID: 5731836908837281920, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: tileType
       value: 101

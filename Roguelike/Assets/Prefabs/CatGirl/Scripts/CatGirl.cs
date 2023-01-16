@@ -179,6 +179,8 @@ public class CatGirl : SerializedMonoBehaviour
         //해당 위치의 블록을 활성화한다.
         MapManager.instance.ActAreaTile(pos.x, pos.y);
 
+        TorchManager.instance.ActAreaTorch(pos.x, pos.y);
+
         //미니맵 갱신
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateMiniMap(new Vector2Int(pos.x, pos.y), 4);

@@ -45,6 +45,8 @@ public enum Obj
 
     StartPos = 100,
 
+    TorchLight = 500,
+
 
     Slime = 1000,
 

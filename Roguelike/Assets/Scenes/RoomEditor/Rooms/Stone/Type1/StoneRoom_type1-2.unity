@@ -20154,6 +20154,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 393404076872321627, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -7178419115232675305, guid: 7bc9b130c7342e84eb65eb9a151db413, type: 3}
     - target: {fileID: 445088300162731373, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: tileType
       value: 1
@@ -23290,6 +23294,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -8978432309063002805, guid: 587c18e9411503048a7ed1e826964464, type: 3}
+    - target: {fileID: 3258378461098736938, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -7178419115232675305, guid: 7bc9b130c7342e84eb65eb9a151db413, type: 3}
     - target: {fileID: 3260055095006997684, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: tileType
       value: 101
@@ -24258,6 +24266,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoomEditor
       objectReference: {fileID: 0}
+    - target: {fileID: 6282301317583767079, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: Obj
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 6282301317583767079, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 6282301317583767079, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
     - target: {fileID: 6544382108616457105, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_LocalPosition.x
       value: -15.403834
@@ -25446,6 +25462,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -7.9728675
       objectReference: {fileID: 0}
+    - target: {fileID: 9179045076669837654, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: Obj
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 9179045076669837654, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 9179045076669837654, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
     - target: {fileID: 9222315588464535428, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.518452

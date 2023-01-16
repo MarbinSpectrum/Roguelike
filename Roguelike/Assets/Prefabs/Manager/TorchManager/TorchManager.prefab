@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3940799031519533934
+--- !u!1 &6996365935536184843
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 537860696832564343}
-  - component: {fileID: 1145579191135139597}
+  - component: {fileID: 6996365935536184844}
+  - component: {fileID: 6996365935536184845}
   m_Layer: 0
-  m_Name: ObjManager
+  m_Name: TorchManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &537860696832564343
+--- !u!4 &6996365935536184844
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3940799031519533934}
+  m_GameObject: {fileID: 6996365935536184843}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,16 +31,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1145579191135139597
+--- !u!114 &6996365935536184845
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3940799031519533934}
+  m_GameObject: {fileID: 6996365935536184843}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 222f0a619220bea40afa1d5754d843fb, type: 3}
+  m_Script: {fileID: 11500000, guid: d2a8af88753ae1f4e96e730ef85f94b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
@@ -52,7 +52,5 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  objDataList:
-  - {fileID: 11400000, guid: ea4ee5215a62fcc45bbb92c941a85e36, type: 2}
-  - {fileID: 11400000, guid: 0d2a3338ef1da9d4c855ab38bc91a212, type: 2}
-  - {fileID: 11400000, guid: 5eb6143662bcc6f47bb0a4e5f1b95c4b, type: 2}
+  torchPrefab: {fileID: 8302593085784104364, guid: 8e55417b11e560a48b957df093e037a5, type: 3}
+  actSize: 10
