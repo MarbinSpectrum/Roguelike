@@ -56,6 +56,27 @@ public enum Obj
     Tentacle = 2000,
 }
 
+public enum Item
+{
+    Null = 0,
+
+    Coin = 100,
+
+
+
+
+
+}
+
+public enum ItemStat
+{
+    Null = 0,
+
+    Pow = 100,
+    Def = 200,
+    Cri = 300,
+}
+
 public enum ButtonInput
 {
     None,

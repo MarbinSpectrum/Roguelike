@@ -140,6 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2431050217336076577}
   - component: {fileID: 8559827119009646908}
+  - component: {fileID: 2056392283567509260}
   m_Layer: 0
   m_Name: broken
   m_TagString: Untagged
@@ -212,3 +213,16 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2056392283567509260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6705300525926066710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47f4ebf6430e7ab4192cb0db229505f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: f506e23c628a89e4eaf327a7cd4f0b1d, type: 3}

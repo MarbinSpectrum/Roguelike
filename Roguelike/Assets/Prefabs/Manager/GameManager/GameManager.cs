@@ -8,6 +8,9 @@ using Sirenix.OdinInspector;
 ////////////////////////////////////////////////////////////////////////////////
 public class GameManager : FieldObjectSingleton<GameManager>
 {
+    [SerializeField]
+    private PlayBGMObj BGMObj;
+
     ////////////////////////////////////////////////////////////////////////////////
     /// : Start
     ////////////////////////////////////////////////////////////////////////////////
@@ -40,6 +43,8 @@ public class GameManager : FieldObjectSingleton<GameManager>
 
         JarManager jarManager = JarManager.instance;
         yield return jarManager.runCreateJarObj(); //항아리 생성
+
+        BGMObj.PlayBGM();
 
         totalUI.ShowCreateMap(false);
     }

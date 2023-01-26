@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+////////////////////////////////////////////////////////////////////////////////
+/// : 항아리 객체들의 정보를 관리하는 매니저
+////////////////////////////////////////////////////////////////////////////////
 public class JarManager : FieldObjectSingleton<JarManager>
 {
     private HashSet<Vector2Int> jarPos = new HashSet<Vector2Int>();
