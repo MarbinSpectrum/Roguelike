@@ -21,6 +21,7 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
             itemObjs = new Dictionary<Item, ItemObj>();
             foreach (ItemData itemData in itemDataList)
             {
+                itemData.itemObj.itemObjData.itemData = itemData;
                 itemObjs[itemData.item] = itemData.itemObj;
             }
         }
@@ -48,6 +49,9 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
         return itemObj;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : pX pY 위치에 아이템을 생성한다.
+    ////////////////////////////////////////////////////////////////////////////////
     public void CreateItem(int pX, int pY,Item pItem)
     {
         Init();
@@ -59,7 +63,45 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
         if (itemObjs[pItem] == null)
             return;
         ItemObj itemObj = Instantiate(itemObjs[pItem]);
+        itemObj.itemObjData = itemObjs[pItem].itemObjData;
+        itemObj.pos = new Vector2Int(pX, pY);
         itemObj.transform.position =
             new Vector3(CreateMap.tileSize * pX, CreateMap.tileSize * pY, 0);
+        itemObj.Init();
+
+        items[new Vector2Int(pX, pY)] = itemObj;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : pX pY 위치에 아이템을 제거한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void RemoveItem(int pX, int pY)
+    {
+        Init();
+
+        if (IsItem(pX, pY))
+        {
+            ItemObj itemObj = items[new Vector2Int(pX, pY)];
+            itemObj.gameObject.SetActive(false);
+            items.Remove(new Vector2Int(pX, pY));
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : ItemType을 받는다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public ItemType GetItemType(ItemObj pItemObj)
+    {
+        ItemObjData itemObjData = pItemObj.itemObjData;
+        ItemData itemData = itemObjData.itemData;
+        return GetItemType(itemData.item);
+    }
+    public ItemType GetItemType(Item pItem)
+    {
+        switch(pItem)
+        {
+            default:
+                return ItemType.Etc;
+        }
     }
 }

@@ -160,6 +160,9 @@ public class CatGirl : SerializedMonoBehaviour
 
         if (targetMonster != null)
         {
+            //이동 방향으로 몬스터가 존재한다.
+            //몬스터를 공격한다.
+
             float gameDis = Vector2.Distance(pos, targetMonster.pos);
             float duration = 0.1f * gameDis;
 
@@ -180,6 +183,9 @@ public class CatGirl : SerializedMonoBehaviour
         }
         else if (jarObj != null)
         {
+            //이동 방향으로 항아리가 존재한다.
+            //항아리를 부순다.
+
             float gameDis = Vector2.Distance(pos, jarObj.pos);
             float duration = 0.1f * gameDis;
 
@@ -200,6 +206,8 @@ public class CatGirl : SerializedMonoBehaviour
         }
         else if (CanMove(pos.x + dic.x, pos.y + dic.y))
         {
+            //해당 방향으로 이동가능한지 검사한다.
+            //이동가능하면 이동한다.
             pos.x += dic.x;
             pos.y += dic.y;
             spriteRenderer.flipX = spriteFiipX;
@@ -217,11 +225,22 @@ public class CatGirl : SerializedMonoBehaviour
         //해당 위치의 블록을 활성화한다.
         MapManager.instance.ActAreaTile(pos.x, pos.y);
 
+        //해당 위치의 토치를 활성화시킨다.
         TorchManager.instance.ActAreaTorch(pos.x, pos.y);
+
+        //이동 위치에 아이템이 존재하는지 확인한다.
+        ItemManager itemManager = ItemManager.instance;
+        ItemObj itemObj = itemManager.GetItem(pos.x, pos.y);
+        if(itemObj != null)
+        {
+            //존재하면 아이템을 얻는다.
+            itemObj.GetItem();
+        }
 
         //미니맵 갱신
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateMiniMap(new Vector2Int(pos.x, pos.y), 4);
+
 
         ButtonInput = ButtonInput.None;
 

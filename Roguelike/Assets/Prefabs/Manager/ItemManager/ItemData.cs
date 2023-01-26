@@ -8,4 +8,7 @@ public class ItemData : ScriptableObject
     public ItemObj itemObj;
     public Sprite itemSprite_UI;
     public bool stockItem;
+
+    [ShowIf("stockItem"),MinMaxSlider(0, 100)]
+    public Vector2Int valueMinMax;
 }

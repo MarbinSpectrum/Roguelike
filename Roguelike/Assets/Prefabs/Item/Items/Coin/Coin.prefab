@@ -269,23 +269,8 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: itemStats
-      Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[ItemStatData, Assembly-CSharp]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-  item: 0
-  count: 0
-  coinMinMax: {x: 28, y: 66}
+    SerializationNodes: []
+  coinMinMax: {x: 18, y: 60}
 --- !u!1 &4077347825653294773
 GameObject:
   m_ObjectHideFlags: 0

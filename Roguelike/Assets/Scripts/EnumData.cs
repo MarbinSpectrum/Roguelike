@@ -77,6 +77,13 @@ public enum ItemStat
     Cri = 300,
 }
 
+public enum ItemType
+{
+    Etc = 100,
+    Weapon = 200,
+    Armor = 300,
+}
+
 public enum ButtonInput
 {
     None,

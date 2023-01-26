@@ -108,9 +108,14 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
         miniMap.UpdateMiniMap(miniMapTexture);
     }
 
-    public void AddItemToInventory()
+    public bool ItemSendToInventory(ItemObj pItemObj)
     {
+        return inventoryUI.AddItem(pItemObj);
+    }
 
+    public void UpdateInventory(ItemType pItemType)
+    {
+        inventoryUI.UpdateSlot(pItemType);
     }
 
     private void Update()

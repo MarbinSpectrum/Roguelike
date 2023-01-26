@@ -31,6 +31,17 @@ public class UpdateSlotCategory : SerializedMonoBehaviour
                 obj.SetActive(false);
             offslot[actCategory].SetActive(false);
             onslot[actCategory].SetActive(true);
+
+            TotalUI totalUI = TotalUI.instance;
+            if(totalUI != null)
+            {
+                if (actCategory == 0)
+                    totalUI.UpdateInventory(ItemType.Etc);
+                else if (actCategory == 1)
+                    totalUI.UpdateInventory(ItemType.Weapon);
+                else if (actCategory == 2)
+                    totalUI.UpdateInventory(ItemType.Armor);
+            }
         }
     }
 
