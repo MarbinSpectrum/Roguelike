@@ -10,6 +10,9 @@ using TMPro;
 ////////////////////////////////////////////////////////////////////////////////
 public class ItemSlot : SerializedMonoBehaviour
 {
+    [System.NonSerialized]
+    public Item item = Item.Null;
+
     #region[private Sprite SlotSprite]
     private Sprite SlotSprite;
     public Sprite slotSprite
@@ -56,7 +59,9 @@ public class ItemSlot : SerializedMonoBehaviour
         else
             numText.enabled = true;
         numText.text = SlotNum.ToString();
-        if(SlotSprite == null)
+        if(item == Item.Coin)
+            numText.text += "$";
+        if (SlotSprite == null)
             slotImg.color = new Color(1, 1, 1, 0);
         else
             slotImg.color = new Color(1, 1, 1, 1);

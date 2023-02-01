@@ -55,6 +55,10 @@ MonoBehaviour:
     SerializationNodes: []
   catGirl: {fileID: 1410027969481209121, guid: 5f0eaa1601ca279488992ea988ba579f, type: 3}
   character: {fileID: 0}
+  basePow: 5
+  baseBalance: 1
+  maxBalance: 10
+  canControl: 0
 --- !u!1001 &8576141272321392113
 PrefabInstance:
   m_ObjectHideFlags: 0

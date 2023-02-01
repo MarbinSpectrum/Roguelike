@@ -18,9 +18,14 @@ public class CatGirl : SerializedMonoBehaviour
     [SerializeField]
     private int attackRange = 3;
     [SerializeField]
+    private Material baseMaterial;
+    [SerializeField]
+    private Material hitMaterial;
+    [SerializeField]
     private Dictionary<ButtonInput, Transform> bulletPos = new Dictionary<ButtonInput, Transform>();
 
     private ButtonInput ButtonInput = ButtonInput.None;
+    private IEnumerator hitCor;
 
     [HideInInspector]
     public ButtonInput buttonInput
@@ -99,10 +104,19 @@ public class CatGirl : SerializedMonoBehaviour
 
     public IEnumerator ButtonEventDelay()
     {
-        yield return new WaitUntil(()=> (buttonInput != ButtonInput.None));
-
         MonsterManager monsterManager = MonsterManager.instance;
         MapManager mapManager = MapManager.instance;
+        CharacterManager characterManager = CharacterManager.instance;
+        ItemManager itemManager = ItemManager.instance;
+        TotalUI totalUI = TotalUI.instance;
+        TorchManager torchManager = TorchManager.instance;
+        DamageEffect damageEffect = DamageEffect.instance;
+        BulletManager bulletManager = BulletManager.instance;
+        JarManager jarManager = JarManager.instance;
+
+        yield return new WaitUntil(()=> (buttonInput != ButtonInput.None));
+
+        yield return new WaitUntil(() => (characterManager.canControl == true)); //컨트롤 불가 상태일경우 대기
 
         int showDic = 0;
         Vector2Int dic = Vector2Int.zero;
@@ -148,7 +162,6 @@ public class CatGirl : SerializedMonoBehaviour
         }
 
         Jar jarObj = null;
-        JarManager jarManager = JarManager.instance;
         for (int i = 1; i <= attackRange && jarObj == null; i++)
         {
             Vector2Int cPos = new Vector2Int(pos.x + dic.x * i, pos.y + dic.y * i);
@@ -170,14 +183,17 @@ public class CatGirl : SerializedMonoBehaviour
                   dic.x == 0 ? bPos.x : targetMonster.pos.x * CreateMap.tileSize
                 , dic.y == 0 ? bPos.y : targetMonster.pos.y * CreateMap.tileSize, 0);
 
-            BulletManager bulletManager = BulletManager.instance;
             bulletManager.FireBullet(bPos, to, duration);
 
             spriteRenderer.flipX = spriteFiipX;
             animator.SetTrigger("attack");
 
             yield return new WaitForSeconds(duration);
-            targetMonster.Hit(1);
+
+            int totalDamage = characterManager.GetTotalDamage();
+            bool critical = characterManager.CriticalProcess(ref totalDamage);
+
+            targetMonster.Hit((uint)totalDamage, critical);
 
             StartCoroutine(monsterManager.RunMonster());
         }
@@ -193,13 +209,17 @@ public class CatGirl : SerializedMonoBehaviour
                   dic.x == 0 ? bPos.x : jarObj.pos.x * CreateMap.tileSize
                 , dic.y == 0 ? bPos.y : jarObj.pos.y * CreateMap.tileSize, 0);
 
-            BulletManager bulletManager = BulletManager.instance;
             bulletManager.FireBullet(bPos, to, duration);
 
             spriteRenderer.flipX = spriteFiipX;
             animator.SetTrigger("attack");
 
             yield return new WaitForSeconds(duration);
+
+            int totalDamage = characterManager.GetTotalDamage();
+
+            damageEffect.DamageEffectRun(jarObj.pos, totalDamage, false);
+
             jarObj.RemoveJarObj();
 
             StartCoroutine(monsterManager.RunMonster());
@@ -223,13 +243,12 @@ public class CatGirl : SerializedMonoBehaviour
         }
 
         //해당 위치의 블록을 활성화한다.
-        MapManager.instance.ActAreaTile(pos.x, pos.y);
+        mapManager.ActAreaTile(pos.x, pos.y);
 
         //해당 위치의 토치를 활성화시킨다.
-        TorchManager.instance.ActAreaTorch(pos.x, pos.y);
+        torchManager.ActAreaTorch(pos.x, pos.y);
 
         //이동 위치에 아이템이 존재하는지 확인한다.
-        ItemManager itemManager = ItemManager.instance;
         ItemObj itemObj = itemManager.GetItem(pos.x, pos.y);
         if(itemObj != null)
         {
@@ -238,12 +257,29 @@ public class CatGirl : SerializedMonoBehaviour
         }
 
         //미니맵 갱신
-        TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateMiniMap(new Vector2Int(pos.x, pos.y), 4);
 
 
         ButtonInput = ButtonInput.None;
 
         StartCoroutine(ButtonEventDelay());
+    }
+
+    public void HitAni()
+    {
+        if (hitCor != null)
+        {
+            StopCoroutine(hitCor);
+            hitCor = null;
+        }
+        hitCor = HitStunAni();
+        StartCoroutine(hitCor);
+    }
+
+    protected virtual IEnumerator HitStunAni()
+    {
+        spriteRenderer.material = hitMaterial;
+        yield return new WaitForSeconds(0.05f);
+        spriteRenderer.material = baseMaterial;
     }
 }

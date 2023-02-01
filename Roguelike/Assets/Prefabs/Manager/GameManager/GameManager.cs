@@ -38,6 +38,15 @@ public class GameManager : FieldObjectSingleton<GameManager>
         Vector2Int createPos = mapManager.GetRandomStartPos();
         characterManager.CreateCatGirl(createPos.x, createPos.y); //Ä³¸¯ÅÍ »ı¼º
 
+        BulletManager bulletManager = BulletManager.instance;
+        yield return bulletManager.runCreateObj();
+
+        DamageEffect damageEffect = DamageEffect.instance;
+        yield return damageEffect.runCreateObj(); //µ¥¹ÌÁö ÀÌÆåÆ® »ı¼º
+
+        GetGoldEffect getGoldEffect = GetGoldEffect.instance;
+        yield return getGoldEffect.runCreateObj(); //°ñµåÈ¹µæ ÀÌÆåÆ® »ı¼º
+
         MonsterManager monsterManager = MonsterManager.instance;
         yield return monsterManager.runCreateMonster(mapManager.GetMonsterList()); //¸Ê »ı¼º
 

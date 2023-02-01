@@ -41,7 +41,9 @@ QualitySettings:
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
     customRenderPipeline: {fileID: 11400000, guid: e638abb003e7f2b489801f7d0c5e5fa5, type: 2}
-    excludedTargetPlatforms: []
+    excludedTargetPlatforms:
+    - Android
+    - Standalone
   - serializedVersion: 2
     name: Low
     pixelLightCount: 0
@@ -113,7 +115,9 @@ QualitySettings:
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
     customRenderPipeline: {fileID: 0}
-    excludedTargetPlatforms: []
+    excludedTargetPlatforms:
+    - Android
+    - Standalone
   - serializedVersion: 2
     name: High
     pixelLightCount: 2
@@ -149,7 +153,9 @@ QualitySettings:
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
     customRenderPipeline: {fileID: 0}
-    excludedTargetPlatforms: []
+    excludedTargetPlatforms:
+    - Standalone
+    - Android
   - serializedVersion: 2
     name: Very High
     pixelLightCount: 3
@@ -185,7 +191,9 @@ QualitySettings:
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
     customRenderPipeline: {fileID: 0}
-    excludedTargetPlatforms: []
+    excludedTargetPlatforms:
+    - Android
+    - Standalone
   - serializedVersion: 2
     name: Ultra
     pixelLightCount: 4
@@ -221,7 +229,9 @@ QualitySettings:
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
     customRenderPipeline: {fileID: 0}
-    excludedTargetPlatforms: []
+    excludedTargetPlatforms:
+    - Standalone
+    - Android
   m_PerPlatformDefaultQuality:
     Android: 2
     Lumin: 5

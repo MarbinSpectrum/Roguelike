@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!21 &-6715626053366644980
+--- !u!21 &-5821545803161040479
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 1
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: NumText
   m_EditorClassIdentifier: 
   hashCode: 1874044939
-  material: {fileID: -6715626053366644980}
+  material: {fileID: -5821545803161040479}
   materialHashCode: 0
   m_Version: 1.1.0
   m_FaceInfo:
@@ -135,6 +135,12 @@ MonoBehaviour:
     m_Scale: 1
     m_Name: NumText_9
     m_HashCode: 725471117
+  - m_ElementType: 2
+    m_Unicode: 36
+    m_GlyphIndex: 10
+    m_Scale: 1
+    m_Name: NumText_10
+    m_HashCode: -1829257195
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:
@@ -155,7 +161,7 @@ MonoBehaviour:
     m_Metrics:
       m_Width: 8
       m_Height: 16
-      m_HorizontalBearingX: -3
+      m_HorizontalBearingX: -4
       m_HorizontalBearingY: 8
       m_HorizontalAdvance: 8
     m_GlyphRect:
@@ -286,5 +292,20 @@ MonoBehaviour:
     m_Scale: 1
     m_AtlasIndex: 0
     sprite: {fileID: 6014608917565758126, guid: 10b920f4cc0acf7498d97922a18749ba, type: 3}
+  - m_Index: 10
+    m_Metrics:
+      m_Width: 8
+      m_Height: 16
+      m_HorizontalBearingX: -4
+      m_HorizontalBearingY: 8
+      m_HorizontalAdvance: 8
+    m_GlyphRect:
+      m_X: 164
+      m_Y: 0
+      m_Width: 8
+      m_Height: 16
+    m_Scale: 1
+    m_AtlasIndex: 0
+    sprite: {fileID: -3992349758612032094, guid: 10b920f4cc0acf7498d97922a18749ba, type: 3}
   spriteInfoList: []
   fallbackSpriteAssets: []

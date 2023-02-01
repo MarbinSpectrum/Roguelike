@@ -10,15 +10,95 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     [SerializeField]
     private CatGirl catGirl;
 
+    [HideInInspector]
     public CatGirl character;
 
-    private uint maxHp;
-    private uint nowHp;
+    #region[public uint maxHp]
+    private uint MaxHp;
+    public uint maxHp
+    {
+        get
+        {
+            return MaxHp;
+        }
+    }
+    #endregion
 
-    private uint maxExp;
-    private uint nowExp;
+    #region[public uint nowHp]
+    private uint NowHp;
+    public uint nowHp
+    {
+        get
+        {
+            return NowHp;
+        }
+    }
+    #endregion
 
-    private uint level;
+    #region[public uint maxExp]
+    private uint MaxExp;
+    public uint maxExp
+    {
+        get
+        {
+            return MaxExp;
+        }
+    }
+    #endregion
+
+    #region[public uint nowExp]
+    private uint NowExp;
+    public uint nowExp
+    {
+        get 
+        { 
+            return NowExp; 
+        }
+    }
+    #endregion
+
+    #region[public uint nowLevel]
+    private uint NowLevel;
+    public uint nowLevel
+    {
+        get
+        {
+            return NowLevel;
+        }
+    }
+    #endregion
+
+    [SerializeField]
+    private uint basePow;
+    [SerializeField]
+    private uint baseBalance;
+    [SerializeField]
+    private uint maxBalance;
+
+    #region[public float baseCriPer]
+    private float BaseCriPer;
+    public float baseCriPer
+    {
+        get
+        {
+            return BaseCriPer;
+        }
+    }
+    #endregion
+
+    #region[public float baseCriDamage]
+    private float BaseCriDamage;
+    public float baseCriDamage
+    {
+        get
+        {
+            return BaseCriDamage;
+        }
+    }
+    #endregion
+
+    [HideInInspector]
+    public bool canControl;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : pX,pY에 해당하는 좌표에 캐릭터를 생성한다.
@@ -35,16 +115,24 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         character.gameObject.SetActive(true);
         character.SetPos(pX, pY);
 
-        maxHp = 3;
-        nowHp = 3;
-        maxExp = 5;
-        nowExp = 0;
+        MaxExp = 5;
+        NowExp = 0;
+        MaxHp = 3;
+        NowHp = MaxHp;
+        NowLevel = 1;
+        BaseCriDamage = 100;
+        BaseCriPer = 50;
 
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateHp(maxHp, nowHp);
         totalUI.UpdateExp(maxExp, nowExp);
+
+        canControl = true;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 입력명령 버튼
+    ////////////////////////////////////////////////////////////////////////////////
     public void CharactorInputButton(ButtonInput pButtonInput)
     {
         if (character == null)
@@ -52,30 +140,67 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         character.buttonInput = pButtonInput;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 플레이어가 pDamage만큼 피해를 받음
+    ////////////////////////////////////////////////////////////////////////////////
     public void Hit(uint pDamage)
     {
         if (nowHp > pDamage)
-            nowHp -= pDamage;
+            NowHp -= pDamage;
         else
-            nowHp = 0;
+            NowHp = 0;
 
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateHp(maxHp, nowHp);
+
+        StartCoroutine(HitStunDelay());
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 스턴딜레이
+    ////////////////////////////////////////////////////////////////////////////////
+    private IEnumerator HitStunDelay()
+    {
+        canControl = false;
+        yield return new WaitForSeconds(0.5f);
+        canControl = true;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 경험치 획득
+    ////////////////////////////////////////////////////////////////////////////////
     public void GetExp(uint pValue)
     {
-        nowExp += pValue;
+        NowExp += pValue;
         if(nowExp >= maxExp)
         {
-            nowExp -= maxExp;
-            maxExp = (uint)(maxExp *1.5f);
-            level += 1;
+            //획득경험치가 최대경험치를 넘겼다면
+            //레벨업을을한다.
+            NowExp -= maxExp;
+
+            LevelUp();
         }
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateExp(maxExp, nowExp);
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 레벨을 올려준다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void LevelUp()
+    {
+        //레벨을 올려주고 공격력을 올려준다.
+        NowLevel += 1;
+        basePow += 1;
+
+        //다음 최대 경험치를 갱신해준다.
+        MaxExp = (uint)(maxExp * 1.5f);
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : Update
+    ////////////////////////////////////////////////////////////////////////////////
     private void Update()
     {
         if (Input.GetKey(KeyCode.LeftArrow))
@@ -95,5 +220,71 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             character.buttonInput = ButtonInput.None;
         else if (Input.GetKeyUp(KeyCode.DownArrow))
             character.buttonInput = ButtonInput.None;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 최종 힘을 구해준다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public uint GetTotalPow()
+    {
+        return basePow;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 최종밸런스를 구해준다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public uint GetTotalBalance()
+    {
+        return baseBalance;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 최종데미지를 구해준다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public int GetTotalDamage()
+    {
+        //  Pow*(balance/maxBalance) ~ Pow 사이로 랜덤하게 데미지가 결정된다.
+        int totalPow = (int)GetTotalPow();
+        float per = GetTotalBalance() / (float)maxBalance;
+        int minPow = (int)(per * totalPow);
+        minPow = Mathf.Max(1, minPow);
+
+        int damage = Random.Range(minPow, totalPow);
+        return damage;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 최종 치명타 확률을 구한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public float GetTotalCriPer()
+    {
+        return baseCriPer;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 최종 치명타 데미지를 구한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public float GetTotalCriDamage()
+    {
+        return baseCriDamage;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 해당 데미지가 크리티컬로 적용될지 정한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public bool CriticalProcess(ref int pDamage)
+    {
+
+        float damage = pDamage;
+        if (Random.Range(0,100) < GetTotalCriPer())
+        {
+            //크리티컬로 정해졌다.
+            //true을 반환하고
+            //크리티컬만큼의 데미지로 늘려준다.
+            damage += damage * (GetTotalCriDamage() / 100f);
+            pDamage = (int)damage;
+            return true;
+        }
+        return false;
     }
 }

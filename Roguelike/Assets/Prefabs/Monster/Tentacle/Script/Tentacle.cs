@@ -6,6 +6,10 @@ public class Tentacle : MonsterObj
 {
     [SerializeField]
     private Animator animator;
+    [SerializeField]
+    private SoundObj hitSE;
+    [SerializeField]
+    private SoundObj dieSE;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 몬스터의 행동을 처리한다.
@@ -78,26 +82,30 @@ public class Tentacle : MonsterObj
 
             //캐릭터가 공격범위에 있다.
             //이동하지않고 플레이어를 공격한다.
-            animator.SetTrigger("Attack");
 
+            //플레이어의 방향에 따라서 애니메이션을 실행한다.
             if (pos.x + 1 == gamePos.x)
             {
                 //오른쪽에 플레이어가 있다.
+                animator.SetTrigger("Attack_Side");
                 monsterSpr.flipX = false;
             }
             else if (pos.x - 1 == gamePos.x)
             {
                 //왼쪽에 플레이어가 있다.
+                animator.SetTrigger("Attack_Side");
                 monsterSpr.flipX = true;
             }
-            else if (pos.x - 1 == gamePos.y)
+            else if (pos.y - 1 == gamePos.y)
             {
                 //아래쪽에 플레이어가 있다.
+                animator.SetTrigger("Attack_Front");
                 monsterSpr.flipX = false;
             }
-            else if (pos.x + 1 == gamePos.y)
+            else if (pos.y + 1 == gamePos.y)
             {
                 //위쪽에 플레이어가 있다.
+                animator.SetTrigger("Attack_Back");
                 monsterSpr.flipX = false;
             }
 
@@ -126,6 +134,28 @@ public class Tentacle : MonsterObj
             jarObj.RemoveJarObj();
         }
 
+        //플레이어의 방향에 따라서 스프라이트를 뒤집는다.
+        if (pos.x + 1 == gamePos.x)
+        {
+            //오른쪽에 플레이어가 있다.
+            monsterSpr.flipX = false;
+        }
+        else if (pos.x - 1 == gamePos.x)
+        {
+            //왼쪽에 플레이어가 있다.
+            monsterSpr.flipX = true;
+        }
+        else if (pos.y - 1 == gamePos.y)
+        {
+            //아래쪽에 플레이어가 있다.
+            monsterSpr.flipX = false;
+        }
+        else if (pos.y + 1 == gamePos.y)
+        {
+            //위쪽에 플레이어가 있다.
+            monsterSpr.flipX = false;
+        }
+
         //이동을 하면 이동스택과 공격스택은 초기화된다.
         attackStack = 0;
         moveStack = 0;
@@ -137,6 +167,21 @@ public class Tentacle : MonsterObj
         //실질적인 이동명령
         Vector3 toPos = new Vector3(gamePos.x * CreateMap.tileSize, gamePos.y * CreateMap.tileSize, 0);
         StartCoroutine(MyLib.Action2D.MoveTo(transform, toPos, 0.2f));
+    }
+
+    public override void Hit(uint pDamage, bool pCritical)
+    {
+        base.Hit(pDamage, pCritical);
+
+        if (hp == 0)
+        {
+            dieSE.PlaySE();
+        }
+        else
+        {
+            animator.SetTrigger("Hit");
+            hitSE.PlaySE();
+        }
     }
 
 }

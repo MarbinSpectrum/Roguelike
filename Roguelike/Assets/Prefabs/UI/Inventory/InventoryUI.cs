@@ -122,7 +122,7 @@ public class InventoryUI : MonoBehaviour
                 break;
         }
     }
-    private void UpdateSlot(ref List<ItemObjData> pItemObjDatas,uint pSlotMax)
+    private void UpdateSlot(ref List<ItemObjData> pItemObjDatas, uint pSlotMax)
     {
         for(int i = 0; i < itemSlotMax; i++)
         {
@@ -144,10 +144,11 @@ public class InventoryUI : MonoBehaviour
                 continue;
             }
 
-            if(itemObj != null)
+            if (itemObj != null)
             {
                 //해당칸의 아이템을 보여준다.
                 ItemData itemData = itemObj.itemData;
+                itemSlots[i].item = itemObj.itemData.item;
                 itemSlots[i].slotSprite = itemData.itemSprite_UI;
                 itemSlots[i].slotNum = (uint)itemObj.count;
             }

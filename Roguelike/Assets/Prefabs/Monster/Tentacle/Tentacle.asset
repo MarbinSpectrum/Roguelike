@@ -15,7 +15,7 @@ MonoBehaviour:
   monsterObj: {fileID: 2577514620860499387, guid: 5587f5b6dd70fc54782dc459e687b453, type: 3}
   previewSprite: {fileID: 21300000, guid: e9f06a3cefa6e6747894755120d9e7e6, type: 3}
   monsterType: 2000
-  hp: 3
+  hp: 25
   damage: 1
   attackDelay: 2
   moveDelay: 3

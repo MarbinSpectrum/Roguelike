@@ -327,6 +327,8 @@ MonoBehaviour:
   spriteRenderer: {fileID: 1410027969481209132}
   moveSpeed: 0.2
   attackRange: 3
+  baseMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  hitMaterial: {fileID: 2100000, guid: 39f124793c6cf054ba28faee0da4d835, type: 2}
 --- !u!1 &3380390602557409756
 GameObject:
   m_ObjectHideFlags: 0

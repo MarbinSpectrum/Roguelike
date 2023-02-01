@@ -82,7 +82,7 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
         if (IsItem(pX, pY))
         {
             ItemObj itemObj = items[new Vector2Int(pX, pY)];
-            itemObj.gameObject.SetActive(false);
+            //itemObj.gameObject.SetActive(false);
             items.Remove(new Vector2Int(pX, pY));
         }
     }

@@ -6,10 +6,13 @@ public class SoundObj : MonoBehaviour
 {
     [SerializeField]
     private AudioClip clip;
+    [SerializeField]
+    private bool onEnablePlay = true;
 
     private void OnEnable()
     {
-        PlaySE();
+        if(onEnablePlay)
+            PlaySE();
     }
 
     public void PlaySE()

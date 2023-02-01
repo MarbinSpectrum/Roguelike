@@ -52,7 +52,6 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 951ac73fe761ae54aa02cd954d7739cb, type: 3}
     - {fileID: 2800000, guid: a7797af4caeecbd49b5b655daae1d139, type: 3}
     - {fileID: 2800000, guid: 03024a28c4724cd44b4ffe16593f7e2f, type: 3}
-    - {fileID: 2800000, guid: 6061e2eda39be6545b43b6a499d9c2d0, type: 3}
     - {fileID: 2800000, guid: 45cb18437a3f1a444866df9d83188199, type: 3}
     - {fileID: 2800000, guid: 92e5ac5ebd84c3841a189ec7c5e3f5bf, type: 3}
     - {fileID: 2800000, guid: 6a5b354543eda144590592b666a4e8a0, type: 3}
@@ -229,7 +228,6 @@ SpriteAtlas:
   - {fileID: -575846659623337753, guid: 7103554d27a08bb418a9f6028e761ac1, type: 3}
   - {fileID: 21300000, guid: 33518aad7d5acb54caaf40a3bfd1035d, type: 3}
   - {fileID: 21300000, guid: 9aef23cd58603494e9427066d030de34, type: 3}
-  - {fileID: 21300000, guid: 6061e2eda39be6545b43b6a499d9c2d0, type: 3}
   - {fileID: 1309125190302641584, guid: 92e5ac5ebd84c3841a189ec7c5e3f5bf, type: 3}
   - {fileID: -5666893499437472510, guid: 92e5ac5ebd84c3841a189ec7c5e3f5bf, type: 3}
   - {fileID: -2130456246522207694, guid: 92e5ac5ebd84c3841a189ec7c5e3f5bf, type: 3}
@@ -342,7 +340,6 @@ SpriteAtlas:
   - Stone Wall_8
   - cat_pixel_attack_front_2
   - JarBroken
-  - Inventory
   - ArrowKey_Up_0
   - ArrowKey_Up_1
   - ArrowKey_Up_2

@@ -34,6 +34,9 @@ public abstract class MonsterObj : MonoBehaviour
     public bool stun;
 
     public SpriteRenderer monsterSpr;
+    public Material baseMaterial;
+    public Material hitMaterial;
+    private IEnumerator hitCor;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : pMonsterData기반으로 몬스터를 초기화
@@ -171,15 +174,28 @@ public abstract class MonsterObj : MonoBehaviour
         StartCoroutine(MyLib.Action2D.MoveTo(transform, toPos, 0.2f));
     }
 
-    public virtual void Hit(uint pDamage)
+    public virtual void Hit(uint pDamage, bool pCritical)
     {
         stun = true;
         moveStack = 0;
 
+        DamageEffect damageEffect = DamageEffect.instance;
+        damageEffect.DamageEffectRun(pos, (int)pDamage, pCritical);
+
         if (hp < pDamage)
             hp = 0;
         else
+        {
+            if(hitCor != null)
+            {
+                StopCoroutine(hitCor);
+                hitCor = null;
+            }
+            hitCor = HitStunAni();
+            StartCoroutine(hitCor);
+
             hp -= pDamage;
+        }
 
         if(hp == 0)
         {
@@ -187,5 +203,18 @@ public abstract class MonsterObj : MonoBehaviour
             CharacterManager characterManager = CharacterManager.instance;
             characterManager.GetExp(exp);
         }
+    }
+
+    public virtual IEnumerator HitStunAni()
+    {
+        monsterSpr.material = hitMaterial;
+        yield return new WaitForSeconds(0.05f);
+        monsterSpr.material = baseMaterial;
+    }
+
+    public virtual void PlayerHitAni()
+    {
+        CharacterManager characterManager = CharacterManager.instance;
+        characterManager.character.HitAni();
     }
 }
