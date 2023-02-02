@@ -51,15 +51,20 @@ public class InventoryUI : MonoBehaviour
         uiObj.SetActive(isRun);
         UpdateSlot(actCategory);
     }
+    public void ActInventory(bool pState)
+    {
+        isRun = pState;
+        uiObj.SetActive(isRun);
+        UpdateSlot(actCategory);
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 아이템을 인벤토리에 추가한다.
     ////////////////////////////////////////////////////////////////////////////////
     public bool AddItem(ItemObjData pItemObjData)
     {
-        ItemManager itemManager = ItemManager.instance;
-
-        ItemType itemType = itemManager.GetItemType(pItemObjData);
+        ItemType itemType = ItemManager.GetItemType(pItemObjData);
         switch(itemType)
         {
             case ItemType.Weapon:
@@ -96,13 +101,7 @@ public class InventoryUI : MonoBehaviour
         //아이템 객체를 생성하고 추가
         pItemObjDatas.Add(new ItemObjData(pItemObjData));
 
-        //아이템 목록을 정렬
-        pItemObjDatas.Sort((x, y) => 
-        {
-            int ret1 = x.equip ? -1 : 1;
-            int ret2 = ret1 != 0 ? ret1 : x.itemData.item.CompareTo(y.itemData.item);
-            return ret2;
-        });
+
         return true;
     }
 
@@ -127,7 +126,15 @@ public class InventoryUI : MonoBehaviour
     }
     private void UpdateSlot(ref List<ItemObjData> pItemObjDatas, uint pSlotMax)
     {
-        for(int i = 0; i < itemSlotMax; i++)
+        //아이템 목록을 정렬
+        pItemObjDatas.Sort((x, y) =>
+        {
+            int ret1 = x.equip ? -1 : 1;
+            int ret2 = ret1 != 0 ? ret1 : x.itemData.item.CompareTo(y.itemData.item);
+            return ret2;
+        });
+
+        for (int i = 0; i < itemSlotMax; i++)
         {
             ItemObjData itemObjData = null;
             if(pItemObjDatas.Count > i)
@@ -180,6 +187,24 @@ public class InventoryUI : MonoBehaviour
         return nowWeapon;
     }
 
+    public void RemoveItem(ItemType pItemType,int pIdx)
+    {
+        List<ItemObjData> itemObjDatas = null;
+        switch (pItemType)
+        {
+            case ItemType.Weapon:
+                itemObjDatas = weaponItems;
+                break;
+            case ItemType.Accessary:
+                itemObjDatas = accessaryItems;
+                break;
+            case ItemType.Etc:
+                itemObjDatas = etcItems;
+                break;
+        }
+        itemObjDatas.RemoveAt(pIdx);
+    }
+
     public void ShowItemData(int pIdx)
     {
         List<ItemObjData> itemObjDatas = null;
@@ -202,6 +227,6 @@ public class InventoryUI : MonoBehaviour
             return;
 
         TotalUI totalUI = TotalUI.instance;
-        totalUI.ShowItemData(itemObjDatas[pIdx]);
+        totalUI.ShowItemData(itemObjDatas[pIdx], pIdx);
     }
 }

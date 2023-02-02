@@ -26,8 +26,17 @@ public class ItemData : ScriptableObject
     [BoxGroup("Box")]
     public Sprite sideSprite;
 
+    [ShowIf("@ItemManager.GetItemType(item) == ItemType.Weapon")]
+    [BoxGroup("Box")]
+    public uint range;
+
+    [ShowIf("@ItemManager.GetItemType(item) == ItemType.Weapon")]
+    [BoxGroup("Box")]
+    public uint reloadDelay;
+
     [Space(100)]
     public string nameKey;
+    [ShowIf("@ItemManager.GetItemType(item) != ItemType.Weapon")]
     public string explainKey;
 
     public ItemObjData createItemObjData()

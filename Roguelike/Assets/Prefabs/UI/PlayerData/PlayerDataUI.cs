@@ -96,13 +96,22 @@ public class PlayerDataUI : MonoBehaviour
 
     private void SetText(ref TextMeshProUGUI pTextMeshProUGUI, float pBase, float pTotal,string pAddText = "")
     {
-        if (pBase < pTotal)
-            pTextMeshProUGUI.color = Color.green;
-        else if (pBase > pTotal)
+        float addValue = pTotal - pBase;
+
+        if (pBase > pTotal)
             pTextMeshProUGUI.color = Color.red;
         else
             pTextMeshProUGUI.color = Color.white;
 
-        pTextMeshProUGUI.text = pTotal.ToString() + pAddText;
+        if(addValue > 0)
+        {
+            string str = string.Format("{0}{1}\n<color=#999999>({2}+{3})</color>", pTotal, pAddText, pBase, addValue);
+            pTextMeshProUGUI.text = str;
+        }
+        else
+        {
+            string str = string.Format("{0}{1}", pTotal, pAddText);
+            pTextMeshProUGUI.text = str;
+        }
     }
 }

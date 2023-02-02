@@ -97,17 +97,17 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
     ////////////////////////////////////////////////////////////////////////////////
     /// : ItemType을 받는다.
     ////////////////////////////////////////////////////////////////////////////////
-    public ItemType GetItemType(ItemObj pItemObj)
+    public static ItemType GetItemType(ItemObj pItemObj)
     {
         ItemObjData itemObjData = pItemObj.itemObjData;
         return GetItemType(itemObjData);
     }
-    public ItemType GetItemType(ItemObjData pItemObjData)
+    public static ItemType GetItemType(ItemObjData pItemObjData)
     {
         ItemData itemData = pItemObjData.itemData;
         return GetItemType(itemData.item);
     }
-    public ItemType GetItemType(ItemData pItemData)
+    public static ItemType GetItemType(ItemData pItemData)
     {
         Item item = pItemData.item;
         return GetItemType(item);
@@ -116,6 +116,9 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
     {
         switch(pItem)
         {
+            case Item.Glock17:
+            case Item.Rifle:
+            case Item.ShotGun:
             case Item.NormalGun:
                 return ItemType.Weapon;
             case Item.Coin:

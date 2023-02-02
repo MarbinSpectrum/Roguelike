@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2731fdd0cf886cf4394818f5a370f3ea, type: 3}
-  m_Name: NormalGun
+  m_Name: Rifle
   m_EditorClassIdentifier: 
-  item: 200
-  itemObj: {fileID: 5770058618838622738, guid: f4153c908c646304397f0c87c18468b6, type: 3}
-  itemSprite_UI: {fileID: 21300000, guid: 79a9d80a203ecc14aa841ee8ad767988, type: 3}
+  item: 400
+  itemObj: {fileID: 8733867233341198764, guid: 9f382bd117e81ab4f854923fb52cfd22, type: 3}
+  itemSprite_UI: {fileID: 21300000, guid: 2d3ee43f5cc45eb4d907fa9b3b579587, type: 3}
   stockItem: 0
   valueMinMax: {x: 0, y: 0}
   itemStatDatas:
   - itemStat: 100
-    valueMinMax: {x: 1, y: 1}
-  frontSprite: {fileID: 4245052342988409972, guid: b79d2839f32b83649ae72ce0804f45c5, type: 3}
-  sideSprite: {fileID: -6007857137893288414, guid: b79d2839f32b83649ae72ce0804f45c5, type: 3}
-  range: 3
+    valueMinMax: {x: 1, y: 10}
+  frontSprite: {fileID: -4815767593418093350, guid: 9d89a86c1ab94714dbea499f777ab298, type: 3}
+  sideSprite: {fileID: 6441202284629174422, guid: 9d89a86c1ab94714dbea499f777ab298, type: 3}
+  range: 2
   reloadDelay: 0
-  nameKey: NORMALGUN_NAME
+  nameKey: RIFLE_NAME
   explainKey: NORMALGUN_EXPLAIN

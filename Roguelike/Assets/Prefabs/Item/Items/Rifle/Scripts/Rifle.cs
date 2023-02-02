@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NormalGunItem : ItemObj
+public class Rifle : ItemObj
 {
     public override void GetItem()
     {

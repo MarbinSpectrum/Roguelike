@@ -64,7 +64,11 @@ public enum Item
 
     NormalGun = 200, //±‚∫ª ¿Â√—
 
+    Glock17 = 300,
 
+    Rifle = 400,
+
+    ShotGun = 500,
 
 }
 
@@ -73,6 +77,7 @@ public enum ItemStat
     Null = 0,
 
     Pow = 100,
+    Balance = 150,
     CriPer = 200,
     CriDmg = 300,
 

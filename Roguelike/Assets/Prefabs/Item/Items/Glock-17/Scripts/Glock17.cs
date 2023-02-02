@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NormalGunItem : ItemObj
+public class Glock17 : ItemObj
 {
     public override void GetItem()
     {

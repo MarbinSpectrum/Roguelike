@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2731fdd0cf886cf4394818f5a370f3ea, type: 3}
+  m_Name: ShotGun
+  m_EditorClassIdentifier: 
+  item: 500
+  itemObj: {fileID: 6730622215486405463, guid: ec217d2dd04872e4ab023e7aef688270, type: 3}
+  itemSprite_UI: {fileID: 21300000, guid: 07a136bca3bee2046bc36346d2808652, type: 3}
+  stockItem: 0
+  valueMinMax: {x: 0, y: 0}
+  itemStatDatas:
+  - itemStat: 100
+    valueMinMax: {x: 50, y: 100}
+  - itemStat: 200
+    valueMinMax: {x: 25, y: 50}
+  - itemStat: 300
+    valueMinMax: {x: 50, y: 100}
+  frontSprite: {fileID: -1649256847451581581, guid: 75024e77b3696a349b15d085551cdd80, type: 3}
+  sideSprite: {fileID: 6805231783222318497, guid: 75024e77b3696a349b15d085551cdd80, type: 3}
+  range: 2
+  reloadDelay: 5
+  nameKey: SHOTGUN_NAME
+  explainKey: NORMALGUN_EXPLAIN

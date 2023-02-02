@@ -10,6 +10,9 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     [SerializeField]
     private CatGirl catGirl;
 
+    [SerializeField]
+    private Item startWeapon;
+
     [HideInInspector]
     public CatGirl character;
 
@@ -80,8 +83,8 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     #endregion
 
     #region[public uint baseBalance]
-    private uint BaseBalance;
-    public uint baseBalance
+    private int BaseBalance;
+    public int baseBalance
     {
         get
         {
@@ -90,7 +93,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     }
     #endregion
 
-    private const uint maxBalance = 100;
+    private const int maxBalance = 100;
 
     #region[public float baseCriPer]
     private float BaseCriPer;
@@ -139,7 +142,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         NowLevel = 1;
 
         BasePow = 5;
-        BaseBalance = 1;
+        BaseBalance = 0;
         BaseCriDamage = 100;
         BaseCriPer = 5;
 
@@ -149,7 +152,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
         //기본총을 플레이어에게 장비 시킨다.
         ItemManager itemManager = ItemManager.instance;
-        ItemObjData itemObjData = itemManager.CreateItemObjData(Item.NormalGun);
+        ItemObjData itemObjData = itemManager.CreateItemObjData(startWeapon);
         itemObjData.equip = true;
         if (totalUI.ItemSendToInventory(itemObjData))
         {
@@ -272,9 +275,20 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     ////////////////////////////////////////////////////////////////////////////////
     /// : 최종밸런스를 구해준다.
     ////////////////////////////////////////////////////////////////////////////////
-    public uint GetTotalBalance()
+    public int GetTotalBalance()
     {
-        return baseBalance;
+        int balance = baseBalance;
+        ItemObjData nowWeaponData = NowWeapon();
+        List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
+        foreach (ItemStatData itemStat in itemStatDatas)
+        {
+            if (itemStat.itemStat == ItemStat.Balance)
+            {
+                balance += itemStat.GetValue();
+            }
+        }
+        balance = Mathf.Min(balance, maxBalance);
+        return balance;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -286,7 +300,6 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         int totalPow = (int)GetTotalPow();
         float per = GetTotalBalance() / (float)maxBalance;
         int minPow = (int)(per * totalPow);
-        minPow = Mathf.Max(1, minPow);
 
         int damage = Random.Range(minPow, totalPow);
         return damage;
@@ -297,7 +310,18 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     ////////////////////////////////////////////////////////////////////////////////
     public float GetTotalCriPer()
     {
-        return baseCriPer;
+        float criPer = baseCriPer;
+        ItemObjData nowWeaponData = NowWeapon();
+        List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
+        foreach (ItemStatData itemStat in itemStatDatas)
+        {
+            if (itemStat.itemStat == ItemStat.CriPer)
+            {
+                criPer += itemStat.GetValue();
+            }
+        }
+
+        return criPer;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -305,7 +329,18 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     ////////////////////////////////////////////////////////////////////////////////
     public float GetTotalCriDamage()
     {
-        return baseCriDamage;
+        float criDmg = baseCriDamage;
+        ItemObjData nowWeaponData = NowWeapon();
+        List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
+        foreach (ItemStatData itemStat in itemStatDatas)
+        {
+            if (itemStat.itemStat == ItemStat.CriDmg)
+            {
+                criDmg += itemStat.GetValue();
+            }
+        }
+
+        return criDmg;
     }
 
     ////////////////////////////////////////////////////////////////////////////////

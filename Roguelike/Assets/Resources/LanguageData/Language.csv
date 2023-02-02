@@ -1,6 +1,10 @@
 Key,Korea,English
-Load,로딩중,Loading
+LOAD,로딩중,Loading
 PLAYER_DATA,플레이어 정보,Player Data
+EQUIP,장착,Equip
+DROP,버리기,Drop
+OK,확인,Ok
+CANCLE,취소,Cancle
 HP,체력,Hp
 EXP,경험치,Exp
 POW,힘,Pow
@@ -9,5 +13,10 @@ CRI_RATE,치명타 확률,Critical Rate
 CRI_DMG,치명타 데미지,Critical Damage
 COIN_NAME,금화,Gold Coin
 COIN_EXPLAIN,여러 곳에서 사용 할 수 있는 금화이다.,It is a gold coin that can be used in many places.
+ATK,공격력,atk
+ADD_EXP,추가 경험치,bonus exp
+ADD_GOLD,추가 골드,bonus gold
 NORMALGUN_NAME,평범한 장총,Normal Gun
-NORMALGUN_EXPLAIN,흔한 장총이다.,It is normal gun.
+GLOCK17_NAME,글록 17,Glock 17
+RIFLE_NAME,라이플,Rifle
+SHOTGUN_NAME,샷건,Shotgun

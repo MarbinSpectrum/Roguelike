@@ -9,7 +9,7 @@ public class LoadingUI : MonoBehaviour
 
     public void ActLoading(bool pState)
     {
-        string loadStr = LanguageManager.GetText("Load");
+        string loadStr = LanguageManager.GetText("LOAD");
         loadText.text = loadStr;
         gameObject.SetActive(pState);
     }

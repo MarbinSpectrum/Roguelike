@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public struct ItemStatData 
+public class ItemStatData 
 {
     public ItemStat itemStat;
     public Vector2Int valueMinMax;
