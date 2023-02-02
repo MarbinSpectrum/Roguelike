@@ -17,7 +17,7 @@ public class CoinItem : ItemObj
     public override void GetItem()
     {
         TotalUI totalUI = TotalUI.instance;
-        if (totalUI.ItemSendToInventory(this))
+        if (totalUI.ItemSendToInventory(itemObjData))
         {
             ItemManager itemManager = ItemManager.instance;
             itemManager.RemoveItem(pos.x, pos.y);

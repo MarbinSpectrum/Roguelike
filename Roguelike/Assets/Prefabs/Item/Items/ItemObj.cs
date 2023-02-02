@@ -8,12 +8,14 @@ public class ItemObjData
     public int count;
     public ItemData itemData;
     public List<ItemStatData> itemStats = new List<ItemStatData>();
+    public bool equip;
 
     public ItemObjData()
     {
         count = 0;
         itemData = null;
         itemStats.Clear();
+        equip = false;
     }
 
     public ItemObjData(ItemObjData pItemObjData)
@@ -23,6 +25,7 @@ public class ItemObjData
         itemStats.Clear();
         foreach (ItemStatData itemStatData in pItemObjData.itemStats)
             itemStats.Add(itemStatData);
+        equip = pItemObjData.equip;
     }
 }
 
@@ -31,24 +34,16 @@ public class ItemObj : SerializedMonoBehaviour
     [System.NonSerialized]
     public Vector2Int pos;
     [System.NonSerialized]
-    public ItemObjData itemObjData = new ItemObjData();
+    public ItemObjData itemObjData;
 
     public virtual void Init()
     {
-        if (itemObjData.itemData.stockItem)
-        {
-            itemObjData.count = Random.Range(
-                itemObjData.itemData.valueMinMax.x,
-                itemObjData.itemData.valueMinMax.y);
-        }
-        else
-            itemObjData.count = 1;
     }
 
     public virtual void GetItem()
     {
         TotalUI totalUI = TotalUI.instance;
-        if (totalUI.ItemSendToInventory(this))
+        if (totalUI.ItemSendToInventory(itemObjData))
         {
             ItemManager itemManager = ItemManager.instance;
             itemManager.RemoveItem(pos.x, pos.y);

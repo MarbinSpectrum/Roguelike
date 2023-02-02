@@ -39,7 +39,7 @@ public class InventoryUI : MonoBehaviour
     private List<ItemSlot> itemSlots = new List<ItemSlot>();
 
     private List<ItemObjData> weaponItems = new List<ItemObjData>();
-    private List<ItemObjData> armorItems = new List<ItemObjData>();
+    private List<ItemObjData> accessaryItems = new List<ItemObjData>();
     private List<ItemObjData> etcItems = new List<ItemObjData>();
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -55,19 +55,19 @@ public class InventoryUI : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     /// : 아이템을 인벤토리에 추가한다.
     ////////////////////////////////////////////////////////////////////////////////
-    public bool AddItem(ItemObj pItemObj)
+    public bool AddItem(ItemObjData pItemObjData)
     {
         ItemManager itemManager = ItemManager.instance;
 
-        ItemType itemType = itemManager.GetItemType(pItemObj);
+        ItemType itemType = itemManager.GetItemType(pItemObjData);
         switch(itemType)
         {
             case ItemType.Weapon:
-                return AddItem(ref weaponItems, pItemObj,weaponItemMax);
-            case ItemType.Armor:
-                return AddItem(ref armorItems, pItemObj,armorItemMax);
+                return AddItem(ref weaponItems, pItemObjData, weaponItemMax);
+            case ItemType.Accessary:
+                return AddItem(ref accessaryItems, pItemObjData, armorItemMax);
             case ItemType.Etc:
-                return AddItem(ref etcItems, pItemObj, etcItemMax);
+                return AddItem(ref etcItems, pItemObjData, etcItemMax);
         }
         return false;
     }
@@ -75,10 +75,9 @@ public class InventoryUI : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     /// : pItemObjs에 해당하는 리스트에 pItemObj의 정보를 토대로 아이템을 추가한다.
     ////////////////////////////////////////////////////////////////////////////////
-    private bool AddItem(ref List<ItemObjData> pItemObjDatas,ItemObj pItemObj,uint pSlotMax)
+    private bool AddItem(ref List<ItemObjData> pItemObjDatas, ItemObjData pItemObjData, uint pSlotMax)
     {
-        ItemObjData AddItemObjData = pItemObj.itemObjData;
-        ItemData AddItemData = AddItemObjData.itemData;
+        ItemData AddItemData = pItemObjData.itemData;
 
         //스톡형 아이템이면 스톡을 추가해준다.
         foreach (ItemObjData itemObjData in pItemObjDatas)
@@ -86,7 +85,7 @@ public class InventoryUI : MonoBehaviour
             ItemData invenItemData = itemObjData.itemData;
             if (AddItemData.stockItem && invenItemData.item == AddItemData.item)
             {
-                itemObjData.count += AddItemObjData.count;
+                itemObjData.count += pItemObjData.count;
                 return true;
             }
         }
@@ -95,11 +94,15 @@ public class InventoryUI : MonoBehaviour
             return false;
 
         //아이템 객체를 생성하고 추가
-        pItemObjDatas.Add(new ItemObjData(pItemObj.itemObjData));
+        pItemObjDatas.Add(new ItemObjData(pItemObjData));
 
         //아이템 목록을 정렬
-        pItemObjDatas.Sort(new Comparison<ItemObjData>(
-                (n1, n2) => n2.itemData.item.CompareTo(n1.itemData.item)));
+        pItemObjDatas.Sort((x, y) => 
+        {
+            int ret1 = x.equip ? -1 : 1;
+            int ret2 = ret1 != 0 ? ret1 : x.itemData.item.CompareTo(y.itemData.item);
+            return ret2;
+        });
         return true;
     }
 
@@ -114,8 +117,8 @@ public class InventoryUI : MonoBehaviour
             case ItemType.Weapon:
                 UpdateSlot(ref weaponItems,weaponItemMax);
                 break;
-            case ItemType.Armor:
-                UpdateSlot(ref armorItems,armorItemMax);
+            case ItemType.Accessary:
+                UpdateSlot(ref accessaryItems, armorItemMax);
                 break;
             case ItemType.Etc:
                 UpdateSlot(ref etcItems,etcItemMax);
@@ -126,10 +129,10 @@ public class InventoryUI : MonoBehaviour
     {
         for(int i = 0; i < itemSlotMax; i++)
         {
-            ItemObjData itemObj = null;
+            ItemObjData itemObjData = null;
             if(pItemObjDatas.Count > i)
             {
-                itemObj = pItemObjDatas[i];
+                itemObjData = pItemObjDatas[i];
             }
 
             if(i < pSlotMax)
@@ -144,20 +147,61 @@ public class InventoryUI : MonoBehaviour
                 continue;
             }
 
-            if (itemObj != null)
+            if (itemObjData != null)
             {
                 //해당칸의 아이템을 보여준다.
-                ItemData itemData = itemObj.itemData;
-                itemSlots[i].item = itemObj.itemData.item;
+                ItemData itemData = itemObjData.itemData;
+                itemSlots[i].item = itemObjData.itemData.item;
                 itemSlots[i].slotSprite = itemData.itemSprite_UI;
-                itemSlots[i].slotNum = (uint)itemObj.count;
+                itemSlots[i].slotNum = (uint)itemObjData.count;
+                itemSlots[i].isEquip = itemObjData.equip;
             }
             else
             {
                 //해당칸에 아이템이 없다 표시하지않는다.
                 itemSlots[i].slotSprite = null;
                 itemSlots[i].slotNum = 0;
+                itemSlots[i].isEquip = false;
             }
         }
+    }
+
+    public ItemObjData NowWeapon()
+    {
+        ItemObjData nowWeapon = null;
+        foreach(ItemObjData itemObjData in weaponItems)
+        {
+            if(itemObjData.equip)
+            {
+                nowWeapon = itemObjData;
+                break;
+            }
+        }
+        return nowWeapon;
+    }
+
+    public void ShowItemData(int pIdx)
+    {
+        List<ItemObjData> itemObjDatas = null;
+        switch (actCategory)
+        {
+            case ItemType.Weapon:
+                itemObjDatas = weaponItems;
+                break;
+            case ItemType.Accessary:
+                itemObjDatas = accessaryItems;
+                break;
+            case ItemType.Etc:
+                itemObjDatas = etcItems;
+                break;
+        }
+        if (itemObjDatas == null)
+            return;
+
+        if (itemObjDatas.Count <= pIdx)
+            return;
+
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.ShowItemData(itemObjDatas[pIdx]);
     }
 }

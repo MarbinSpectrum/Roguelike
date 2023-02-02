@@ -24,12 +24,16 @@ public class GameManager : FieldObjectSingleton<GameManager>
     ////////////////////////////////////////////////////////////////////////////////
     public void StartGame()
     {
-        StartCoroutine(runStartGamep());
+        StartCoroutine(runStartGame());
     }
-    public IEnumerator runStartGamep()
+    public IEnumerator runStartGame()
     {
+        LanguageManager languageManager = LanguageManager.instance;
+        yield return languageManager.runLoadData(); //언어 데이터 로드
+
         TotalUI totalUI = TotalUI.instance;
         totalUI.ShowCreateMap(true);
+
 
         MapManager mapManager = MapManager.instance;
         yield return mapManager.runCreateTileMap(); //맵 생성

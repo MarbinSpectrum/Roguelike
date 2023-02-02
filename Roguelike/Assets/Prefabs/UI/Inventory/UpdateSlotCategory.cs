@@ -40,7 +40,7 @@ public class UpdateSlotCategory : SerializedMonoBehaviour
                 else if (actCategory == 1)
                     totalUI.UpdateInventory(ItemType.Weapon);
                 else if (actCategory == 2)
-                    totalUI.UpdateInventory(ItemType.Armor);
+                    totalUI.UpdateInventory(ItemType.Accessary);
             }
         }
     }

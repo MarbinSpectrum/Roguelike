@@ -13,16 +13,18 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
     private List<ItemData> itemDataList = new List<ItemData>();
     private Dictionary<Vector2Int, ItemObj> items = new Dictionary<Vector2Int, ItemObj>();
     private Dictionary<Item, ItemObj> itemObjs;
+    private Dictionary<Item, ItemData> itemDatas;
 
     private void Init()
     {
         if (itemObjs == null)
         {
             itemObjs = new Dictionary<Item, ItemObj>();
+            itemDatas = new Dictionary<Item, ItemData>();
             foreach (ItemData itemData in itemDataList)
             {
-                itemData.itemObj.itemObjData.itemData = itemData;
                 itemObjs[itemData.item] = itemData.itemObj;
+                itemDatas[itemData.item] = itemData;
             }
         }
     }
@@ -63,13 +65,19 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
         if (itemObjs[pItem] == null)
             return;
         ItemObj itemObj = Instantiate(itemObjs[pItem]);
-        itemObj.itemObjData = itemObjs[pItem].itemObjData;
+        itemObj.itemObjData = CreateItemObjData(pItem);
         itemObj.pos = new Vector2Int(pX, pY);
         itemObj.transform.position =
             new Vector3(CreateMap.tileSize * pX, CreateMap.tileSize * pY, 0);
         itemObj.Init();
 
         items[new Vector2Int(pX, pY)] = itemObj;
+    }
+
+    public ItemObjData CreateItemObjData(Item pItem)
+    {
+        Init();
+        return itemDatas[pItem].createItemObjData();
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -82,7 +90,6 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
         if (IsItem(pX, pY))
         {
             ItemObj itemObj = items[new Vector2Int(pX, pY)];
-            //itemObj.gameObject.SetActive(false);
             items.Remove(new Vector2Int(pX, pY));
         }
     }
@@ -93,13 +100,25 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
     public ItemType GetItemType(ItemObj pItemObj)
     {
         ItemObjData itemObjData = pItemObj.itemObjData;
-        ItemData itemData = itemObjData.itemData;
+        return GetItemType(itemObjData);
+    }
+    public ItemType GetItemType(ItemObjData pItemObjData)
+    {
+        ItemData itemData = pItemObjData.itemData;
         return GetItemType(itemData.item);
     }
-    public ItemType GetItemType(Item pItem)
+    public ItemType GetItemType(ItemData pItemData)
+    {
+        Item item = pItemData.item;
+        return GetItemType(item);
+    }
+    public static ItemType GetItemType(Item pItem)
     {
         switch(pItem)
         {
+            case Item.NormalGun:
+                return ItemType.Weapon;
+            case Item.Coin:
             default:
                 return ItemType.Etc;
         }

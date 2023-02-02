@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2731fdd0cf886cf4394818f5a370f3ea, type: 3}
+  m_Name: NormalGun
+  m_EditorClassIdentifier: 
+  item: 200
+  itemObj: {fileID: 5770058618838622738, guid: f4153c908c646304397f0c87c18468b6, type: 3}
+  itemSprite_UI: {fileID: 21300000, guid: 79a9d80a203ecc14aa841ee8ad767988, type: 3}
+  stockItem: 0
+  valueMinMax: {x: 0, y: 0}
+  itemStatDatas:
+  - itemStat: 100
+    valueMinMax: {x: 3, y: 3}
+  frontSprite: {fileID: -6007857137893288414, guid: b79d2839f32b83649ae72ce0804f45c5, type: 3}
+  sideSprite: {fileID: 4245052342988409972, guid: b79d2839f32b83649ae72ce0804f45c5, type: 3}
+  nameKey: NORMALGUN_NAME
+  explainKey: NORMALGUN_EXPLAIN

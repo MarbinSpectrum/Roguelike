@@ -68,12 +68,29 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     }
     #endregion
 
-    [SerializeField]
-    private uint basePow;
-    [SerializeField]
-    private uint baseBalance;
-    [SerializeField]
-    private uint maxBalance;
+    #region[public uint basePow]
+    private int BasePow;
+    public int basePow
+    {
+        get
+        {
+            return BasePow;
+        }
+    }
+    #endregion
+
+    #region[public uint baseBalance]
+    private uint BaseBalance;
+    public uint baseBalance
+    {
+        get
+        {
+            return BaseBalance;
+        }
+    }
+    #endregion
+
+    private const uint maxBalance = 100;
 
     #region[public float baseCriPer]
     private float BaseCriPer;
@@ -120,12 +137,24 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         MaxHp = 3;
         NowHp = MaxHp;
         NowLevel = 1;
+
+        BasePow = 5;
+        BaseBalance = 1;
         BaseCriDamage = 100;
-        BaseCriPer = 50;
+        BaseCriPer = 5;
 
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateHp(maxHp, nowHp);
         totalUI.UpdateExp(maxExp, nowExp);
+
+        //기본총을 플레이어에게 장비 시킨다.
+        ItemManager itemManager = ItemManager.instance;
+        ItemObjData itemObjData = itemManager.CreateItemObjData(Item.NormalGun);
+        itemObjData.equip = true;
+        if (totalUI.ItemSendToInventory(itemObjData))
+        {
+
+        }
 
         canControl = true;
     }
@@ -191,7 +220,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     {
         //레벨을 올려주고 공격력을 올려준다.
         NowLevel += 1;
-        basePow += 1;
+        BasePow += 1;
 
         //다음 최대 경험치를 갱신해준다.
         MaxExp = (uint)(maxExp * 1.5f);
@@ -225,9 +254,19 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     ////////////////////////////////////////////////////////////////////////////////
     /// : 최종 힘을 구해준다.
     ////////////////////////////////////////////////////////////////////////////////
-    public uint GetTotalPow()
+    public int GetTotalPow()
     {
-        return basePow;
+        int pow = basePow;
+        ItemObjData nowWeaponData = NowWeapon();
+        List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
+        foreach(ItemStatData itemStat in itemStatDatas)
+        {
+            if(itemStat.itemStat == ItemStat.Pow)
+            {
+                pow += itemStat.GetValue();
+            }
+        }
+        return pow;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -274,7 +313,6 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     ////////////////////////////////////////////////////////////////////////////////
     public bool CriticalProcess(ref int pDamage)
     {
-
         float damage = pDamage;
         if (Random.Range(0,100) < GetTotalCriPer())
         {
@@ -286,5 +324,11 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             return true;
         }
         return false;
+    }
+
+    public ItemObjData NowWeapon()
+    {
+        TotalUI totalUI = TotalUI.instance;
+        return totalUI.GetNowWeaponToInventory();
     }
 }

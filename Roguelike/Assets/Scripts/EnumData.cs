@@ -62,7 +62,7 @@ public enum Item
 
     Coin = 100,
 
-
+    NormalGun = 200, //±‚∫ª ¿Â√—
 
 
 
@@ -73,15 +73,19 @@ public enum ItemStat
     Null = 0,
 
     Pow = 100,
-    Def = 200,
-    Cri = 300,
+    CriPer = 200,
+    CriDmg = 300,
+
+    Hp = 400,
+    AddExp = 500,
+    AddGold = 600,
 }
 
 public enum ItemType
 {
     Etc = 100,
     Weapon = 200,
-    Armor = 300,
+    Accessary = 300,
 }
 
 public enum ButtonInput
@@ -91,4 +95,10 @@ public enum ButtonInput
     Right,
     Up,
     Down
+}
+
+public enum Language
+{
+    Korea = 100,
+    English = 200,
 }

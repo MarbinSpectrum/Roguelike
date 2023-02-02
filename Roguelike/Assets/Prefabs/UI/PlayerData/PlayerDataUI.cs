@@ -25,6 +25,8 @@ public class PlayerDataUI : MonoBehaviour
     [SerializeField]
     private GameObject uiObj;
 
+    [Space(40)]
+
     [SerializeField]
     private TextMeshProUGUI levelText;
     [SerializeField]
@@ -41,8 +43,25 @@ public class PlayerDataUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI criPerDamage;
 
+    [Space(40)]
+
+    [SerializeField]
+    private TextMeshProUGUI headerText;
+    [SerializeField]
+    private TextMeshProUGUI hpHeaderText;
+    [SerializeField]
+    private TextMeshProUGUI expHeaderText;
+    [SerializeField]
+    private TextMeshProUGUI powHeaderText;
+    [SerializeField]
+    private TextMeshProUGUI balanceHeaderText;
+    [SerializeField]
+    private TextMeshProUGUI critRateHeaderText;
+    [SerializeField]
+    private TextMeshProUGUI critDmgHeaderText;
+
     ////////////////////////////////////////////////////////////////////////////////
-    /// : 인벤토리 비활성/활성
+    /// : 플레이어정보창 비활성/활성
     ////////////////////////////////////////////////////////////////////////////////
     public void ActPlayerData()
     {
@@ -55,15 +74,35 @@ public class PlayerDataUI : MonoBehaviour
     {
         CharacterManager characterManager = CharacterManager.instance;
 
+        headerText.text = LanguageManager.GetText("PLAYER_DATA");
+        hpHeaderText.text = LanguageManager.GetText("HP");
+        expHeaderText.text = LanguageManager.GetText("EXP");
+        powHeaderText.text = LanguageManager.GetText("POW");
+        balanceHeaderText.text = LanguageManager.GetText("BALANCE");
+        critRateHeaderText.text = LanguageManager.GetText("CRI_RATE");
+        critDmgHeaderText.text = LanguageManager.GetText("CRI_DMG");
+
         levelText.text = characterManager.nowLevel.ToString();
         hpText.text = characterManager.nowHp.ToString() + "/" + characterManager.maxHp.ToString();
         float expPer = characterManager.nowExp / (float)characterManager.maxExp;
         expPer *= 100;
         expText.text = string.Format("{0:00.00}", expPer) + "%";
 
-        powText.text = characterManager.GetTotalPow().ToString();
-        balanceText.text = characterManager.GetTotalBalance().ToString();
-        criPerText.text = characterManager.GetTotalCriPer().ToString() + "%";
-        criPerDamage.text = characterManager.GetTotalDamage().ToString() + "%";
+        SetText(ref powText, characterManager.basePow, characterManager.GetTotalPow());
+        SetText(ref balanceText, characterManager.baseBalance, characterManager.GetTotalBalance());
+        SetText(ref criPerText, characterManager.baseCriPer, characterManager.GetTotalCriPer(),"%");
+        SetText(ref criPerDamage, characterManager.baseCriDamage, characterManager.GetTotalCriDamage(), "%");
+    }
+
+    private void SetText(ref TextMeshProUGUI pTextMeshProUGUI, float pBase, float pTotal,string pAddText = "")
+    {
+        if (pBase < pTotal)
+            pTextMeshProUGUI.color = Color.green;
+        else if (pBase > pTotal)
+            pTextMeshProUGUI.color = Color.red;
+        else
+            pTextMeshProUGUI.color = Color.white;
+
+        pTextMeshProUGUI.text = pTotal.ToString() + pAddText;
     }
 }

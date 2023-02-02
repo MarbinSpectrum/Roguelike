@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class TotalUI : FieldObjectSingleton<TotalUI>
 {
     [SerializeField]
-    private GameObject createMap;
+    private LoadingUI loadingUI;
     [SerializeField]
     private HpBar hpBar;
     [SerializeField]
@@ -20,13 +20,17 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     private SetingUI setingUI;
     [SerializeField]
     private InventoryUI inventoryUI;
+    [SerializeField]
+    private PlayerDataUI playerDataUI;
+    [SerializeField]
+    private ItemDataUI itemDataUI;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 맵 생성중인지를 표시해줍니다.
     ////////////////////////////////////////////////////////////////////////////////
     public void ShowCreateMap(bool pState)
     {
-        createMap.SetActive(pState);
+        loadingUI.ActLoading(pState);
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -108,21 +112,57 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
         miniMap.UpdateMiniMap(miniMapTexture);
     }
 
-    public bool ItemSendToInventory(ItemObj pItemObj)
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 인벤토리에 pItemObjData(아이템정보)를 넣어준다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public bool ItemSendToInventory(ItemObjData pItemObjData)
     {
-        return inventoryUI.AddItem(pItemObj);
+        return inventoryUI.AddItem(pItemObjData);
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : pItemObjData(아이템정보)를 토대로 아이템 정보를 표시한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void ShowItemData(ItemObjData pItemObjData)
+    {
+        itemDataUI.ActItemData(true);
+        itemDataUI.UpdateItemData(pItemObjData);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : pItemType에 맞는 인벤토리 항목을 보여준다.
+    ////////////////////////////////////////////////////////////////////////////////
     public void UpdateInventory(ItemType pItemType)
     {
         inventoryUI.UpdateSlot(pItemType);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 인벤토리에서 현재 장착중인 무기를 정보를 가져온다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public ItemObjData GetNowWeaponToInventory()
+    {
+        return inventoryUI.NowWeapon();
     }
 
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            setingUI.gameObject.SetActive(!setingUI.gameObject.activeSelf);
+            if (itemDataUI.isRun)
+            {
+                itemDataUI.ActItemData();
+            }
+            else if (inventoryUI.isRun)
+            {
+                inventoryUI.ActInventory();
+            }
+            else if (playerDataUI.isRun)
+            {
+                playerDataUI.ActPlayerData();
+            }
+            else
+                setingUI.gameObject.SetActive(!setingUI.gameObject.activeSelf);
         }
     }
 }

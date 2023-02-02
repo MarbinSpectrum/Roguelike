@@ -47,6 +47,26 @@ public class ItemSlot : SerializedMonoBehaviour
     }
     #endregion
 
+    #region[private bool IsEquip]
+    private bool IsEquip;
+    public bool isEquip
+    {
+        get
+        {
+            return IsEquip;
+        }
+        set
+        {
+            IsEquip = value;
+            UpdateSlot();
+        }
+
+    }
+    #endregion
+
+    [SerializeField]
+    private GameObject equipView;
+
     private void Awake()
     {
         UpdateSlot();
@@ -66,6 +86,7 @@ public class ItemSlot : SerializedMonoBehaviour
         else
             slotImg.color = new Color(1, 1, 1, 1);
         slotImg.sprite = SlotSprite;
+        equipView.SetActive(IsEquip);
     }
 
     [SerializeField]
