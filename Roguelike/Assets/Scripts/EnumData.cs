@@ -50,6 +50,8 @@ public enum Obj
     TorchLight = 500,
 
     Jar = 600,
+    Chest_Normal_Pos = 610,
+    Chest_Normal = 615,
 
     Slime = 1000,
 
@@ -66,9 +68,9 @@ public enum Item
 
     Glock17 = 300,
 
-    Rifle = 400,
+    M4 = 400,
 
-    ShotGun = 500,
+    MP133 = 500,
 
 }
 

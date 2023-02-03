@@ -75,6 +75,7 @@ public abstract class MonsterObj : MonoBehaviour
         CharacterManager characterManager = CharacterManager.instance;
         MapManager mapManager = MapManager.instance;
         JarManager jarManager = JarManager.instance;
+        ChestManager chestManager = ChestManager.instance;
 
         if (alive == false)
         {
@@ -120,6 +121,12 @@ public abstract class MonsterObj : MonoBehaviour
             //해당위치는 벽이다 이동하지 않는다.
             return;
         }
+        if (chestManager.IsChest(gamePos.x, gamePos.y))
+        {
+            //상자는 부술수없다. 이동하지 않는다.
+            return;
+        }
+
         if (gamePos == characterManager.character.GetPos())
         {
             //캐릭터가 공격범위에 있다.

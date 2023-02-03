@@ -95,16 +95,21 @@ public class CatGirl : SerializedMonoBehaviour
         MapManager mapManager = MapManager.instance;
         MonsterManager monsterManager = MonsterManager.instance;
         JarManager jarManager = JarManager.instance;
+        ChestManager chestManager = ChestManager.instance;
 
-        if(jarManager.IsJar(pX,pY))
-        {
-            return false;
-        }
         if (mapManager.IsWall(pX, pY))
         {
             return false;
         }
         if (monsterManager.IsMonster(pX, pY))
+        {
+            return false;
+        }
+        if(jarManager.IsJar(pX,pY))
+        {
+            return false;
+        }
+        if (chestManager.IsChest(pX, pY))
         {
             return false;
         }
@@ -122,6 +127,8 @@ public class CatGirl : SerializedMonoBehaviour
         DamageEffect damageEffect = DamageEffect.instance;
         BulletManager bulletManager = BulletManager.instance;
         JarManager jarManager = JarManager.instance;
+        ChestManager chestManager = ChestManager.instance;
+
         ItemObjData nowWeapon = characterManager.NowWeapon();
 
         yield return new WaitUntil(()=> (buttonInput != ButtonInput.None));
@@ -183,6 +190,13 @@ public class CatGirl : SerializedMonoBehaviour
                 jarObj = jarManager.GetJarObj(cPos);
         }
 
+        Chest chestObj = null;
+        {
+            Vector2Int cPos = new Vector2Int(pos.x + dic.x, pos.y + dic.y);
+            if (chestObj == null)
+                chestObj = chestManager.GetChestObj(cPos);
+        }
+
         //공격 딜레이 확인
         uint reloadDelay = nowWeapon.itemData.reloadDelay;
         bool canFire = false;
@@ -227,6 +241,12 @@ public class CatGirl : SerializedMonoBehaviour
 
             StartCoroutine(monsterManager.RunMonster());
 
+        }
+        else if(chestObj != null)
+        {
+            chestObj.RemoveChestObj();
+
+            yield return new WaitForSeconds(0.2f);
         }
         else if (jarObj != null)
         {

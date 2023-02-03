@@ -6,6 +6,8 @@ using Sirenix.OdinInspector;
 ////////////////////////////////////////////////////////////////////////////////
 /// : 에디터에서 사용되는 오브젝트 객체
 ////////////////////////////////////////////////////////////////////////////////
+
+[ExecuteInEditMode]
 public class EditorObj : SerializedMonoBehaviour
 {
     [Title("Obj")]
@@ -36,6 +38,14 @@ public class EditorObj : SerializedMonoBehaviour
     private MonsterManager monsterManager;
     [SerializeField]
     private SpriteRenderer spriteRenderer;
+
+    private void Start()
+    {
+        Sprite sprite = objManager.GetSprite(Obj);
+        if (sprite == null)
+            sprite = monsterManager.GetSprite(Obj);
+        spriteRenderer.sprite = sprite;
+    }
 }
 
 

@@ -18,5 +18,5 @@ ADD_EXP,추가 경험치,bonus exp
 ADD_GOLD,추가 골드,bonus gold
 NORMALGUN_NAME,평범한 장총,Normal Gun
 GLOCK17_NAME,글록 17,Glock 17
-RIFLE_NAME,라이플,Rifle
-SHOTGUN_NAME,샷건,Shotgun
+M4_NAME,M4,M4
+MP133_NAME,MP-133,MP-133

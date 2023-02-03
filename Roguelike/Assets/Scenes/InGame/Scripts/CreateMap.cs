@@ -332,6 +332,18 @@ public class CreateMap : MonoBehaviour
                                     jarManager.AddJarPos(new Vector2Int(ax, ay));
                                 }
                                 break;
+                            case Obj.Chest_Normal:
+                                {
+                                    ChestManager chestManager = ChestManager.instance;
+                                    chestManager.AddMakeChestPos(new Vector2Int(ax, ay),Obj.Chest_Normal);
+                                }
+                                break;
+                            case Obj.Chest_Normal_Pos:
+                                {
+                                    ChestManager chestManager = ChestManager.instance;
+                                    chestManager.AddRandomChestPos(new Vector2Int(ax, ay), Obj.Chest_Normal);
+                                }
+                                break;
                             //몬스터 객체 등록
                             case Obj.Slime:
                             case Obj.Tentacle:

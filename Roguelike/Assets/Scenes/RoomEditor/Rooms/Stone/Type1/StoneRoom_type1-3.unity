@@ -20106,6 +20106,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 286128747615028425, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: Obj
+      value: 610
+      objectReference: {fileID: 0}
+    - target: {fileID: 286128747615028425, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 286128747615028425, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
     - target: {fileID: 289774632560299914, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -25234,6 +25242,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -5795222592932567911, guid: 587c18e9411503048a7ed1e826964464, type: 3}
+    - target: {fileID: 8786429024785235908, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ee34ad05cdd5d6f49943127bbd8584fc, type: 3}
     - target: {fileID: 8915348099198077710, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_IsActive
       value: 0

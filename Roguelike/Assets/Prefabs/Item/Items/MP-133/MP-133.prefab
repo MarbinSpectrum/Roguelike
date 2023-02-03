@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: -516459813
   m_SortingLayer: 2
   m_SortingOrder: 6
-  m_Sprite: {fileID: 21300000, guid: 2d3ee43f5cc45eb4d907fa9b3b579587, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 07a136bca3bee2046bc36346d2808652, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -91,9 +91,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5770058618838622764}
-  - component: {fileID: 8733867233341198764}
+  - component: {fileID: 6730622215486405463}
   m_Layer: 0
-  m_Name: Rifle
+  m_Name: MP-133
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,7 +114,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8733867233341198764
+--- !u!114 &6730622215486405463
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,7 +123,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5770058618838622739}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df81a8aef1f82a84f902de173ecb7ad9, type: 3}
+  m_Script: {fileID: 11500000, guid: acc590b439d14734b885304a09262422, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:

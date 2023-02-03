@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2731fdd0cf886cf4394818f5a370f3ea, type: 3}
-  m_Name: ShotGun
+  m_Name: MP-133
   m_EditorClassIdentifier: 
   item: 500
   itemObj: {fileID: 6730622215486405463, guid: ec217d2dd04872e4ab023e7aef688270, type: 3}
@@ -19,7 +19,7 @@ MonoBehaviour:
   valueMinMax: {x: 0, y: 0}
   itemStatDatas:
   - itemStat: 100
-    valueMinMax: {x: 50, y: 100}
+    valueMinMax: {x: 25, y: 30}
   - itemStat: 200
     valueMinMax: {x: 25, y: 50}
   - itemStat: 300
@@ -28,5 +28,5 @@ MonoBehaviour:
   sideSprite: {fileID: 6805231783222318497, guid: 75024e77b3696a349b15d085551cdd80, type: 3}
   range: 2
   reloadDelay: 5
-  nameKey: SHOTGUN_NAME
+  nameKey: MP133_NAME
   explainKey: NORMALGUN_EXPLAIN

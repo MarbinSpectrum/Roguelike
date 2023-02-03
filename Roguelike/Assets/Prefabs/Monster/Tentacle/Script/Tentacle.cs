@@ -23,6 +23,7 @@ public class Tentacle : MonsterObj
         CharacterManager characterManager = CharacterManager.instance;
         MapManager mapManager = MapManager.instance;
         JarManager jarManager = JarManager.instance;
+        ChestManager chestManager = ChestManager.instance;
 
         if (alive == false)
         {
@@ -67,6 +68,11 @@ public class Tentacle : MonsterObj
         if (mapManager.IsWall(gamePos.x, gamePos.y))
         {
             //해당위치는 벽이다 이동하지 않는다.
+            return;
+        }
+        if(chestManager.IsChest(gamePos.x,gamePos.y))
+        {
+            //상자는 부술수없다. 이동하지 않는다.
             return;
         }
         if (gamePos == characterManager.character.GetPos())

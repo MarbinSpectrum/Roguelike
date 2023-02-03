@@ -117,8 +117,8 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
         switch(pItem)
         {
             case Item.Glock17:
-            case Item.Rifle:
-            case Item.ShotGun:
+            case Item.M4:
+            case Item.MP133:
             case Item.NormalGun:
                 return ItemType.Weapon;
             case Item.Coin:

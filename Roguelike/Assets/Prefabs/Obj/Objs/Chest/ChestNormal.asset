@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8b6c5d02f442164b960dd6698a34cad, type: 3}
-  m_Name: Jar
+  m_Name: ChestNormal
   m_EditorClassIdentifier: 
-  obj: 600
-  objSprite: {fileID: 21300000, guid: adcd690fb1de131418d2d015dec95b50, type: 3}
+  obj: 615
+  objSprite: {fileID: 3635057145325263752, guid: 0f245cacbe05d0540b4611ecdf4b372d, type: 3}

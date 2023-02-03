@@ -57,6 +57,9 @@ public class GameManager : FieldObjectSingleton<GameManager>
         JarManager jarManager = JarManager.instance;
         yield return jarManager.runCreateJarObj(); //亲酒府 积己
 
+        ChestManager chestManager = ChestManager.instance;
+        yield return chestManager.runCreateChestObj(); //惑磊 积己
+
         BGMObj.PlayBGM();
 
         totalUI.ShowCreateMap(false);
