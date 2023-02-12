@@ -18,8 +18,8 @@ MonoBehaviour:
   stockItem: 0
   valueMinMax: {x: 0, y: 0}
   itemStatDatas:
-  - itemStat: 100
-    valueMinMax: {x: 10, y: 15}
+  - itemStat: 300
+    valueMinMax: {x: 20, y: 20}
   frontSprite: {fileID: -4815767593418093350, guid: 9d89a86c1ab94714dbea499f777ab298, type: 3}
   sideSprite: {fileID: 6441202284629174422, guid: 9d89a86c1ab94714dbea499f777ab298, type: 3}
   range: 2

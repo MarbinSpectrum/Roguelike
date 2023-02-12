@@ -36,7 +36,7 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     ////////////////////////////////////////////////////////////////////////////////
     /// : 체력 상태 갱신
     ////////////////////////////////////////////////////////////////////////////////
-    public void UpdateHp(uint pMaxHp,uint pNowHp)
+    public void UpdateHp(int pMaxHp,int pNowHp)
     {
         hpBar.UpdateHp(pMaxHp, pNowHp);
     }
@@ -159,6 +159,14 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     public ItemObjData GetNowWeaponToInventory()
     {
         return inventoryUI.NowWeapon();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 인벤토리에서 현재 장착중인 악세사리를 정보를 가져온다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public ItemObjData GetNowAccessaryToInventory()
+    {
+        return inventoryUI.NowAccessary();
     }
 
     private void Update()

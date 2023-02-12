@@ -55,6 +55,12 @@ MonoBehaviour:
     SerializationNodes: []
   catGirl: {fileID: 1410027969481209121, guid: 5f0eaa1601ca279488992ea988ba579f, type: 3}
   startWeapon: 500
+  startAccessary: 600
+  startHp: 3
+  startPow: 5
+  startBalance: 0
+  startCriDamage: 25
+  startCriRate: 5
   character: {fileID: 0}
   canControl: 0
 --- !u!1001 &8576141272321392113

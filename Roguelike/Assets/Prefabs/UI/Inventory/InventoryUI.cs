@@ -30,7 +30,7 @@ public class InventoryUI : MonoBehaviour
 
     const uint itemSlotMax = 16;
     const uint weaponItemMax = 16;
-    const uint armorItemMax = 16;
+    const uint accessaryItemMax = 16;
     const uint etcItemMax = 8;
 
     public ItemType actCategory = ItemType.Etc;
@@ -70,7 +70,7 @@ public class InventoryUI : MonoBehaviour
             case ItemType.Weapon:
                 return AddItem(ref weaponItems, pItemObjData, weaponItemMax);
             case ItemType.Accessary:
-                return AddItem(ref accessaryItems, pItemObjData, armorItemMax);
+                return AddItem(ref accessaryItems, pItemObjData, accessaryItemMax);
             case ItemType.Etc:
                 return AddItem(ref etcItems, pItemObjData, etcItemMax);
         }
@@ -117,7 +117,7 @@ public class InventoryUI : MonoBehaviour
                 UpdateSlot(ref weaponItems,weaponItemMax);
                 break;
             case ItemType.Accessary:
-                UpdateSlot(ref accessaryItems, armorItemMax);
+                UpdateSlot(ref accessaryItems, accessaryItemMax);
                 break;
             case ItemType.Etc:
                 UpdateSlot(ref etcItems,etcItemMax);

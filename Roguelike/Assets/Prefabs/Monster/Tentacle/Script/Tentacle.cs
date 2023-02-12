@@ -115,7 +115,7 @@ public class Tentacle : MonsterObj
                 monsterSpr.flipX = false;
             }
 
-            characterManager.Hit(damage);
+            characterManager.Hit((int)damage);
 
 
 

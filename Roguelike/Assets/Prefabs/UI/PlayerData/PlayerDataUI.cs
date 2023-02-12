@@ -83,7 +83,7 @@ public class PlayerDataUI : MonoBehaviour
         critDmgHeaderText.text = LanguageManager.GetText("CRI_DMG");
 
         levelText.text = characterManager.nowLevel.ToString();
-        hpText.text = characterManager.nowHp.ToString() + "/" + characterManager.maxHp.ToString();
+        hpText.text = characterManager.nowHp.ToString() + "/" + characterManager.GetTotalMaxHp().ToString();
         float expPer = characterManager.nowExp / (float)characterManager.maxExp;
         expPer *= 100;
         expText.text = string.Format("{0:00.00}", expPer) + "%";

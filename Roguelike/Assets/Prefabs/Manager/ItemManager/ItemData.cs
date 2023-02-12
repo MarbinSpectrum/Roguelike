@@ -14,7 +14,7 @@ public class ItemData : ScriptableObject
     [ShowIf("@ItemManager.GetItemType(item) != ItemType.Weapon && stockItem"),MinMaxSlider(0, 100)]
     public Vector2Int valueMinMax;
 
-    [ShowIf("@ItemManager.GetItemType(item) == ItemType.Weapon")]
+    [ShowIf("@ItemManager.GetItemType(item) != ItemType.Etc")]
     [BoxGroup("Box")]
     public List<ItemStatData> itemStatDatas = new List<ItemStatData>();
 
@@ -46,7 +46,7 @@ public class ItemData : ScriptableObject
 
         ItemType itemType = ItemManager.GetItemType(item);
 
-        if (itemType != ItemType.Weapon && itemObjData.itemData.stockItem)
+        if (itemType == ItemType.Etc && itemObjData.itemData.stockItem)
         {
             //스톡이 되는 아이템은 랜덤한 범위내에서 아이템 갯수슬 설정
             itemObjData.count = Random.Range(
@@ -59,7 +59,7 @@ public class ItemData : ScriptableObject
             itemObjData.count = 1;
         }
 
-        if(itemType == ItemType.Weapon)
+        if(itemType != ItemType.Etc)
         {
             //스탯정보를 대입
             foreach(ItemStatData itemStatData in itemStatDatas)

@@ -11,9 +11,9 @@ public class HpBar : SerializedMonoBehaviour
 {
     [Title("Hp Data")]
     #region[private uint maxHp]
-    private uint MaxHp;
+    private int MaxHp;
     [ShowInInspector, PropertyOrder(-2)]
-    public uint maxHp
+    public int maxHp
     {
         get { return MaxHp; }
         set
@@ -24,9 +24,9 @@ public class HpBar : SerializedMonoBehaviour
     }
     #endregion
     #region[private uint Hp]
-    private uint Hp;
+    private int Hp;
     [ShowInInspector, PropertyOrder(-1)]
-    public uint hp
+    public int hp
     {
         get { return Hp; }
         set
@@ -109,7 +109,7 @@ public class HpBar : SerializedMonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     /// : 체력 업데이트
     ////////////////////////////////////////////////////////////////////////////////
-    public void UpdateHp(uint pMaxHp, uint pNowHp)
+    public void UpdateHp(int pMaxHp, int pNowHp)
     {
         maxHp = pMaxHp;
         hp = pNowHp;

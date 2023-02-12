@@ -12,24 +12,37 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
     [SerializeField]
     private Item startWeapon;
+    [SerializeField]
+    private Item startAccessary;
+    [SerializeField]
+    private int startHp;
+    [SerializeField]
+    private int startPow;
+    [SerializeField]
+    private int startBalance;
+    [SerializeField]
+    private int startCriDamage;
+    [SerializeField]
+    private int startCriRate;
+
 
     [HideInInspector]
     public CatGirl character;
 
-    #region[public uint maxHp]
-    private uint MaxHp;
-    public uint maxHp
+    #region[public uint baseMaxHp]
+    private int BaseMaxHp;
+    public int baseMaxHp
     {
         get
         {
-            return MaxHp;
+            return BaseMaxHp;
         }
     }
     #endregion
 
     #region[public uint nowHp]
-    private uint NowHp;
-    public uint nowHp
+    private int NowHp;
+    public int nowHp
     {
         get
         {
@@ -137,26 +150,33 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
         MaxExp = 5;
         NowExp = 0;
-        MaxHp = 3;
-        NowHp = MaxHp;
+        BaseMaxHp = startHp;
+        NowHp = GetTotalMaxHp();
         NowLevel = 1;
 
-        BasePow = 5;
-        BaseBalance = 0;
-        BaseCriDamage = 100;
-        BaseCriPer = 5;
+        BasePow = startPow;
+        BaseBalance = startBalance;
+        BaseCriDamage = startCriDamage;
+        BaseCriPer = startCriRate;
 
         TotalUI totalUI = TotalUI.instance;
-        totalUI.UpdateHp(maxHp, nowHp);
+        totalUI.UpdateHp(GetTotalMaxHp(), nowHp);
         totalUI.UpdateExp(maxExp, nowExp);
 
         //기본총을 플레이어에게 장비 시킨다.
         ItemManager itemManager = ItemManager.instance;
-        ItemObjData itemObjData = itemManager.CreateItemObjData(startWeapon);
-        itemObjData.equip = true;
-        if (totalUI.ItemSendToInventory(itemObjData))
+        ItemObjData weaponObjData = itemManager.CreateItemObjData(startWeapon);
+        weaponObjData.equip = true;
+        if (totalUI.ItemSendToInventory(weaponObjData))
         {
+            Debug.Log("시작 무기 등록 완료");
+        }
 
+        ItemObjData accessaryObjData = itemManager.CreateItemObjData(startAccessary);
+        accessaryObjData.equip = true;
+        if (totalUI.ItemSendToInventory(accessaryObjData))
+        {
+            Debug.Log("시작 엑세사리 등록 완료");
         }
 
         canControl = true;
@@ -175,7 +195,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     ////////////////////////////////////////////////////////////////////////////////
     /// : 플레이어가 pDamage만큼 피해를 받음
     ////////////////////////////////////////////////////////////////////////////////
-    public void Hit(uint pDamage)
+    public void Hit(int pDamage)
     {
         if (nowHp > pDamage)
             NowHp -= pDamage;
@@ -183,7 +203,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             NowHp = 0;
 
         TotalUI totalUI = TotalUI.instance;
-        totalUI.UpdateHp(maxHp, nowHp);
+        totalUI.UpdateHp(GetTotalMaxHp(), nowHp);
 
         StartCoroutine(HitStunDelay());
     }
@@ -255,20 +275,72 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+    /// : 최종체력을 구해준다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public int GetTotalMaxHp()
+    {
+        int hp = BaseMaxHp;
+        ItemObjData nowWeaponData = NowWeapon();
+        if (nowWeaponData != null)
+        {
+            List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
+            foreach (ItemStatData itemStat in itemStatDatas)
+            {
+                if (itemStat.itemStat == ItemStat.Hp)
+                {
+                    hp += itemStat.GetValue();
+                }
+            }
+        }
+
+        ItemObjData nowAccessaryData = NowAccessary();
+        if (nowAccessaryData != null)
+        {
+            List<ItemStatData> itemStatDatas = nowAccessaryData.itemStats;
+            foreach (ItemStatData itemStat in itemStatDatas)
+            {
+                if (itemStat.itemStat == ItemStat.Hp)
+                {
+                    hp += itemStat.GetValue();
+                }
+            }
+        }
+
+        return hp;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     /// : 최종 힘을 구해준다.
     ////////////////////////////////////////////////////////////////////////////////
     public int GetTotalPow()
     {
         int pow = basePow;
         ItemObjData nowWeaponData = NowWeapon();
-        List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
-        foreach(ItemStatData itemStat in itemStatDatas)
+        if(nowWeaponData != null)
         {
-            if(itemStat.itemStat == ItemStat.Pow)
+            List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
+            foreach (ItemStatData itemStat in itemStatDatas)
             {
-                pow += itemStat.GetValue();
+                if (itemStat.itemStat == ItemStat.Pow)
+                {
+                    pow += itemStat.GetValue();
+                }
             }
         }
+
+        ItemObjData nowAccessaryData = NowAccessary();
+        if (nowAccessaryData != null)
+        {
+            List<ItemStatData> itemStatDatas = nowAccessaryData.itemStats;
+            foreach (ItemStatData itemStat in itemStatDatas)
+            {
+                if (itemStat.itemStat == ItemStat.Pow)
+                {
+                    pow += itemStat.GetValue();
+                }
+            }
+        }
+
         return pow;
     }
 
@@ -279,14 +351,31 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     {
         int balance = baseBalance;
         ItemObjData nowWeaponData = NowWeapon();
-        List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
-        foreach (ItemStatData itemStat in itemStatDatas)
+        if (nowWeaponData != null)
         {
-            if (itemStat.itemStat == ItemStat.Balance)
+            List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
+            foreach (ItemStatData itemStat in itemStatDatas)
             {
-                balance += itemStat.GetValue();
+                if (itemStat.itemStat == ItemStat.Balance)
+                {
+                    balance += itemStat.GetValue();
+                }
             }
         }
+
+        ItemObjData nowAccessaryData = NowAccessary();
+        if (nowAccessaryData != null)
+        {
+            List<ItemStatData> itemStatDatas = nowAccessaryData.itemStats;
+            foreach (ItemStatData itemStat in itemStatDatas)
+            {
+                if (itemStat.itemStat == ItemStat.Balance)
+                {
+                    balance += itemStat.GetValue();
+                }
+            }
+        }
+
         balance = Mathf.Min(balance, maxBalance);
         return balance;
     }
@@ -365,5 +454,11 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     {
         TotalUI totalUI = TotalUI.instance;
         return totalUI.GetNowWeaponToInventory();
+    }
+
+    public ItemObjData NowAccessary()
+    {
+        TotalUI totalUI = TotalUI.instance;
+        return totalUI.GetNowAccessaryToInventory();
     }
 }
