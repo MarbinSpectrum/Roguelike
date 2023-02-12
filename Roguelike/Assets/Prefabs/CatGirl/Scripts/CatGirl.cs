@@ -30,6 +30,7 @@ public class CatGirl : SerializedMonoBehaviour
     private ButtonInput ButtonInput = ButtonInput.None;
     private IEnumerator hitCor;
     private uint reloadStack = uint.MaxValue;
+    private const float aniTime = 0.3f;
 
     [HideInInspector]
     public ButtonInput buttonInput
@@ -168,6 +169,7 @@ public class CatGirl : SerializedMonoBehaviour
         animator.SetInteger("showDic", showDic);
 
         uint weaponRange = nowWeapon.itemData.range;
+        bool nowShotGun = ItemManager.IsShotGun(nowWeapon.itemData.item);
 
         //이동 방향에 몬스터가 존재하는지 검사한다.
         MonsterObj targetMonster = null;
@@ -223,6 +225,11 @@ public class CatGirl : SerializedMonoBehaviour
                 spriteRenderer.flipX = spriteFiipX;
                 gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
                 animator.SetTrigger("attack");
+                animator.SetBool("shotGun", nowShotGun);
+                if(nowShotGun)
+                    CameraVibrate.Vibrate(10, 0.1f, 0.15f);
+                else
+                    CameraVibrate.Vibrate(3, 0.02f, 0.15f);
 
                 yield return new WaitForSeconds(duration);
 
@@ -230,13 +237,16 @@ public class CatGirl : SerializedMonoBehaviour
                 bool critical = characterManager.CriticalProcess(ref totalDamage);
 
                 targetMonster.Hit((uint)totalDamage, critical);
+
+                float remainTime = Mathf.Max(0, aniTime - duration);
+                yield return new WaitForSeconds(remainTime);
             }
             else
             {
                 spriteRenderer.flipX = spriteFiipX;
                 gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
                 animator.SetTrigger("reload");
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(aniTime);
             }
 
             StartCoroutine(monsterManager.RunMonster());
@@ -246,7 +256,7 @@ public class CatGirl : SerializedMonoBehaviour
         {
             chestObj.RemoveChestObj();
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(aniTime);
         }
         else if (jarObj != null)
         {
@@ -269,6 +279,11 @@ public class CatGirl : SerializedMonoBehaviour
                 spriteRenderer.flipX = spriteFiipX;
                 gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
                 animator.SetTrigger("attack");
+                animator.SetBool("shotGun", nowShotGun);
+                if (nowShotGun)
+                    CameraVibrate.Vibrate(10, 0.1f, 0.15f);
+                else
+                    CameraVibrate.Vibrate(3, 0.02f, 0.15f);
 
                 yield return new WaitForSeconds(duration);
 
@@ -277,13 +292,16 @@ public class CatGirl : SerializedMonoBehaviour
                 damageEffect.DamageEffectRun(jarObj.pos, totalDamage, false);
 
                 jarObj.RemoveJarObj();
+
+                float remainTime = Mathf.Max(0, aniTime - duration);
+                yield return new WaitForSeconds(remainTime);
             }
             else
             {
                 spriteRenderer.flipX = spriteFiipX;
                 gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
                 animator.SetTrigger("reload");
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(aniTime);
             }
 
             StartCoroutine(monsterManager.RunMonster());

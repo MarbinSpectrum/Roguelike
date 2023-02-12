@@ -121,9 +121,24 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
             case Item.MP133:
             case Item.NormalGun:
                 return ItemType.Weapon;
+            case Item.Glasses_B:
+            case Item.Glasses_R:
+                return ItemType.Accessary;
             case Item.Coin:
             default:
                 return ItemType.Etc;
         }
+    }
+
+    public static bool IsShotGun(Item pItem)
+    {
+        switch (pItem)
+        {
+            case Item.MP133:
+                return true;
+            default:
+                return false;
+        }
+        return false;
     }
 }

@@ -72,6 +72,10 @@ public enum Item
 
     MP133 = 500,
 
+    Glasses_B = 600,
+
+    Glasses_R = 700,
+
 }
 
 public enum ItemStat

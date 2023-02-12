@@ -187,6 +187,20 @@ public class InventoryUI : MonoBehaviour
         return nowWeapon;
     }
 
+    public ItemObjData NowAccessary()
+    {
+        ItemObjData nowAccessary = null;
+        foreach (ItemObjData itemObjData in accessaryItems)
+        {
+            if (itemObjData.equip)
+            {
+                nowAccessary = itemObjData;
+                break;
+            }
+        }
+        return nowAccessary;
+    }
+
     public void RemoveItem(ItemType pItemType,int pIdx)
     {
         List<ItemObjData> itemObjDatas = null;

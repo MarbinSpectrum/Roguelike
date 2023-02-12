@@ -55,7 +55,7 @@ public class ItemData : ScriptableObject
         }
         else
         {
-            //아니라면 무조건한개임
+            //아니라면 무조건 한개임
             itemObjData.count = 1;
         }
 
