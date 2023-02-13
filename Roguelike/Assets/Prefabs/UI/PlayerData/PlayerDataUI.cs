@@ -65,7 +65,20 @@ public class PlayerDataUI : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     public void ActPlayerData()
     {
-        isRun = !isRun;
+        TotalUI totalUI = TotalUI.instance;
+        if(IsRun)
+        {
+            //UI가 실행상태에서 멈춤상태로 바뀐다.
+            totalUI.ActKeyPad(true);
+            isRun = false;
+        }
+        else
+        {
+            //UI가 멈춤상태에서 실행상태로 바뀐다.
+            totalUI.ActKeyPad(false);
+            isRun = true;
+        }
+
         uiObj.SetActive(isRun);
         UpdateUI();
     }

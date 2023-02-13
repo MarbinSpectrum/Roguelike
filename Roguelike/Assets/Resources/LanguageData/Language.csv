@@ -3,6 +3,7 @@ LOAD,로딩중,Loading
 PLAYER_DATA,플레이어 정보,Player Data
 EQUIP,장착,Equip
 DROP,버리기,Drop
+TAKE_OFF,벗기,Take Off
 OK,확인,Ok
 CANCLE,취소,Cancle
 HP,체력,Hp
@@ -11,6 +12,9 @@ POW,힘,Pow
 BALANCE,밸런스,Balance
 CRI_RATE,치명타 확률,Critical Rate
 CRI_DMG,치명타 데미지,Critical Damage
+SELECT_STAT_POW_TEXT,기본 데미지가\n증가합니다.\n(+{0}),
+SELECT_STAT_HP_TEXT,최대 체력이\n증가합니다.\n(+{0}),
+SELECT_STAT_BALANCE_TEXT,밸런스가\n증가합니다.\n(+{0}%),
 COIN_NAME,금화,Gold Coin
 COIN_EXPLAIN,여러 곳에서 사용 할 수 있는 금화이다.,It is a gold coin that can be used in many places.
 ATK,공격력,atk
@@ -20,3 +24,9 @@ NORMALGUN_NAME,평범한 장총,Normal Gun
 GLOCK17_NAME,글록 17,Glock 17
 M4_NAME,M4,M4
 MP133_NAME,MP-133,MP-133
+GLASSES_R_NAME,빨간 뿔태 안경,Red Glasses
+GLASSES_R_EXPLAIN,치명타 데미지가 증가한다.,
+GLASSES_B_NAME,파란 뿔태 안경,Blue Glasses
+GLASSES_B_EXPLAIN,밸런스가 증가한다.,
+GUARDIAN_RING_NAME,수호의 반지,
+GUARDIAN_RING_EXPLAIN,피해를 한번 막아준다.\n(사용되면 파괴된다.),

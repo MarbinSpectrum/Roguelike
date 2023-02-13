@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NormalGunItem : ItemObj
+public class Guardian_Ring : ItemObj
 {
     public SpriteRenderer spriteRenderer;
     public SoundObj getSound;

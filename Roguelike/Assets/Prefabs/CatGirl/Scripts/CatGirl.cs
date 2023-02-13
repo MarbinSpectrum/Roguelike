@@ -25,6 +25,9 @@ public class CatGirl : SerializedMonoBehaviour
     [SerializeField]
     private Material hitMaterial;
     [SerializeField]
+    private SoundObj hurtSE;
+
+    [SerializeField]
     private Dictionary<ButtonInput, Transform> bulletPos = new Dictionary<ButtonInput, Transform>();
 
     private ButtonInput ButtonInput = ButtonInput.None;
@@ -55,7 +58,7 @@ public class CatGirl : SerializedMonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     private void Start()
     {
-        StartCoroutine(ButtonEventDelay());
+        StartCoroutine(runCatEvent());
     }
 
 
@@ -117,7 +120,10 @@ public class CatGirl : SerializedMonoBehaviour
         return true;
     }
 
-    public IEnumerator ButtonEventDelay()
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 캐릭터 조작에 따른 이벤트를 처리한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public IEnumerator runCatEvent()
     {
         MonsterManager monsterManager = MonsterManager.instance;
         MapManager mapManager = MapManager.instance;
@@ -132,7 +138,9 @@ public class CatGirl : SerializedMonoBehaviour
 
         ItemObjData nowWeapon = characterManager.NowWeapon();
 
-        yield return new WaitUntil(()=> (buttonInput != ButtonInput.None));
+        characterManager.LevelUpCheck(); //레벨업이 가능한지 검사.
+
+        yield return new WaitUntil(()=> (buttonInput != ButtonInput.None)); //버튼 입력이 없는 상태면 대기
 
         yield return new WaitUntil(() => (characterManager.canControl == true)); //컨트롤 불가 상태일경우 대기
 
@@ -169,49 +177,81 @@ public class CatGirl : SerializedMonoBehaviour
         animator.SetInteger("showDic", showDic);
 
         uint weaponRange = nowWeapon.itemData.range;
-        bool nowShotGun = ItemManager.IsShotGun(nowWeapon.itemData.item);
 
-        //이동 방향에 몬스터가 존재하는지 검사한다.
         MonsterObj targetMonster = null;
         for (int i = 1; i <= weaponRange && targetMonster == null; i++)
         {
+            //이동 방향에 몬스터가 존재하는지 검사한다.
+            //공격범위안에 몬스터가 있으면 해당 객체를 가져온다.
             Vector2Int cPos = new Vector2Int(pos.x + dic.x * i, pos.y + dic.y * i);
             if (mapManager.IsWall(cPos.x, cPos.y))
+            {
+                //도중에 벽을 만났다. 탐색중지
                 break;
+            }
             if (targetMonster == null)
+            {
+                //몬스터 발견
                 targetMonster = monsterManager.IsMonster(cPos.x, cPos.y);
+            }
         }
 
         Jar jarObj = null;
         for (int i = 1; i <= weaponRange && jarObj == null; i++)
         {
+            //이동 방향에 항아리 객체가 존재하는지 검사한다.
+            //공격범위안에 항아리가 있으면 해당 객체를 가져온다.
             Vector2Int cPos = new Vector2Int(pos.x + dic.x * i, pos.y + dic.y * i);
             if (mapManager.IsWall(cPos.x, cPos.y))
+            {
+                //도중에 벽을 만났다. 탐색중지
                 break;
+            }
             if (jarObj == null)
+            {
+                //항아리 발견
                 jarObj = jarManager.GetJarObj(cPos);
+            }
         }
 
         Chest chestObj = null;
         {
+            //이동 방향에 궤작 객체가 존재하는지 검사한다.
             Vector2Int cPos = new Vector2Int(pos.x + dic.x, pos.y + dic.y);
             if (chestObj == null)
+            {
+                //궤작 발견
                 chestObj = chestManager.GetChestObj(cPos);
+            }
         }
 
+        //현재무기가 샷건인지 여부 확인
+        bool nowShotGun = ItemManager.IsShotGun(nowWeapon.itemData.item);
+
         //공격 딜레이 확인
+        //reloadStack이 reloadDelay를 넘어서면 공격가능하다.
+        //reloadStack은 플레이어가 다른 조작을 할때마다 쌓인다.
+        //해당 방식으로 공격의 딜레이를 넣었다.
         uint reloadDelay = nowWeapon.itemData.reloadDelay;
         bool canFire = false;
         if (reloadDelay <= reloadStack)
+        {
+            //발사가능
             canFire = true;
+        }
         else
+        {
+            //스택을 더채운다.
             reloadStack++;
+        }
 
         if (targetMonster != null)
         {
             if (canFire)
             {
-                reloadStack = 0;
+                //몬스터를 발견했고 발사가능한 상태
+
+                reloadStack = 0; //장전스택을 0으로한다.
 
                 float gameDis = Vector2.Distance(pos, targetMonster.pos);
                 float duration = 0.1f * gameDis;
@@ -243,6 +283,8 @@ public class CatGirl : SerializedMonoBehaviour
             }
             else
             {
+                //공격 불가능이다.
+                //장전 애니메이션 실행
                 spriteRenderer.flipX = spriteFiipX;
                 gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
                 animator.SetTrigger("reload");
@@ -342,10 +384,9 @@ public class CatGirl : SerializedMonoBehaviour
         //미니맵 갱신
         totalUI.UpdateMiniMap(new Vector2Int(pos.x, pos.y), 4);
 
-
         ButtonInput = ButtonInput.None;
 
-        StartCoroutine(ButtonEventDelay());
+        StartCoroutine(runCatEvent());
     }
 
     public void HitAni()
@@ -355,6 +396,7 @@ public class CatGirl : SerializedMonoBehaviour
             StopCoroutine(hitCor);
             hitCor = null;
         }
+        hurtSE.PlaySE();
         hitCor = HitStunAni();
         StartCoroutine(hitCor);
     }

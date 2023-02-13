@@ -15,7 +15,7 @@ public class SoundObj : MonoBehaviour
             PlaySE();
     }
 
-    public void PlaySE()
+    public virtual void PlaySE()
     {
         SoundManager soundManager = SoundManager.instance;
         if (soundManager != null)

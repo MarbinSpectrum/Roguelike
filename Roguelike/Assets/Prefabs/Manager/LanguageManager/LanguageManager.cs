@@ -63,8 +63,15 @@ public class LanguageManager : FieldObjectSingleton<LanguageManager>
 
     public static string GetText(string pKey)
     {
-        if(instance.languageData[instance.nowLanguage].ContainsKey(pKey))
-            return instance.languageData[instance.nowLanguage][pKey];
+        if(instance.languageData.ContainsKey(instance.nowLanguage))
+        {
+            if (instance.languageData[instance.nowLanguage].ContainsKey(pKey))
+            {
+                string str = instance.languageData[instance.nowLanguage][pKey];
+                str = str.Replace("\\n", "\n");
+                return str;
+            }
+        }
         return string.Empty;
     }
 }

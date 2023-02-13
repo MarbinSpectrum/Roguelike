@@ -77,7 +77,10 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
     public ItemObjData CreateItemObjData(Item pItem)
     {
         Init();
-        return itemDatas[pItem].createItemObjData();
+        ItemObjData itemObjData = null;
+        if (itemDatas.ContainsKey(pItem))
+            itemObjData = itemDatas[pItem].createItemObjData();
+        return itemObjData;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -123,6 +126,7 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
                 return ItemType.Weapon;
             case Item.Glasses_B:
             case Item.Glasses_R:
+            case Item.Guardian_Ring:
                 return ItemType.Accessary;
             case Item.Coin:
             default:

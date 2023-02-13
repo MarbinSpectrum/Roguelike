@@ -47,12 +47,13 @@ public class InventoryUI : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     public void ActInventory()
     {
-        isRun = !isRun;
-        uiObj.SetActive(isRun);
-        UpdateSlot(actCategory);
+        ActInventory(!isRun);
     }
     public void ActInventory(bool pState)
     {
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.ActKeyPad(!pState);
+
         isRun = pState;
         uiObj.SetActive(isRun);
         UpdateSlot(actCategory);

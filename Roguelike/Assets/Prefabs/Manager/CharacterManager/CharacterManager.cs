@@ -25,6 +25,10 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     [SerializeField]
     private int startCriRate;
 
+    [Space(40)]
+
+    [SerializeField]
+    private SoundObj changeWeaponSE;
 
     [HideInInspector]
     public CatGirl character;
@@ -148,7 +152,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         character.gameObject.SetActive(true);
         character.SetPos(pX, pY);
 
-        MaxExp = 5;
+        MaxExp = 10;
         NowExp = 0;
         BaseMaxHp = startHp;
         NowHp = GetTotalMaxHp();
@@ -165,18 +169,29 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
         //기본총을 플레이어에게 장비 시킨다.
         ItemManager itemManager = ItemManager.instance;
+
+        //무기 장비 설정
         ItemObjData weaponObjData = itemManager.CreateItemObjData(startWeapon);
-        weaponObjData.equip = true;
-        if (totalUI.ItemSendToInventory(weaponObjData))
+        if (weaponObjData != null)
         {
-            Debug.Log("시작 무기 등록 완료");
+            //해당 장비를 장착한다.
+            weaponObjData.equip = true;
+            if (totalUI.ItemSendToInventory(weaponObjData))
+            {
+                //인벤토리에 장비를 넣는다.
+            }
         }
 
+        //악세사리 장비 설정
         ItemObjData accessaryObjData = itemManager.CreateItemObjData(startAccessary);
-        accessaryObjData.equip = true;
-        if (totalUI.ItemSendToInventory(accessaryObjData))
+        if (accessaryObjData != null)
         {
-            Debug.Log("시작 엑세사리 등록 완료");
+            //해당 장비를 장착한다.
+            accessaryObjData.equip = true;
+            if (totalUI.ItemSendToInventory(accessaryObjData))
+            {
+                //인벤토리에 장비를 넣는다.
+            }
         }
 
         canControl = true;
@@ -197,15 +212,35 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     ////////////////////////////////////////////////////////////////////////////////
     public void Hit(int pDamage)
     {
-        if (nowHp > pDamage)
-            NowHp -= pDamage;
-        else
-            NowHp = 0;
-
         TotalUI totalUI = TotalUI.instance;
-        totalUI.UpdateHp(GetTotalMaxHp(), nowHp);
 
-        StartCoroutine(HitStunDelay());
+        ItemObjData nowAccessaryData = NowAccessary();
+        Item accessaryItem = Item.Null;
+
+        if (nowAccessaryData != null)
+        {
+            //현재 아이템을 받아온다.
+            accessaryItem = nowAccessaryData.itemData.item;
+        }
+
+        if (accessaryItem == Item.Guardian_Ring)
+        {
+            //현재 악세사리는 수호의 링이다.
+            //데미지를 받는 대신 수호의 링이 파괴된다.
+            totalUI.InventoryRemoveItem(ItemType.Accessary, 0);
+        }
+        else
+        {
+            //데미지를 받았다.
+            if (nowHp > pDamage)
+                NowHp -= pDamage;
+            else
+                NowHp = 0;
+
+            totalUI.UpdateHp(GetTotalMaxHp(), nowHp);
+
+            StartCoroutine(HitStunDelay());
+        }     
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -224,7 +259,17 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     public void GetExp(uint pValue)
     {
         NowExp += pValue;
-        if(nowExp >= maxExp)
+
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.UpdateExp(maxExp, nowExp);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 레벨업이 가능한지 검사한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void LevelUpCheck()
+    {
+        if (nowExp >= maxExp)
         {
             //획득경험치가 최대경험치를 넘겼다면
             //레벨업을을한다.
@@ -232,6 +277,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
             LevelUp();
         }
+
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateExp(maxExp, nowExp);
     }
@@ -241,9 +287,12 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     ////////////////////////////////////////////////////////////////////////////////
     public void LevelUp()
     {
-        //레벨을 올려주고 공격력을 올려준다.
+        //레벨을 올려준다.
         NowLevel += 1;
-        BasePow += 1;
+
+        //스탯을 찍자.
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.ActSelectStatUI(true);
 
         //다음 최대 경험치를 갱신해준다.
         MaxExp = (uint)(maxExp * 1.5f);
@@ -255,14 +304,17 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     ////////////////////////////////////////////////////////////////////////////////
     private void Update()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
-            character.buttonInput = ButtonInput.Left;
-        else if (Input.GetKey(KeyCode.RightArrow))
-            character.buttonInput = ButtonInput.Right;
-        else if (Input.GetKey(KeyCode.UpArrow))
-            character.buttonInput = ButtonInput.Up;
-        else if (Input.GetKey(KeyCode.DownArrow))
-            character.buttonInput = ButtonInput.Down;
+        if (KeyPad.actBtn)
+        {
+            if (Input.GetKey(KeyCode.LeftArrow))
+                character.buttonInput = ButtonInput.Left;
+            else if (Input.GetKey(KeyCode.RightArrow))
+                character.buttonInput = ButtonInput.Right;
+            else if (Input.GetKey(KeyCode.UpArrow))
+                character.buttonInput = ButtonInput.Up;
+            else if (Input.GetKey(KeyCode.DownArrow))
+                character.buttonInput = ButtonInput.Down;
+        }
 
         if (Input.GetKeyUp(KeyCode.LeftArrow))
             character.buttonInput = ButtonInput.None;
@@ -272,6 +324,31 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             character.buttonInput = ButtonInput.None;
         else if (Input.GetKeyUp(KeyCode.DownArrow))
             character.buttonInput = ButtonInput.None;
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 기본 공격력을 올린다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void AddPow(int pValue)
+    {
+        BasePow += pValue;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 기본 체력을 올린다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void AddMaxHp(int pValue)
+    {
+        BaseMaxHp += pValue;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 기본 밸런스를 올린다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void AddBalance(int pValue)
+    {
+        BaseBalance += pValue;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -400,16 +477,33 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     public float GetTotalCriPer()
     {
         float criPer = baseCriPer;
+
         ItemObjData nowWeaponData = NowWeapon();
-        List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
-        foreach (ItemStatData itemStat in itemStatDatas)
+        if (nowWeaponData != null)
         {
-            if (itemStat.itemStat == ItemStat.CriPer)
+            List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
+            foreach (ItemStatData itemStat in itemStatDatas)
             {
-                criPer += itemStat.GetValue();
+                if (itemStat.itemStat == ItemStat.CriPer)
+                {
+                    criPer += itemStat.GetValue();
+                }
             }
         }
 
+        ItemObjData nowAccessaryData = NowAccessary();
+        if (nowAccessaryData != null)
+        {
+            List<ItemStatData> itemStatDatas = nowAccessaryData.itemStats;
+            foreach (ItemStatData itemStat in itemStatDatas)
+            {
+                if (itemStat.itemStat == ItemStat.CriPer)
+                {
+                    criPer += itemStat.GetValue();
+                }
+            }
+        }
+        criPer = Mathf.Min(criPer, 100);
         return criPer;
     }
 
@@ -420,12 +514,28 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     {
         float criDmg = baseCriDamage;
         ItemObjData nowWeaponData = NowWeapon();
-        List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
-        foreach (ItemStatData itemStat in itemStatDatas)
+        if (nowWeaponData != null)
         {
-            if (itemStat.itemStat == ItemStat.CriDmg)
+            List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
+            foreach (ItemStatData itemStat in itemStatDatas)
             {
-                criDmg += itemStat.GetValue();
+                if (itemStat.itemStat == ItemStat.CriDmg)
+                {
+                    criDmg += itemStat.GetValue();
+                }
+            }
+        }
+
+        ItemObjData nowAccessaryData = NowAccessary();
+        if (nowAccessaryData != null)
+        {
+            List<ItemStatData> itemStatDatas = nowAccessaryData.itemStats;
+            foreach (ItemStatData itemStat in itemStatDatas)
+            {
+                if (itemStat.itemStat == ItemStat.CriDmg)
+                {
+                    criDmg += itemStat.GetValue();
+                }
             }
         }
 
@@ -448,6 +558,54 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             return true;
         }
         return false;
+    }
+
+    public bool ChangeItem(ref ItemObjData pItemObjData)
+    {
+        if (pItemObjData == null)
+        {
+            //현재 장비가 없는것 같다.
+            return false;
+        }
+
+        ItemObjData nowItemData = null;
+        ItemType itemType = ItemManager.GetItemType(pItemObjData);
+        if (itemType == ItemType.Weapon)
+        {
+            changeWeaponSE.PlaySE();
+            nowItemData = NowWeapon();
+        }
+        else if (itemType == ItemType.Accessary)
+            nowItemData = NowAccessary();
+        else
+        {
+            //해당 장비는 못끼는 장비같다.
+            return false;
+        }
+
+        if (nowItemData != null)
+        {
+            //현재 장비를 벗는다..
+            nowItemData.equip = false;
+        }
+
+        //해당 장비를 장착한다.
+        pItemObjData.equip = true;
+
+        return true;
+    }
+
+    public bool TakeOffItem(ref ItemObjData pItemObjData)
+    {
+        if(pItemObjData == null)
+        {
+            //현재 장비가 없는것 같다.
+            return false;
+        }
+
+        pItemObjData.equip = false;
+
+        return true;
     }
 
     public ItemObjData NowWeapon()

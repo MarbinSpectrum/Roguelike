@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MP133 : ItemObj
 {
+    public SpriteRenderer spriteRenderer;
+    public SoundObj getSound;
+
     public override void GetItem()
     {
         TotalUI totalUI = TotalUI.instance;
@@ -11,8 +14,8 @@ public class MP133 : ItemObj
         {
             ItemManager itemManager = ItemManager.instance;
             itemManager.RemoveItem(pos.x, pos.y);
-
-            gameObject.SetActive(false);
+            spriteRenderer.enabled = false;
+            getSound.PlaySE();
         }
     }
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Glasses_R
   m_EditorClassIdentifier: 
   item: 700
-  itemObj: {fileID: 2709167506050122807, guid: 9ccce43adedb06c448842eb2c15cddfa, type: 3}
+  itemObj: {fileID: 5193071249719512278, guid: 9ccce43adedb06c448842eb2c15cddfa, type: 3}
   itemSprite_UI: {fileID: 21300000, guid: d3ea564cd85aff142bd43bf13f579b67, type: 3}
   stockItem: 0
   valueMinMax: {x: 0, y: 0}

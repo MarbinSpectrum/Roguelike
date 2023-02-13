@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6221678552183082552}
   - component: {fileID: 81515106078998053}
+  - component: {fileID: 1179110335062359274}
   m_Layer: 0
-  m_Name: open
+  m_Name: Open
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,6 +83,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!111 &1179110335062359274
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3090885147779259663}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: c5ebcf00a05d45441b53644fa0305e01, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: c5ebcf00a05d45441b53644fa0305e01, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &3224636902573106739
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,4 +229,4 @@ MonoBehaviour:
   pos: {x: 0, y: 0}
   close: {fileID: 3224636902573106739}
   open: {fileID: 3090885147779259663}
-  chestItemList: 900100002c010000f401000064000000
+  chestItemList: 58020000bc0200002c01000090010000f40100002003000064000000

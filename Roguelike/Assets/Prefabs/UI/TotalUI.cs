@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// : 전체적인 UI를 관리합니다.
@@ -15,6 +16,8 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     [SerializeField]
     private ExpBar expBar;
     [SerializeField]
+    private KeyPad keyPad;
+    [SerializeField]
     private MiniMapUI miniMap;
     [SerializeField]
     private SetingUI setingUI;
@@ -24,6 +27,8 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     private PlayerDataUI playerDataUI;
     [SerializeField]
     private ItemDataUI itemDataUI;
+    [SerializeField]
+    private SelectStatUI selectStatUI;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 맵 생성중인지를 표시해줍니다.
@@ -113,6 +118,14 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+    /// : 스텟결정UI 실행
+    ////////////////////////////////////////////////////////////////////////////////
+    public void ActSelectStatUI(bool pState)
+    {
+        selectStatUI.ActSelectStat(pState);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     /// : 인벤토리 실행
     ////////////////////////////////////////////////////////////////////////////////
     public void ActInventory(bool pState)
@@ -121,7 +134,7 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
-    /// : 인벤토리 실행
+    /// : 인벤토리에서 pItemType의 pIdx에 해당하는 아이템을 제거
     ////////////////////////////////////////////////////////////////////////////////
     public void InventoryRemoveItem(ItemType pItemType, int pIdx)
     {
@@ -133,6 +146,8 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     ////////////////////////////////////////////////////////////////////////////////
     public bool ItemSendToInventory(ItemObjData pItemObjData)
     {
+        if (pItemObjData == null)
+            return false;
         return inventoryUI.AddItem(pItemObjData);
     }
 
@@ -169,6 +184,14 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
         return inventoryUI.NowAccessary();
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 키패드의 작동을 멈춘다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void ActKeyPad(bool pState)
+    {
+        keyPad.ActKeyPad(pState);
+    }
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -186,7 +209,10 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
                 playerDataUI.ActPlayerData();
             }
             else
+            {
+                ActKeyPad(setingUI.gameObject.activeSelf);
                 setingUI.gameObject.SetActive(!setingUI.gameObject.activeSelf);
+            }
         }
     }
 }

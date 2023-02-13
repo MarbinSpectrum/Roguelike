@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &146059157154880880
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4730476658449195632}
+  - component: {fileID: 1790094004629568564}
+  m_Layer: 0
+  m_Name: PlayerHurt SE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &4730476658449195632
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146059157154880880}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.1960175, y: 0.95687425, z: -0.95401245}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1410027969481209123}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1790094004629568564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146059157154880880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47f4ebf6430e7ab4192cb0db229505f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: 828948adfcded694ba4f90003cec8780, type: 3}
+  onEnablePlay: 0
 --- !u!1 &372816026981447725
 GameObject:
   m_ObjectHideFlags: 0
@@ -39,7 +84,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2367247288283181254}
-  - component: {fileID: 2717954092066789322}
+  - component: {fileID: 8262182578911240360}
   m_Layer: 0
   m_Name: Gun SE
   m_TagString: Untagged
@@ -61,7 +106,7 @@ Transform:
   m_Father: {fileID: 1410027969481209123}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2717954092066789322
+--- !u!114 &8262182578911240360
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -70,11 +115,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 774577837915038399}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47f4ebf6430e7ab4192cb0db229505f1, type: 3}
+  m_Script: {fileID: 11500000, guid: a71b9bfb727b2264cace5763df05f075, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: 70643d3dda87ac14e8a7ae9d6485d003, type: 3}
-  onEnablePlay: 1
+  normalGun: {fileID: 8300000, guid: 70643d3dda87ac14e8a7ae9d6485d003, type: 3}
+  shotGun: {fileID: 8300000, guid: 1c89bf0124413a84aa75d1c9e6f4daef, type: 3}
 --- !u!1 &1280780153707928881
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,6 +198,7 @@ Transform:
   - {fileID: 6770674281993323168}
   - {fileID: 216798053591544217}
   - {fileID: 2367247288283181254}
+  - {fileID: 4730476658449195632}
   - {fileID: 6103674804894800051}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -333,6 +379,7 @@ MonoBehaviour:
   moveSpeed: 0.2
   baseMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   hitMaterial: {fileID: 2100000, guid: 39f124793c6cf054ba28faee0da4d835, type: 2}
+  hurtSE: {fileID: 1790094004629568564}
 --- !u!1 &3380390602557409756
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,5 +615,5 @@ Transform:
   m_Children:
   - {fileID: 4079641907989978098}
   m_Father: {fileID: 1410027969481209123}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
