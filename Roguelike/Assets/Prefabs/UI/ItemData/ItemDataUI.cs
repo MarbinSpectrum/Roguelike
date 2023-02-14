@@ -114,6 +114,8 @@ public class ItemDataUI : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     public void UpdateItemData(ItemObjData pItemObjData, int pIdx)
     {
+        CharacterManager characterManager = CharacterManager.instance;
+
         nowItem = pItemObjData;
         nowItemIdx = pIdx;
 
@@ -121,6 +123,12 @@ public class ItemDataUI : MonoBehaviour
         nameText.text = LanguageManager.GetText(pItemObjData.itemData.nameKey); //아이템 이름 표시
 
         ItemType itemType = ItemManager.GetItemType(pItemObjData);
+
+        //현재 무기 정보를 가져온다.
+        ItemObjData nowWeapon = characterManager.NowWeapon();
+        Item nowWeaponItem = nowWeapon.itemData.item;
+        bool cantTakeOffWeapon = ItemManager.CantTakeOff(nowWeaponItem);        // 해당 장비를 벗을 수 있는지 검사
+
         if (itemType == ItemType.Etc)
         {
             //기타 아이템이다. 아이템 버리기만 활성화한다.
@@ -134,6 +142,7 @@ public class ItemDataUI : MonoBehaviour
             //equipBox : 장비 벗기 끼기 관련 UI
             if (pItemObjData.equip)
             {
+                //현재 장착중인 장비에 대한 처리
                 if (itemType == ItemType.Weapon)
                 {
                     //장착중인 무기는 벗거나 끼는것을 표시해주지 않는다.
@@ -147,14 +156,57 @@ public class ItemDataUI : MonoBehaviour
                     //장착중인 악세사리는 벗거나 끼는것을 표시 해도된다.
                     //악세사리 장비는 벗은 상태여도 되기 때문
                     equipBtn.SetActive(false);
-                    takeOffBtn.SetActive(true);
+
+                    bool cantTakeOff = ItemManager.CantTakeOff(nowItem.itemData.item);
+                    if (cantTakeOff)
+                    {
+                        //벗을수 없는 장비다.
+                        takeOffBtn.SetActive(false);
+                    }
+                    else
+                        takeOffBtn.SetActive(true);
+
                     dropBtn.SetActive(false);
                 }
             }
             else
             {
-                //장착중이지 않은 장비는 벗거나 끼는것을 표시해준다.
-                equipBtn.SetActive(true);
+                //장착중이지 않은 장비의 벗거나 끼는것을 표시해준다.
+                if(itemType == ItemType.Weapon)
+                {
+                    //무기장비이고
+                    if (cantTakeOffWeapon)
+                    {
+                        //현재 벗을수 없는 무기 장비를 끼고있다면
+                        equipBtn.SetActive(false);
+                    }
+                    else
+                        equipBtn.SetActive(true);
+                }
+                else if (itemType == ItemType.Accessary)
+                {
+                    //악세사리 장비이고
+                    bool fullSlot = false;
+                    List<ItemObjData> nowAccessary = characterManager.NowAccessaryList();
+                    int accessaryCount = nowAccessary.Count;
+                    if (accessaryCount >= CharacterManager.MAX_ACCESSARY_SLOT)
+                    {
+                        //슬롯이 꽉찼다.
+                        fullSlot = true;
+                    }
+
+                    if (fullSlot)
+                    {
+                        //현재 악세사리 슬롯이 꽉찼다.
+                        equipBtn.SetActive(false);
+                    }
+                    else
+                    {
+                        //슬롯에 아직 여유 공간이 남아있다.
+                        equipBtn.SetActive(true);
+                    }
+                }
+
                 takeOffBtn.SetActive(false);
                 dropBtn.SetActive(true);
             }
@@ -168,7 +220,7 @@ public class ItemDataUI : MonoBehaviour
         }
         else
         {
-            //나머지는 설명이 없다.
+            //나머지 경우는 설명이 있다.
             explainBox.SetActive(true);
         }
 
@@ -201,12 +253,42 @@ public class ItemDataUI : MonoBehaviour
     public void EquipItem()
     {
         CharacterManager characterManager = CharacterManager.instance;
-        if(characterManager.ChangeItem(ref nowItem))
-        {
-            ActItemData(false);
+        ItemType itemType = ItemManager.GetItemType(nowItem);
 
-            TotalUI totalUI = TotalUI.instance;
-            totalUI.ActInventory(true);
+        if(itemType == ItemType.Weapon)
+        {
+            if (characterManager.ChangeItem(ref nowItem))
+            {
+                ActItemData(false);
+
+                TotalUI totalUI = TotalUI.instance;
+                totalUI.ActInventory(true);
+            }
+
+        }
+        else if (itemType == ItemType.Accessary)
+        {
+            //악세사리 장비이고
+            bool fullSlot = false;
+            List<ItemObjData> nowAccessary = characterManager.NowAccessaryList();
+            int accessaryCount = nowAccessary.Count;
+            if (accessaryCount >= CharacterManager.MAX_ACCESSARY_SLOT)
+            {
+                //슬롯이 꽉찼다.
+                fullSlot = true;
+                return;
+            }
+
+            if(fullSlot == false)
+            {
+                nowItem.equip = true;
+
+                ActItemData(false);
+
+                TotalUI totalUI = TotalUI.instance;
+                totalUI.ActInventory(true);
+                totalUI.UpdateHp();
+            }
         }
     }
 
@@ -222,6 +304,7 @@ public class ItemDataUI : MonoBehaviour
 
             TotalUI totalUI = TotalUI.instance;
             totalUI.ActInventory(true);
+            totalUI.UpdateHp();
         }
     }
 

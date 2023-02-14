@@ -110,7 +110,8 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     }
     #endregion
 
-    private const int maxBalance = 100;
+
+    private const int MAX_BALANCE = 100;
 
     #region[public float baseCriPer]
     private float BaseCriPer;
@@ -133,6 +134,8 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         }
     }
     #endregion
+
+    public const int MAX_ACCESSARY_SLOT = 4;
 
     [HideInInspector]
     public bool canControl;
@@ -164,8 +167,8 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         BaseCriPer = startCriRate;
 
         TotalUI totalUI = TotalUI.instance;
-        totalUI.UpdateHp(GetTotalMaxHp(), nowHp);
-        totalUI.UpdateExp(maxExp, nowExp);
+        totalUI.UpdateHp();
+        totalUI.UpdateExp();
 
         //기본총을 플레이어에게 장비 시킨다.
         ItemManager itemManager = ItemManager.instance;
@@ -214,33 +217,28 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     {
         TotalUI totalUI = TotalUI.instance;
 
-        ItemObjData nowAccessaryData = NowAccessary();
-        Item accessaryItem = Item.Null;
-
-        if (nowAccessaryData != null)
+        List<ItemObjData> nowAccessaryData = NowAccessaryList();
+        
+        for(int idx = 0; idx < nowAccessaryData.Count; idx++)
         {
-            //현재 아이템을 받아온다.
-            accessaryItem = nowAccessaryData.itemData.item;
+            ItemData accessaryData = nowAccessaryData[idx].itemData;
+            if (accessaryData.item == Item.Guardian_Ring)
+            {
+                //현재 악세사리로 수호의 링을 가지고 있다.
+                //데미지를 받는 대신 수호의 링이 파괴된다.
+                totalUI.InventoryRemoveItem(ItemType.Accessary, idx);
+                return;
+            }
         }
 
-        if (accessaryItem == Item.Guardian_Ring)
-        {
-            //현재 악세사리는 수호의 링이다.
-            //데미지를 받는 대신 수호의 링이 파괴된다.
-            totalUI.InventoryRemoveItem(ItemType.Accessary, 0);
-        }
+        //데미지를 받았다.
+        if (nowHp > pDamage)
+            NowHp -= pDamage;
         else
-        {
-            //데미지를 받았다.
-            if (nowHp > pDamage)
-                NowHp -= pDamage;
-            else
-                NowHp = 0;
+            NowHp = 0;
 
-            totalUI.UpdateHp(GetTotalMaxHp(), nowHp);
-
-            StartCoroutine(HitStunDelay());
-        }     
+        totalUI.UpdateHp();
+        StartCoroutine(HitStunDelay());
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -261,7 +259,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         NowExp += pValue;
 
         TotalUI totalUI = TotalUI.instance;
-        totalUI.UpdateExp(maxExp, nowExp);
+        totalUI.UpdateExp();
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -370,18 +368,19 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             }
         }
 
-        ItemObjData nowAccessaryData = NowAccessary();
-        if (nowAccessaryData != null)
+        List<ItemObjData> nowAccessary = NowAccessaryList();
+        foreach (ItemObjData accessary in nowAccessary)
         {
-            List<ItemStatData> itemStatDatas = nowAccessaryData.itemStats;
-            foreach (ItemStatData itemStat in itemStatDatas)
+            foreach (ItemStatData itemStatData in accessary.itemStats)
             {
-                if (itemStat.itemStat == ItemStat.Hp)
+                if (itemStatData.itemStat == ItemStat.Hp)
                 {
-                    hp += itemStat.GetValue();
+                    hp += itemStatData.GetValue();
                 }
             }
         }
+
+        NowHp = Mathf.Min(nowHp, hp);
 
         return hp;
     }
@@ -393,7 +392,9 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     {
         int pow = basePow;
         ItemObjData nowWeaponData = NowWeapon();
-        if(nowWeaponData != null)
+        List<ItemObjData> nowAccessary = NowAccessaryList();
+
+        if (nowWeaponData != null)
         {
             List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
             foreach (ItemStatData itemStat in itemStatDatas)
@@ -405,11 +406,9 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             }
         }
 
-        ItemObjData nowAccessaryData = NowAccessary();
-        if (nowAccessaryData != null)
+        foreach (ItemObjData accessary in nowAccessary)
         {
-            List<ItemStatData> itemStatDatas = nowAccessaryData.itemStats;
-            foreach (ItemStatData itemStat in itemStatDatas)
+            foreach (ItemStatData itemStat in accessary.itemStats)
             {
                 if (itemStat.itemStat == ItemStat.Pow)
                 {
@@ -428,6 +427,8 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     {
         int balance = baseBalance;
         ItemObjData nowWeaponData = NowWeapon();
+        List<ItemObjData> nowAccessary = NowAccessaryList();
+
         if (nowWeaponData != null)
         {
             List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
@@ -440,11 +441,9 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             }
         }
 
-        ItemObjData nowAccessaryData = NowAccessary();
-        if (nowAccessaryData != null)
+        foreach (ItemObjData accessary in nowAccessary)
         {
-            List<ItemStatData> itemStatDatas = nowAccessaryData.itemStats;
-            foreach (ItemStatData itemStat in itemStatDatas)
+            foreach (ItemStatData itemStat in accessary.itemStats)
             {
                 if (itemStat.itemStat == ItemStat.Balance)
                 {
@@ -452,8 +451,8 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
                 }
             }
         }
-
-        balance = Mathf.Min(balance, maxBalance);
+    
+        balance = Mathf.Min(balance, MAX_BALANCE);
         return balance;
     }
 
@@ -464,7 +463,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     {
         //  Pow*(balance/maxBalance) ~ Pow 사이로 랜덤하게 데미지가 결정된다.
         int totalPow = (int)GetTotalPow();
-        float per = GetTotalBalance() / (float)maxBalance;
+        float per = GetTotalBalance() / (float)MAX_BALANCE;
         int minPow = (int)(per * totalPow);
 
         int damage = Random.Range(minPow, totalPow);
@@ -479,6 +478,8 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         float criPer = baseCriPer;
 
         ItemObjData nowWeaponData = NowWeapon();
+        List<ItemObjData> nowAccessary = NowAccessaryList();
+
         if (nowWeaponData != null)
         {
             List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
@@ -491,11 +492,9 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             }
         }
 
-        ItemObjData nowAccessaryData = NowAccessary();
-        if (nowAccessaryData != null)
+        foreach (ItemObjData accessary in nowAccessary)
         {
-            List<ItemStatData> itemStatDatas = nowAccessaryData.itemStats;
-            foreach (ItemStatData itemStat in itemStatDatas)
+            foreach (ItemStatData itemStat in accessary.itemStats)
             {
                 if (itemStat.itemStat == ItemStat.CriPer)
                 {
@@ -503,6 +502,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
                 }
             }
         }
+
         criPer = Mathf.Min(criPer, 100);
         return criPer;
     }
@@ -514,6 +514,8 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     {
         float criDmg = baseCriDamage;
         ItemObjData nowWeaponData = NowWeapon();
+        List<ItemObjData> nowAccessary = NowAccessaryList();
+
         if (nowWeaponData != null)
         {
             List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
@@ -526,11 +528,9 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             }
         }
 
-        ItemObjData nowAccessaryData = NowAccessary();
-        if (nowAccessaryData != null)
+        foreach (ItemObjData accessary in nowAccessary)
         {
-            List<ItemStatData> itemStatDatas = nowAccessaryData.itemStats;
-            foreach (ItemStatData itemStat in itemStatDatas)
+            foreach (ItemStatData itemStat in accessary.itemStats)
             {
                 if (itemStat.itemStat == ItemStat.CriDmg)
                 {
@@ -576,7 +576,16 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             nowItemData = NowWeapon();
         }
         else if (itemType == ItemType.Accessary)
-            nowItemData = NowAccessary();
+        {
+            //악세사리는 다른 장비를 바로끼는 로직이 아니다.
+            //하지만 구현은 해두겠다.
+            List<ItemObjData> nowAccessary = NowAccessaryList();
+            if(nowAccessary.Count > 0)
+            {
+                //0번째 아이템을 갈아낀다.
+                nowItemData = nowAccessary[0];
+            }
+        }
         else
         {
             //해당 장비는 못끼는 장비같다.
@@ -585,6 +594,13 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
         if (nowItemData != null)
         {
+            bool cantTakeOff = ItemManager.CantTakeOff(nowItemData.itemData.item);
+            if(cantTakeOff)
+            {
+                //벗을수 없는 장비다.
+                return false;
+            }
+
             //현재 장비를 벗는다..
             nowItemData.equip = false;
         }
@@ -614,9 +630,15 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         return totalUI.GetNowWeaponToInventory();
     }
 
-    public ItemObjData NowAccessary()
+    public List<ItemObjData> NowAccessaryList()
     {
         TotalUI totalUI = TotalUI.instance;
         return totalUI.GetNowAccessaryToInventory();
+    }
+
+    public List<ItemObjData> HasAccessaryList()
+    {
+        TotalUI totalUI = TotalUI.instance;
+        return totalUI.GetHasAccessaryToInventory();
     }
 }

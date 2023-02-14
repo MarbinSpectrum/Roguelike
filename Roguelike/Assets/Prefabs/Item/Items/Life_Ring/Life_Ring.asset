@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2731fdd0cf886cf4394818f5a370f3ea, type: 3}
+  m_Name: Life_Ring
+  m_EditorClassIdentifier: 
+  item: 900
+  itemObj: {fileID: 7865117524547287910, guid: d6d9d7a9c8cf7c44893a41992eedaf0f, type: 3}
+  itemSprite_UI: {fileID: 21300000, guid: 4fda90485bb637e4f98e28971d7fd1e5, type: 3}
+  stockItem: 0
+  valueMinMax: {x: 5, y: 15}
+  itemStatDatas:
+  - itemStat: 400
+    valueMinMax: {x: 1, y: 2}
+  frontSprite: {fileID: 0}
+  sideSprite: {fileID: 0}
+  range: 0
+  reloadDelay: 0
+  nameKey: LIFE_RING_NAME
+  explainKey: LIFE_RING_EXPLAIN

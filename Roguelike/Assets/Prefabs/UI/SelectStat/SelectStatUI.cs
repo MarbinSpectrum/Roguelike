@@ -80,7 +80,7 @@ public class SelectStatUI : MonoBehaviour
         characterManager.AddMaxHp(addHp);
 
         TotalUI totalUI = TotalUI.instance;
-        totalUI.UpdateHp(characterManager.GetTotalMaxHp(), characterManager.nowHp);
+        totalUI.UpdateHp();
 
         ActSelectStat(false);
 

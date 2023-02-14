@@ -47,25 +47,8 @@ public class ItemSlot : SerializedMonoBehaviour
     }
     #endregion
 
-    #region[private bool IsEquip]
-    private bool IsEquip;
-    public bool isEquip
-    {
-        get
-        {
-            return IsEquip;
-        }
-        set
-        {
-            IsEquip = value;
-            UpdateSlot();
-        }
-
-    }
-    #endregion
-
     [SerializeField]
-    private GameObject equipView;
+    private GameObject clickItem;
 
     private void Awake()
     {
@@ -82,11 +65,16 @@ public class ItemSlot : SerializedMonoBehaviour
         if(item == Item.Coin)
             numText.text += "$";
         if (SlotSprite == null)
+        {
             slotImg.color = new Color(1, 1, 1, 0);
+            clickItem.SetActive(false);
+        }
         else
+        {
             slotImg.color = new Color(1, 1, 1, 1);
+            clickItem.SetActive(true);
+        }
         slotImg.sprite = SlotSprite;
-        equipView.SetActive(IsEquip);
     }
 
     [SerializeField]

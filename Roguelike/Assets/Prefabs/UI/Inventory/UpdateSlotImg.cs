@@ -12,68 +12,56 @@ public class UpdateSlotImg : MonoBehaviour
     [SerializeField]
     private List<Sprite> slotSprite = new List<Sprite>();
     [SerializeField]
+    private List<Sprite> equipSlotSprite = new List<Sprite>();
+    [SerializeField]
     private List<Image> slotImg = new List<Image>();
-    [SerializeField]
-    private int w = 4;
-    [SerializeField]
-    private int h = 4;
+    public const int w = 4;
+    public const int h = 4;
+
+    public int equipSlotSize = 0;
 
     private void Update()
     {
-        int idx = 0;
-        foreach(Image sImage in slotImg)
+        for (int idx = 0; idx < w * h; idx++)
         {
+            Image sImage = slotImg[idx];
             if(sImage != null)
             {
                 int x = idx % w;
                 int y = idx / w;
+                int imgIdx = 0;
                 if (x - 1 < 0)
                 {
                     if (y - 1 < 0)
-                    {
-                        sImage.sprite = slotSprite[0];
-                    }
+                        imgIdx = 0;
                     else if (y + 1 >= h)
-                    {
-                        sImage.sprite = slotSprite[6];
-                    }
+                        imgIdx = 6;
                     else
-                    {
-                        sImage.sprite = slotSprite[3];
-                    }
+                        imgIdx = 3;
                 }
                 else if (x + 1 >= w)
                 {
                     if (y - 1 < 0)
-                    {
-                        sImage.sprite = slotSprite[2];
-                    }
+                        imgIdx = 2;
                     else if (y + 1 >= h)
-                    {
-                        sImage.sprite = slotSprite[8];
-                    }
+                        imgIdx = 8;
                     else
-                    {
-                        sImage.sprite = slotSprite[5];
-                    }
+                        imgIdx = 5;
                 }
                 else
                 {
                     if (y - 1 < 0)
-                    {
-                        sImage.sprite = slotSprite[1];
-                    }
+                        imgIdx = 1;
                     else if (y + 1 >= h)
-                    {
-                        sImage.sprite = slotSprite[7];
-                    }
+                        imgIdx = 7;
                     else
-                    {
-                        sImage.sprite = slotSprite[4];
-                    }
+                        imgIdx = 4;
                 }
 
-                idx++;
+                if(equipSlotSize <= idx)
+                    sImage.sprite = slotSprite[imgIdx];
+                else
+                    sImage.sprite = equipSlotSprite[imgIdx];
             }
         }
     }

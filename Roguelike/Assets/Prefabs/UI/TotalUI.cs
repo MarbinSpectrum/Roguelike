@@ -45,6 +45,14 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     {
         hpBar.UpdateHp(pMaxHp, pNowHp);
     }
+    public void UpdateHp()
+    {
+        CharacterManager characterManager = CharacterManager.instance;
+
+        int maxHp = characterManager.GetTotalMaxHp();
+        int nowHp = characterManager.nowHp;
+        UpdateHp(maxHp, nowHp);
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 경험치 상태 갱신
@@ -52,6 +60,14 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     public void UpdateExp(uint pMaxExp, uint pNowExp)
     {
         expBar.UpdateExp(pMaxExp, pNowExp);
+    }
+    public void UpdateExp()
+    {
+        CharacterManager characterManager = CharacterManager.instance;
+
+        uint maxExp = characterManager.maxExp;
+        uint nowExp = characterManager.nowExp;
+        expBar.UpdateExp(maxExp, nowExp);
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -179,9 +195,17 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     ////////////////////////////////////////////////////////////////////////////////
     /// : 인벤토리에서 현재 장착중인 악세사리를 정보를 가져온다.
     ////////////////////////////////////////////////////////////////////////////////
-    public ItemObjData GetNowAccessaryToInventory()
+    public List<ItemObjData> GetNowAccessaryToInventory()
     {
-        return inventoryUI.NowAccessary();
+        return inventoryUI.NowAccessaryList();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 인벤토리에서 현재 가지고 있는 악세사리를 정보를 가져온다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public List<ItemObjData> GetHasAccessaryToInventory()
+    {
+        return inventoryUI.HasAccessaryList();
     }
 
     ////////////////////////////////////////////////////////////////////////////////

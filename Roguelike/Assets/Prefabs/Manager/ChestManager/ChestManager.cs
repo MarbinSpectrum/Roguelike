@@ -70,7 +70,6 @@ public class ChestManager : FieldObjectSingleton<ChestManager>
                 chestObj.pos = cPos;
                 chestObj.transform.position =
                     new Vector3(cPos.x * CreateMap.tileSize, cPos.y * CreateMap.tileSize, 0);
-                chestObj.MakeChestItem();
 
                 chestObjs[cPos] = chestObj;
                 chestPos.Add(cPos);
@@ -92,7 +91,6 @@ public class ChestManager : FieldObjectSingleton<ChestManager>
             chestObj.pos = cPos;
             chestObj.transform.position =
                 new Vector3(cPos.x * CreateMap.tileSize, cPos.y * CreateMap.tileSize, 0);
-            chestObj.MakeChestItem();
 
             chestObjs[cPos] = chestObj;
             chestPos.Add(cPos);

@@ -77,6 +77,12 @@ public enum Item
     Glasses_R = 700,
 
     Guardian_Ring = 800,
+
+    Life_Ring = 900,
+
+    Curse_Life_Ring = 1000,
+
+    Gold_Ring = 1100,
 }
 
 public enum ItemStat

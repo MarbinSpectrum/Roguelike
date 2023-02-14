@@ -9,7 +9,7 @@ public class ItemData : ScriptableObject
     public ItemObj itemObj;
     public Sprite itemSprite_UI;
 
-    [ShowIf("@ItemManager.GetItemType(item) != ItemType.Weapon")]
+    [ShowIf("@ItemManager.GetItemType(item) == ItemType.Etc")]
     public bool stockItem;
     [ShowIf("@ItemManager.GetItemType(item) != ItemType.Weapon && stockItem"),MinMaxSlider(0, 100)]
     public Vector2Int valueMinMax;
@@ -48,7 +48,7 @@ public class ItemData : ScriptableObject
 
         if (itemType == ItemType.Etc && itemObjData.itemData.stockItem)
         {
-            //스톡이 되는 아이템은 랜덤한 범위내에서 아이템 갯수슬 설정
+            //스톡이 되는 아이템은 랜덤한 범위내에서 아이템 갯수 설정
             itemObjData.count = Random.Range(
                 itemObjData.itemData.valueMinMax.x,
                 itemObjData.itemData.valueMinMax.y);

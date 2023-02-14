@@ -127,11 +127,26 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
             case Item.Glasses_B:
             case Item.Glasses_R:
             case Item.Guardian_Ring:
+            case Item.Life_Ring:
+            case Item.Curse_Life_Ring:
+            case Item.Gold_Ring:
                 return ItemType.Accessary;
             case Item.Coin:
             default:
                 return ItemType.Etc;
         }
+    }
+
+    public static bool CantTakeOff(Item pItem)
+    {
+        switch (pItem)
+        {
+            case Item.Curse_Life_Ring:
+                return true;
+            default:
+                return false;
+        }
+        return false;
     }
 
     public static bool IsShotGun(Item pItem)
