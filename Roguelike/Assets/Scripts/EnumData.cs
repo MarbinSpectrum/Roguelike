@@ -65,24 +65,22 @@ public enum Item
     Coin = 100,
 
     NormalGun = 200, //±‚∫ª ¿Â√—
-
     Glock17 = 300,
-
     M4 = 400,
-
     MP133 = 500,
 
     Glasses_B = 600,
-
     Glasses_R = 700,
 
     Guardian_Ring = 800,
-
     Life_Ring = 900,
-
     Curse_Life_Ring = 1000,
-
     Gold_Ring = 1100,
+    Leaf_Ring = 1200,
+    Curse_Leaf_Ring = 1300,
+
+
+    Potion = 10000
 }
 
 public enum ItemStat
@@ -97,6 +95,8 @@ public enum ItemStat
     Hp = 400,
     AddExp = 500,
     AddGold = 600,
+
+    Heal = 10000
 }
 
 public enum ItemType

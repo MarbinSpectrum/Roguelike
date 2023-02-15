@@ -27,30 +27,41 @@ public class ItemDataUI : MonoBehaviour
 
     [SerializeField]
     private Image itemImg;
-    [SerializeField]
-    private TextMeshProUGUI nameText;
-    [SerializeField]
-    private TextMeshProUGUI explainText;
-    [SerializeField]
-    private TextMeshProUGUI statText;
+
+    [Space(40)]
 
     [SerializeField]
     private GameObject statBox;
     [SerializeField]
     private GameObject explainBox;
+
+    [Space(40)]
+
     [SerializeField]
     private GameObject equipBtn;
     [SerializeField]
     private GameObject dropBtn;
     [SerializeField]
     private GameObject takeOffBtn;
+    [SerializeField]
+    private GameObject useBtn;
 
+    [Space(40)]
+
+    [SerializeField]
+    private TextMeshProUGUI nameText;
+    [SerializeField]
+    private TextMeshProUGUI explainText;
+    [SerializeField]
+    private TextMeshProUGUI statText;
     [SerializeField]
     private TextMeshProUGUI equipText;
     [SerializeField]
     private TextMeshProUGUI dropText;
     [SerializeField]
     private TextMeshProUGUI takeOffText;
+    [SerializeField]
+    private TextMeshProUGUI useText;
 
     private ItemObjData nowItem;
     private int nowItemIdx;
@@ -114,7 +125,7 @@ public class ItemDataUI : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     public void UpdateItemData(ItemObjData pItemObjData, int pIdx)
     {
-        CharacterManager characterManager = CharacterManager.instance;
+        InventoryManager inventoryManager = InventoryManager.instance;
 
         nowItem = pItemObjData;
         nowItemIdx = pIdx;
@@ -124,10 +135,11 @@ public class ItemDataUI : MonoBehaviour
 
         ItemType itemType = ItemManager.GetItemType(pItemObjData);
 
+        //무기를 벗을 수 있는지 검사하기 위해서
         //현재 무기 정보를 가져온다.
-        ItemObjData nowWeapon = characterManager.NowWeapon();
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
         Item nowWeaponItem = nowWeapon.itemData.item;
-        bool cantTakeOffWeapon = ItemManager.CantTakeOff(nowWeaponItem);        // 해당 장비를 벗을 수 있는지 검사
+        bool cantTakeOffWeapon = ItemManager.CantTakeOff(nowWeaponItem);  
 
         if (itemType == ItemType.Etc)
         {
@@ -135,6 +147,16 @@ public class ItemDataUI : MonoBehaviour
             equipBtn.SetActive(false);
             takeOffBtn.SetActive(false);
             dropBtn.SetActive(true);
+
+            bool isUseItem = ItemManager.IsUseItem(nowItem.itemData.item);
+            if(isUseItem)
+            {
+                useBtn.SetActive(true);
+            }
+            else
+            {
+                useBtn.SetActive(false);
+            }
         }
         else
         {
@@ -187,7 +209,7 @@ public class ItemDataUI : MonoBehaviour
                 {
                     //악세사리 장비이고
                     bool fullSlot = false;
-                    List<ItemObjData> nowAccessary = characterManager.NowAccessaryList();
+                    List<ItemObjData> nowAccessary = inventoryManager.NowAccessaryList();
                     int accessaryCount = nowAccessary.Count;
                     if (accessaryCount >= CharacterManager.MAX_ACCESSARY_SLOT)
                     {
@@ -210,6 +232,7 @@ public class ItemDataUI : MonoBehaviour
                 takeOffBtn.SetActive(false);
                 dropBtn.SetActive(true);
             }
+            useBtn.SetActive(false);
         }
 
         if (itemType == ItemType.Weapon)
@@ -245,6 +268,7 @@ public class ItemDataUI : MonoBehaviour
         equipText.text = LanguageManager.GetText("EQUIP");
         dropText.text = LanguageManager.GetText("DROP");
         takeOffText.text = LanguageManager.GetText("TAKE_OFF");
+        useText.text = LanguageManager.GetText("USE");
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -252,12 +276,12 @@ public class ItemDataUI : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     public void EquipItem()
     {
-        CharacterManager characterManager = CharacterManager.instance;
+        InventoryManager inventoryManager = InventoryManager.instance;
         ItemType itemType = ItemManager.GetItemType(nowItem);
 
         if(itemType == ItemType.Weapon)
         {
-            if (characterManager.ChangeItem(ref nowItem))
+            if (inventoryManager.ChangeItem(ref nowItem))
             {
                 ActItemData(false);
 
@@ -270,7 +294,7 @@ public class ItemDataUI : MonoBehaviour
         {
             //악세사리 장비이고
             bool fullSlot = false;
-            List<ItemObjData> nowAccessary = characterManager.NowAccessaryList();
+            List<ItemObjData> nowAccessary = inventoryManager.NowAccessaryList();
             int accessaryCount = nowAccessary.Count;
             if (accessaryCount >= CharacterManager.MAX_ACCESSARY_SLOT)
             {
@@ -297,8 +321,8 @@ public class ItemDataUI : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     public void TakeOffItem()
     {
-        CharacterManager characterManager = CharacterManager.instance;
-        if (characterManager.TakeOffItem(ref nowItem))
+        InventoryManager inventoryManager = InventoryManager.instance;
+        if (inventoryManager.TakeOffItem(ref nowItem))
         { 
             ActItemData(false);
 
@@ -313,16 +337,38 @@ public class ItemDataUI : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     public void DropItem()
     {
-        if (nowItem != null)
-        {
-            ItemType itemType = ItemManager.GetItemType(nowItem);
+        if (nowItem == null)
+            return;
+        ItemType itemType = ItemManager.GetItemType(nowItem);
 
-            TotalUI totalUI = TotalUI.instance;
-            totalUI.InventoryRemoveItem(itemType, nowItemIdx);
+        InventoryManager inventoryManager = InventoryManager.instance;
+        inventoryManager.RemoveItem(itemType, nowItemIdx);
 
-            ActItemData(false);
+        ActItemData(false);
 
-            totalUI.ActInventory(true);
-        }
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.ActInventory(true);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : nowItem을 사용한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void UseItem()
+    {
+        if (nowItem == null)
+            return;
+
+        ItemType itemType = ItemManager.GetItemType(nowItem);
+        if (itemType != ItemType.Etc)
+            return;
+
+        InventoryManager inventoryManager = InventoryManager.instance;
+        inventoryManager.UseItem(nowItemIdx);
+
+        ActItemData(false);
+        TotalUI totalUI = TotalUI.instance;
+
+        totalUI.ActInventory(true);
+
     }
 }

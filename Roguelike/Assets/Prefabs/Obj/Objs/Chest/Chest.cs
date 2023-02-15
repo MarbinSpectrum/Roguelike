@@ -20,10 +20,10 @@ public class Chest : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     public virtual void MakeChestItem()
     {
-        CharacterManager characterManager = CharacterManager.instance;
+        InventoryManager inventoryManager = InventoryManager.instance;
         HashSet<Item> hasItem = new HashSet<Item>();
 
-        List<ItemObjData> nowAccessary = characterManager.HasAccessaryList();
+        List<ItemObjData> nowAccessary = inventoryManager.GetItemList(ItemType.Accessary);
         foreach (ItemObjData accessary in nowAccessary)
         {   
             //현재 악세사리등록

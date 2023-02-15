@@ -135,8 +135,9 @@ public class CatGirl : SerializedMonoBehaviour
         BulletManager bulletManager = BulletManager.instance;
         JarManager jarManager = JarManager.instance;
         ChestManager chestManager = ChestManager.instance;
+        InventoryManager inventoryManager = InventoryManager.instance;
 
-        ItemObjData nowWeapon = characterManager.NowWeapon();
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
 
         yield return new WaitUntil(()=> (buttonInput != ButtonInput.None)); //버튼 입력이 없는 상태면 대기
 
@@ -414,16 +415,16 @@ public class CatGirl : SerializedMonoBehaviour
 
     public void GunSpriteFront()
     {
-        CharacterManager characterManager = CharacterManager.instance;
-        ItemObjData nowWeapon = characterManager.NowWeapon();
+        InventoryManager inventoryManager = InventoryManager.instance;
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
         Sprite sprite = nowWeapon.itemData.frontSprite;
         gunSprite.sprite = sprite;
     }
 
     public void GunSpriteSide()
     {
-        CharacterManager characterManager = CharacterManager.instance;
-        ItemObjData nowWeapon = characterManager.NowWeapon();
+        InventoryManager inventoryManager = InventoryManager.instance;
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
         Sprite sprite = nowWeapon.itemData.sideSprite;
         gunSprite.sprite = sprite;
     }

@@ -42,8 +42,8 @@ public class ItemObj : SerializedMonoBehaviour
 
     public virtual void GetItem()
     {
-        TotalUI totalUI = TotalUI.instance;
-        if (totalUI.ItemSendToInventory(itemObjData))
+        InventoryManager inventoryManager = InventoryManager.instance;
+        if (inventoryManager.AddItem(itemObjData))
         {
             ItemManager itemManager = ItemManager.instance;
             itemManager.RemoveItem(pos.x, pos.y);

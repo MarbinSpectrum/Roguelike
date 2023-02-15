@@ -7,8 +7,6 @@ using UnityEngine;
 ////////////////////////////////////////////////////////////////////////////////
 public class CharacterManager : FieldObjectSingleton<CharacterManager>
 {
-    [SerializeField]
-    private CatGirl catGirl;
 
     [SerializeField]
     private Item startWeapon;
@@ -28,8 +26,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     [Space(40)]
 
     [SerializeField]
-    private SoundObj changeWeaponSE;
-
+    private CatGirl catGirl;
     private CatGirl character;
 
     #region[public uint baseMaxHp]
@@ -172,8 +169,8 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         totalUI.UpdateHp();
         totalUI.UpdateExp();
 
-        //기본총을 플레이어에게 장비 시킨다.
         ItemManager itemManager = ItemManager.instance;
+        InventoryManager inventoryManager = InventoryManager.instance;
 
         //무기 장비 설정
         ItemObjData weaponObjData = itemManager.CreateItemObjData(startWeapon);
@@ -181,7 +178,8 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         {
             //해당 장비를 장착한다.
             weaponObjData.equip = true;
-            if (totalUI.ItemSendToInventory(weaponObjData))
+
+            if (inventoryManager.AddItem(weaponObjData))
             {
                 //인벤토리에 장비를 넣는다.
             }
@@ -193,7 +191,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         {
             //해당 장비를 장착한다.
             accessaryObjData.equip = true;
-            if (totalUI.ItemSendToInventory(accessaryObjData))
+            if (inventoryManager.AddItem(accessaryObjData))
             {
                 //인벤토리에 장비를 넣는다.
             }
@@ -242,9 +240,10 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             return;
         }
 
+        InventoryManager inventoryManager = InventoryManager.instance;
         TotalUI totalUI = TotalUI.instance;
 
-        List<ItemObjData> nowAccessaryData = NowAccessaryList();
+        List<ItemObjData> nowAccessaryData = inventoryManager.NowAccessaryList();
 
         for (int idx = 0; idx < nowAccessaryData.Count; idx++)
         {
@@ -293,8 +292,8 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             return;
         use_Guardian_Ring = false;
 
-        TotalUI totalUI = TotalUI.instance;
-        totalUI.InventoryRemoveItem(ItemType.Accessary, guardian_Ring_idx);
+        InventoryManager inventoryManager = InventoryManager.instance;
+        inventoryManager.RemoveItem(ItemType.Accessary, guardian_Ring_idx);
         guardian_Ring_idx = -1;
 
         GurdianEffect.RunEffect();
@@ -315,10 +314,28 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     ////////////////////////////////////////////////////////////////////////////////
     public void GetExp(uint pValue)
     {
+        float addExpRate = (100 + GetAddExpRate()) / 100f;
+        pValue = (uint)(pValue * addExpRate);
+
         NowExp += pValue;
 
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateExp();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 경험치 획득률 계산
+    ////////////////////////////////////////////////////////////////////////////////
+    public int GetAddExpRate()
+    {
+        int rate = 0;
+        InventoryManager inventoryManager = InventoryManager.instance;
+        List<ItemObjData> nowAccessary = inventoryManager.NowAccessaryList();
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
+
+        rate += ItemManager.GetTotalStatValue(nowWeapon, ItemStat.AddExp);
+        rate += ItemManager.GetTotalStatValue(nowAccessary, ItemStat.AddExp);
+        return rate;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -393,14 +410,6 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
-    /// : 기본 체력을 올린다.
-    ////////////////////////////////////////////////////////////////////////////////
-    public void AddMaxHp(int pValue)
-    {
-        BaseMaxHp += pValue;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
     /// : 기본 밸런스를 올린다.
     ////////////////////////////////////////////////////////////////////////////////
     public void AddBalance(int pValue)
@@ -409,35 +418,34 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+    /// : 기본 체력을 올린다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void AddMaxHp(int pValue)
+    {
+        BaseMaxHp += pValue;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 체력을 회복한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void AddNowHp(int pValue)
+    {
+        NowHp += pValue;
+        NowHp = Mathf.Min(NowHp, GetTotalMaxHp());
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     /// : 최종체력을 구해준다.
     ////////////////////////////////////////////////////////////////////////////////
     public int GetTotalMaxHp()
     {
         int hp = BaseMaxHp;
-        ItemObjData nowWeaponData = NowWeapon();
-        if (nowWeaponData != null)
-        {
-            List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
-            foreach (ItemStatData itemStat in itemStatDatas)
-            {
-                if (itemStat.itemStat == ItemStat.Hp)
-                {
-                    hp += itemStat.GetValue();
-                }
-            }
-        }
+        InventoryManager inventoryManager = InventoryManager.instance;
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
+        List<ItemObjData> nowAccessary = inventoryManager.NowAccessaryList();
 
-        List<ItemObjData> nowAccessary = NowAccessaryList();
-        foreach (ItemObjData accessary in nowAccessary)
-        {
-            foreach (ItemStatData itemStatData in accessary.itemStats)
-            {
-                if (itemStatData.itemStat == ItemStat.Hp)
-                {
-                    hp += itemStatData.GetValue();
-                }
-            }
-        }
+        hp += ItemManager.GetTotalStatValue(nowWeapon, ItemStat.Hp);
+        hp += ItemManager.GetTotalStatValue(nowAccessary, ItemStat.Hp);
 
         NowHp = Mathf.Min(nowHp, hp);
 
@@ -450,32 +458,12 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     public int GetTotalPow()
     {
         int pow = basePow;
-        ItemObjData nowWeaponData = NowWeapon();
-        List<ItemObjData> nowAccessary = NowAccessaryList();
+        InventoryManager inventoryManager = InventoryManager.instance;
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
+        List<ItemObjData> nowAccessary = inventoryManager.NowAccessaryList();
 
-        if (nowWeaponData != null)
-        {
-            List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
-            foreach (ItemStatData itemStat in itemStatDatas)
-            {
-                if (itemStat.itemStat == ItemStat.Pow)
-                {
-                    pow += itemStat.GetValue();
-                }
-            }
-        }
-
-        foreach (ItemObjData accessary in nowAccessary)
-        {
-            foreach (ItemStatData itemStat in accessary.itemStats)
-            {
-                if (itemStat.itemStat == ItemStat.Pow)
-                {
-                    pow += itemStat.GetValue();
-                }
-            }
-        }
-
+        pow += ItemManager.GetTotalStatValue(nowWeapon, ItemStat.Pow);
+        pow += ItemManager.GetTotalStatValue(nowAccessary, ItemStat.Pow);
         return pow;
     }
 
@@ -485,32 +473,12 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     public int GetTotalBalance()
     {
         int balance = baseBalance;
-        ItemObjData nowWeaponData = NowWeapon();
-        List<ItemObjData> nowAccessary = NowAccessaryList();
+        InventoryManager inventoryManager = InventoryManager.instance;
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
+        List<ItemObjData> nowAccessary = inventoryManager.NowAccessaryList();
 
-        if (nowWeaponData != null)
-        {
-            List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
-            foreach (ItemStatData itemStat in itemStatDatas)
-            {
-                if (itemStat.itemStat == ItemStat.Balance)
-                {
-                    balance += itemStat.GetValue();
-                }
-            }
-        }
-
-        foreach (ItemObjData accessary in nowAccessary)
-        {
-            foreach (ItemStatData itemStat in accessary.itemStats)
-            {
-                if (itemStat.itemStat == ItemStat.Balance)
-                {
-                    balance += itemStat.GetValue();
-                }
-            }
-        }
-    
+        balance += ItemManager.GetTotalStatValue(nowWeapon, ItemStat.Balance);
+        balance += ItemManager.GetTotalStatValue(nowAccessary, ItemStat.Balance);
         balance = Mathf.Min(balance, MAX_BALANCE);
         return balance;
     }
@@ -536,32 +504,12 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     {
         float criPer = baseCriPer;
 
-        ItemObjData nowWeaponData = NowWeapon();
-        List<ItemObjData> nowAccessary = NowAccessaryList();
+        InventoryManager inventoryManager = InventoryManager.instance;
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
+        List<ItemObjData> nowAccessary = inventoryManager.NowAccessaryList();
 
-        if (nowWeaponData != null)
-        {
-            List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
-            foreach (ItemStatData itemStat in itemStatDatas)
-            {
-                if (itemStat.itemStat == ItemStat.CriPer)
-                {
-                    criPer += itemStat.GetValue();
-                }
-            }
-        }
-
-        foreach (ItemObjData accessary in nowAccessary)
-        {
-            foreach (ItemStatData itemStat in accessary.itemStats)
-            {
-                if (itemStat.itemStat == ItemStat.CriPer)
-                {
-                    criPer += itemStat.GetValue();
-                }
-            }
-        }
-
+        criPer += ItemManager.GetTotalStatValue(nowWeapon, ItemStat.CriPer);
+        criPer += ItemManager.GetTotalStatValue(nowAccessary, ItemStat.CriPer);
         criPer = Mathf.Min(criPer, 100);
         return criPer;
     }
@@ -572,32 +520,12 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     public float GetTotalCriDamage()
     {
         float criDmg = baseCriDamage;
-        ItemObjData nowWeaponData = NowWeapon();
-        List<ItemObjData> nowAccessary = NowAccessaryList();
+        InventoryManager inventoryManager = InventoryManager.instance;
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
+        List<ItemObjData> nowAccessary = inventoryManager.NowAccessaryList();
 
-        if (nowWeaponData != null)
-        {
-            List<ItemStatData> itemStatDatas = nowWeaponData.itemStats;
-            foreach (ItemStatData itemStat in itemStatDatas)
-            {
-                if (itemStat.itemStat == ItemStat.CriDmg)
-                {
-                    criDmg += itemStat.GetValue();
-                }
-            }
-        }
-
-        foreach (ItemObjData accessary in nowAccessary)
-        {
-            foreach (ItemStatData itemStat in accessary.itemStats)
-            {
-                if (itemStat.itemStat == ItemStat.CriDmg)
-                {
-                    criDmg += itemStat.GetValue();
-                }
-            }
-        }
-
+        criDmg += ItemManager.GetTotalStatValue(nowWeapon, ItemStat.CriDmg);
+        criDmg += ItemManager.GetTotalStatValue(nowAccessary, ItemStat.CriDmg);
         return criDmg;
     }
 
@@ -617,87 +545,5 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             return true;
         }
         return false;
-    }
-
-    public bool ChangeItem(ref ItemObjData pItemObjData)
-    {
-        if (pItemObjData == null)
-        {
-            //현재 장비가 없는것 같다.
-            return false;
-        }
-
-        ItemObjData nowItemData = null;
-        ItemType itemType = ItemManager.GetItemType(pItemObjData);
-        if (itemType == ItemType.Weapon)
-        {
-            changeWeaponSE.PlaySE();
-            nowItemData = NowWeapon();
-        }
-        else if (itemType == ItemType.Accessary)
-        {
-            //악세사리는 다른 장비를 바로끼는 로직이 아니다.
-            //하지만 구현은 해두겠다.
-            List<ItemObjData> nowAccessary = NowAccessaryList();
-            if(nowAccessary.Count > 0)
-            {
-                //0번째 아이템을 갈아낀다.
-                nowItemData = nowAccessary[0];
-            }
-        }
-        else
-        {
-            //해당 장비는 못끼는 장비같다.
-            return false;
-        }
-
-        if (nowItemData != null)
-        {
-            bool cantTakeOff = ItemManager.CantTakeOff(nowItemData.itemData.item);
-            if(cantTakeOff)
-            {
-                //벗을수 없는 장비다.
-                return false;
-            }
-
-            //현재 장비를 벗는다..
-            nowItemData.equip = false;
-        }
-
-        //해당 장비를 장착한다.
-        pItemObjData.equip = true;
-
-        return true;
-    }
-
-    public bool TakeOffItem(ref ItemObjData pItemObjData)
-    {
-        if(pItemObjData == null)
-        {
-            //현재 장비가 없는것 같다.
-            return false;
-        }
-
-        pItemObjData.equip = false;
-
-        return true;
-    }
-
-    public ItemObjData NowWeapon()
-    {
-        TotalUI totalUI = TotalUI.instance;
-        return totalUI.GetNowWeaponToInventory();
-    }
-
-    public List<ItemObjData> NowAccessaryList()
-    {
-        TotalUI totalUI = TotalUI.instance;
-        return totalUI.GetNowAccessaryToInventory();
-    }
-
-    public List<ItemObjData> HasAccessaryList()
-    {
-        TotalUI totalUI = TotalUI.instance;
-        return totalUI.GetHasAccessaryToInventory();
     }
 }

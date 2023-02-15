@@ -198,5 +198,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f4ebf6430e7ab4192cb0db229505f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: e752e285ae82646419b9fae197e97af8, type: 3}
+  clip: {fileID: 8300000, guid: 549a4e5c28a550b44a4da71353bea64e, type: 3}
   onEnablePlay: 0

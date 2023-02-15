@@ -19,8 +19,8 @@ public class CoinItem : ItemObj
         float addGoldRate = (100 + GetAddGoldRate()) / 100f;
         itemObjData.count = (int)(itemObjData.count * addGoldRate);
 
-        TotalUI totalUI = TotalUI.instance;
-        if (totalUI.ItemSendToInventory(itemObjData))
+        InventoryManager inventoryManager = InventoryManager.instance;
+        if (inventoryManager.AddItem(itemObjData))
         {
             ItemManager itemManager = ItemManager.instance;
             itemManager.RemoveItem(pos.x, pos.y);
@@ -36,33 +36,12 @@ public class CoinItem : ItemObj
     public int GetAddGoldRate()
     {
         int rate = 0;
-        CharacterManager characterManager = CharacterManager.instance;
-        List<ItemObjData> nowAccessary = characterManager.NowAccessaryList();
-        ItemObjData nowWeapon = characterManager.NowWeapon();
+        InventoryManager inventoryManager = InventoryManager.instance;
+        List<ItemObjData> nowAccessary = inventoryManager.NowAccessaryList();
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
 
-        if (nowWeapon != null)
-        {
-            foreach (ItemStatData itemStatData in nowWeapon.itemStats)
-            {
-                if (itemStatData.itemStat == ItemStat.AddGold)
-                {
-                    //AddGoldΩ∫≈›¿Ã¥Ÿ ±›»≠ »πµÊ∑¸ø° ¥ı«ÿ¡ÿ¥Ÿ.
-                    rate += itemStatData.GetValue();
-                }
-            }
-        }
-
-        foreach(ItemObjData accessary in nowAccessary)
-        {
-            foreach (ItemStatData itemStat in accessary.itemStats)
-            {
-                if (itemStat.itemStat == ItemStat.AddGold)
-                {
-                    //AddGoldΩ∫≈›¿Ã¥Ÿ ±›»≠ »πµÊ∑¸ø° ¥ı«ÿ¡ÿ¥Ÿ.
-                    rate += itemStat.GetValue();
-                }
-            }
-        }
+        rate += ItemManager.GetTotalStatValue(nowWeapon, ItemStat.AddGold);
+        rate += ItemManager.GetTotalStatValue(nowAccessary, ItemStat.AddGold);
         return rate;
     }
 }

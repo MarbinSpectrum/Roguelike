@@ -17,12 +17,12 @@ public class PlayerGunSE : MonoBehaviour
     public void PlaySE()
     {
         SoundManager soundManager = SoundManager.instance;
-        CharacterManager characterManager = CharacterManager.instance;
+        InventoryManager inventoryManager = InventoryManager.instance;
 
-        if (soundManager == null || characterManager == null)
+        if (soundManager == null || inventoryManager == null)
             return;
 
-        ItemObjData nowWeapon = characterManager.NowWeapon();
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
 
         if (ItemManager.IsShotGun(nowWeapon.itemData.item))
         {

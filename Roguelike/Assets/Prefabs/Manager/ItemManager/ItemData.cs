@@ -14,7 +14,7 @@ public class ItemData : ScriptableObject
     [ShowIf("@ItemManager.GetItemType(item) != ItemType.Weapon && stockItem"),MinMaxSlider(0, 100)]
     public Vector2Int valueMinMax;
 
-    [ShowIf("@ItemManager.GetItemType(item) != ItemType.Etc")]
+    [ShowIf("@ItemManager.GetItemType(item) != ItemType.Etc || ItemManager.IsUseItem(item)")]
     [BoxGroup("Box")]
     public List<ItemStatData> itemStatDatas = new List<ItemStatData>();
 
@@ -59,7 +59,7 @@ public class ItemData : ScriptableObject
             itemObjData.count = 1;
         }
 
-        if(itemType != ItemType.Etc)
+        if(itemType != ItemType.Etc || ItemManager.IsUseItem(item))
         {
             //스탯정보를 대입
             foreach(ItemStatData itemStatData in itemStatDatas)

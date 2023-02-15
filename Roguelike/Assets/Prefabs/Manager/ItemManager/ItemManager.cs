@@ -92,9 +92,34 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
 
         if (IsItem(pX, pY))
         {
-            ItemObj itemObj = items[new Vector2Int(pX, pY)];
             items.Remove(new Vector2Int(pX, pY));
         }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : pItemObjData의 정보를 토대로 아이템 사용효과를 적용
+    ////////////////////////////////////////////////////////////////////////////////
+    public static void RunUseItemEffect(ItemObjData pItemObjData)
+    {
+        CharacterManager characterManager = CharacterManager.instance;
+        TotalUI totalUI = TotalUI.instance;
+
+        List<ItemStatData> useEffect = pItemObjData.itemStats;
+        foreach (ItemStatData itemStatData in useEffect)
+        {
+            ItemStat itemStat = itemStatData.itemStat;
+            int value = itemStatData.GetValue();
+            switch (itemStat)
+            {
+                case ItemStat.Heal:
+                    {
+                        //플레이어 회복효과
+                        characterManager.AddNowHp(value);
+                    }
+                    break;
+            }
+        }
+        totalUI.UpdateHp();
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -130,6 +155,8 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
             case Item.Life_Ring:
             case Item.Curse_Life_Ring:
             case Item.Gold_Ring:
+            case Item.Leaf_Ring:
+            case Item.Curse_Leaf_Ring:
                 return ItemType.Accessary;
             case Item.Coin:
             default:
@@ -137,18 +164,38 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 벗을수 있는 템인지 검사
+    ////////////////////////////////////////////////////////////////////////////////
     public static bool CantTakeOff(Item pItem)
     {
         switch (pItem)
         {
             case Item.Curse_Life_Ring:
+            case Item.Curse_Leaf_Ring:
                 return true;
             default:
                 return false;
         }
-        return false;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 사용아이템인지 검사
+    ////////////////////////////////////////////////////////////////////////////////
+    public static bool IsUseItem(Item pItem)
+    {
+        switch (pItem)
+        {
+            case Item.Potion:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 샷건인지 검사
+    ////////////////////////////////////////////////////////////////////////////////
     public static bool IsShotGun(Item pItem)
     {
         switch (pItem)
@@ -158,6 +205,36 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
             default:
                 return false;
         }
-        return false;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 아이템에서 특정스텟값의 총합을 반환하는 함수
+    ////////////////////////////////////////////////////////////////////////////////
+    public static int GetTotalStatValue(List<ItemObjData> pItemList,ItemStat pItemStat)
+    {
+        if (pItemList == null)
+            return 0;
+        int sum = 0;
+        foreach (ItemObjData itemObj in pItemList)
+        {
+            sum += GetTotalStatValue(itemObj, pItemStat);
+        }
+        return sum;
+    }
+
+    public static int GetTotalStatValue(ItemObjData pItemObjData, ItemStat pItemStat)
+    {
+        if (pItemObjData == null)
+            return 0;
+        int sum = 0;
+        foreach (ItemStatData itemStat in pItemObjData.itemStats)
+        {
+            if (itemStat.itemStat == pItemStat)
+            {
+                //AddExp스텟이다 경험치 획득률에 더해준다.
+                sum += itemStat.GetValue();
+            }
+        }
+        return sum;
     }
 }
