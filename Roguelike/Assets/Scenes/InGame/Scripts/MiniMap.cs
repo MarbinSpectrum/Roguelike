@@ -35,7 +35,7 @@ public class MiniMap : MonoBehaviour
     {
         MapManager mapManager = MapManager.instance;
         CharacterManager characterManager = CharacterManager.instance;
-         Vector2Int cPos = characterManager.character.GetPos();
+         Vector2Int cPos = characterManager.CharactorGamePos();
         if (Vector2.Distance(pPos,cPos) <= 0)
         {
             //캐릭터 위치 표시

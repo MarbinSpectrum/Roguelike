@@ -75,7 +75,7 @@ public class MonsterManager : FieldObjectSingleton<MonsterManager>
     public MonsterObj GetClosestMonster()
     {
         CharacterManager characterManager = CharacterManager.instance;
-        Vector2 cPos = characterManager.character.transform.position;
+        Vector2 cPos = characterManager.CharactorTransPos();
         MonsterObj closestMonster = null;
 
         float dis = float.MaxValue;
@@ -177,7 +177,7 @@ public class MonsterManager : FieldObjectSingleton<MonsterManager>
         moveToPos.Clear();
 
         CharacterManager characterManager = CharacterManager.instance;
-        Vector2Int characterPos = characterManager.character.GetPos();
+        Vector2Int characterPos = characterManager.CharactorGamePos();
 
         List<MonsterRoute> monsterRouteList = new List<MonsterRoute>();
 

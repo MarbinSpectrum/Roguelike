@@ -138,8 +138,6 @@ public class CatGirl : SerializedMonoBehaviour
 
         ItemObjData nowWeapon = characterManager.NowWeapon();
 
-        characterManager.LevelUpCheck(); //레벨업이 가능한지 검사.
-
         yield return new WaitUntil(()=> (buttonInput != ButtonInput.None)); //버튼 입력이 없는 상태면 대기
 
         yield return new WaitUntil(() => (characterManager.canControl == true)); //컨트롤 불가 상태일경우 대기
@@ -383,6 +381,12 @@ public class CatGirl : SerializedMonoBehaviour
 
         //미니맵 갱신
         totalUI.UpdateMiniMap(new Vector2Int(pos.x, pos.y), 4);
+
+        //수호의 링을 사용했다면
+        //이펙트와 함께 수호의 링을 없애준다.
+        characterManager.UseGuardianRing();
+
+        characterManager.LevelUpCheck(); //레벨업이 가능한지 검사.
 
         ButtonInput = ButtonInput.None;
 

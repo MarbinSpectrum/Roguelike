@@ -43,7 +43,6 @@ public class GetGoldEffect : FieldObjectSingleton<GetGoldEffect>
         getGold.transform.parent = transform;
 
         CharacterManager characterManager = CharacterManager.instance;
-        CatGirl catGirl = characterManager.character;
-        getGold.transform.position = catGirl.transform.position;
+        getGold.transform.position = characterManager.CharactorTransPos();
     }
 }

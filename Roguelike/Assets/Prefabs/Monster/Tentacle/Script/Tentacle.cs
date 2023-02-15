@@ -75,7 +75,7 @@ public class Tentacle : MonsterObj
             //상자는 부술수없다. 이동하지 않는다.
             return;
         }
-        if (gamePos == characterManager.character.GetPos())
+        if (gamePos == characterManager.CharactorGamePos())
         {
             //캐릭터가 공격범위에 있다.
             //이동하지않고 플레이어를 공격한다.

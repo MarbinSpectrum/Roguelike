@@ -13,15 +13,10 @@ public class FollowPlayer : SerializedMonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     private void Update()
     {
-        CatGirl catGirl = null;
         CharacterManager characterManager = CharacterManager.instance;
-        catGirl = characterManager.character;
 
-        if (catGirl == null)
-            return;
-
-        transform.parent = catGirl.transform;
-        transform.localPosition = Vector3.zero;
-
+        Vector3 pos = characterManager.CharactorTransPos();
+        pos.z = transform.position.z;
+        transform.position = pos;
     }
 }

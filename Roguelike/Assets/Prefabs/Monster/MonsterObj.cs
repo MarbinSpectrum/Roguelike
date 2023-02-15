@@ -127,7 +127,7 @@ public abstract class MonsterObj : MonoBehaviour
             return;
         }
 
-        if (gamePos == characterManager.character.GetPos())
+        if (gamePos == characterManager.CharactorGamePos())
         {
             //캐릭터가 공격범위에 있다.
             //이동하지않고 플레이어를 공격한다.
@@ -222,6 +222,6 @@ public abstract class MonsterObj : MonoBehaviour
     public virtual void PlayerHitAni()
     {
         CharacterManager characterManager = CharacterManager.instance;
-        characterManager.character.HitAni();
+        characterManager.PlayHitAni();
     }
 }

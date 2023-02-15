@@ -79,4 +79,9 @@ public class SoundManager : DontDestroySingleton<SoundManager>
             bgmSource.Play();
         }
     }
+
+    public void MuteBGM(bool pState)
+    {
+        bgmSource.mute = pState;
+    }
 }

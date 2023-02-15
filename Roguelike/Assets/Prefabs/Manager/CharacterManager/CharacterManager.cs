@@ -30,8 +30,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     [SerializeField]
     private SoundObj changeWeaponSE;
 
-    [HideInInspector]
-    public CatGirl character;
+    private CatGirl character;
 
     #region[public uint baseMaxHp]
     private int BaseMaxHp;
@@ -70,9 +69,9 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     private uint NowExp;
     public uint nowExp
     {
-        get 
-        { 
-            return NowExp; 
+        get
+        {
+            return NowExp;
         }
     }
     #endregion
@@ -110,7 +109,6 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     }
     #endregion
 
-
     private const int MAX_BALANCE = 100;
 
     #region[public float baseCriPer]
@@ -135,17 +133,21 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     }
     #endregion
 
-    public const int MAX_ACCESSARY_SLOT = 4;
-
     [HideInInspector]
     public bool canControl;
+
+    public const int MAX_ACCESSARY_SLOT = 4;
+
+    private bool use_Guardian_Ring = false;
+    private int guardian_Ring_idx = 0;
+    private int gudrdian_cnt = 0;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : pX,pY에 해당하는 좌표에 캐릭터를 생성한다.
     ////////////////////////////////////////////////////////////////////////////////
     public void CreateCatGirl(int pX, int pY)
     {
-        if(character != null)
+        if (character != null)
         {
             Destroy(character);
         }
@@ -200,6 +202,23 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         canControl = true;
     }
 
+    public Vector2Int CharactorGamePos()
+    {
+        if (character == null)
+        {
+            return Vector2Int.zero;
+        }
+        return character.GetPos();
+    }
+    public Vector3 CharactorTransPos()
+    {
+        if(character == null)
+        {
+            return Vector3.zero;
+        }
+        return character.transform.position;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     /// : 입력명령 버튼
     ////////////////////////////////////////////////////////////////////////////////
@@ -215,18 +234,29 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     ////////////////////////////////////////////////////////////////////////////////
     public void Hit(int pDamage)
     {
+        if (use_Guardian_Ring)
+        {
+            //수호의 링을 사용했다.
+            //데미지가 없다.
+            gudrdian_cnt++;
+            return;
+        }
+
         TotalUI totalUI = TotalUI.instance;
 
         List<ItemObjData> nowAccessaryData = NowAccessaryList();
-        
-        for(int idx = 0; idx < nowAccessaryData.Count; idx++)
+
+        for (int idx = 0; idx < nowAccessaryData.Count; idx++)
         {
             ItemData accessaryData = nowAccessaryData[idx].itemData;
             if (accessaryData.item == Item.Guardian_Ring)
             {
                 //현재 악세사리로 수호의 링을 가지고 있다.
                 //데미지를 받는 대신 수호의 링이 파괴된다.
-                totalUI.InventoryRemoveItem(ItemType.Accessary, idx);
+                //파괴는 데미지처리가 모드 끝난후 일어나므로 플레그와 인덱스값만 저장해주자.
+                use_Guardian_Ring = true;
+                guardian_Ring_idx = idx;
+                gudrdian_cnt++;
                 return;
             }
         }
@@ -239,6 +269,35 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
         totalUI.UpdateHp();
         StartCoroutine(HitStunDelay());
+    }
+
+    public void PlayHitAni()
+    {
+        if(gudrdian_cnt > 0)
+        {
+            gudrdian_cnt--;
+            //수호의 링 사용상태
+            //데미지 애니메이션이 실행되지 않는다.
+            return;
+        }
+        character.HitAni();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 수호의링 이펙트처리
+    /// : 이펙트 실행 및 수호의 링 제거
+    ////////////////////////////////////////////////////////////////////////////////
+    public void UseGuardianRing()
+    {
+        if (use_Guardian_Ring == false)
+            return;
+        use_Guardian_Ring = false;
+
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.InventoryRemoveItem(ItemType.Accessary, guardian_Ring_idx);
+        guardian_Ring_idx = -1;
+
+        GurdianEffect.RunEffect();
     }
 
     ////////////////////////////////////////////////////////////////////////////////
