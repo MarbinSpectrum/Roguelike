@@ -72,12 +72,12 @@ SpriteRenderer:
   m_SortingLayerID: -516459813
   m_SortingLayer: 2
   m_SortingOrder: 6
-  m_Sprite: {fileID: 21300000, guid: 6dc909ef141294441b56515f1c8bd738, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3ea98fbece92ff5479a0cf249c33bd4e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -153,9 +153,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5770058618838622764}
-  - component: {fileID: 2709167506050122807}
+  - component: {fileID: 6158409598656097286}
   m_Layer: 0
-  m_Name: Glasses_B
+  m_Name: Coolness_Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -177,7 +177,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2709167506050122807
+--- !u!114 &6158409598656097286
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

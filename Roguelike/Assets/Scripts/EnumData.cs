@@ -69,16 +69,15 @@ public enum Item
     M4 = 400,
     MP133 = 500,
 
-    Glasses_B = 600,
-    Glasses_R = 700,
-
+    Coolness_Ring = 600,
+    Angry_Ring = 700,
     Guardian_Ring = 800,
     Life_Ring = 900,
     Curse_Life_Ring = 1000,
     Gold_Ring = 1100,
     Leaf_Ring = 1200,
     Curse_Leaf_Ring = 1300,
-
+    Skull_Ring = 1400,
 
     Potion = 10000
 }
@@ -87,14 +86,15 @@ public enum ItemStat
 {
     Null = 0,
 
-    Pow = 100,
-    Balance = 150,
-    CriPer = 200,
-    CriDmg = 300,
+    Pow = 100,              //공격력
+    Balance = 150,          //밸런스
+    CriPer = 200,           //크리티컬 확률(%)
+    CriDmg = 300,           //크리티컬 데미지(%)
 
     Hp = 400,
-    AddExp = 500,
-    AddGold = 600,
+    AddExp = 500,           //추가 경험치(%)
+    AddGold = 600,          //추가 골드(%)
+    HitDamage = 700,        //받는 데미지 추가
 
     Heal = 10000
 }

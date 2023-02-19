@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Glasses_B : ItemObj
+public class Coolness_Ring : ItemObj
 {
     public SpriteRenderer spriteRenderer;
     public SoundObj getSound;

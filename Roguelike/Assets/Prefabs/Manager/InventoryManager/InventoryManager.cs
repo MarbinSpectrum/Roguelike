@@ -14,6 +14,8 @@ public class InventoryManager : DontDestroySingleton<InventoryManager>
 
     [SerializeField]
     private SoundObj changeWeaponSE;
+    [SerializeField]
+    private SoundObj itemDrinkSE;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 아이템을 인벤토리에 추가한다.
@@ -179,6 +181,11 @@ public class InventoryManager : DontDestroySingleton<InventoryManager>
 
         ItemObjData itemObjData = etcItems[pIdx];
         ItemManager.RunUseItemEffect(itemObjData);
+
+        if(ItemManager.IsDrink(itemObjData.itemData.item))
+        {
+            itemDrinkSE.PlaySE();
+        }
 
         itemObjData.count--;
         if (itemObjData.count == 0)

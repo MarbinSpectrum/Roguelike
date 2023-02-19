@@ -55,7 +55,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   startWeapon: 200
-  startAccessary: 800
+  startAccessary: 0
   startHp: 3
   startPow: 5
   startBalance: 0

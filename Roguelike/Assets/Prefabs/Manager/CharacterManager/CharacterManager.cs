@@ -244,7 +244,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         TotalUI totalUI = TotalUI.instance;
 
         List<ItemObjData> nowAccessaryData = inventoryManager.NowAccessaryList();
-
+        ItemObjData nowWeaponData = inventoryManager.NowWeapon();
         for (int idx = 0; idx < nowAccessaryData.Count; idx++)
         {
             ItemData accessaryData = nowAccessaryData[idx].itemData;
@@ -260,9 +260,13 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             }
         }
 
+        int totalDamage = pDamage;
+        totalDamage += ItemManager.GetTotalStatValue(nowAccessaryData, ItemStat.HitDamage);
+        totalDamage += ItemManager.GetTotalStatValue(nowWeaponData, ItemStat.HitDamage);
+
         //데미지를 받았다.
-        if (nowHp > pDamage)
-            NowHp -= pDamage;
+        if (nowHp > totalDamage)
+            NowHp -= totalDamage;
         else
             NowHp = 0;
 

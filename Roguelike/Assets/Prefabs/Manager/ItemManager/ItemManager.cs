@@ -149,14 +149,15 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
             case Item.MP133:
             case Item.NormalGun:
                 return ItemType.Weapon;
-            case Item.Glasses_B:
-            case Item.Glasses_R:
+            case Item.Coolness_Ring:
+            case Item.Angry_Ring:
             case Item.Guardian_Ring:
             case Item.Life_Ring:
             case Item.Curse_Life_Ring:
             case Item.Gold_Ring:
             case Item.Leaf_Ring:
             case Item.Curse_Leaf_Ring:
+            case Item.Skull_Ring:
                 return ItemType.Accessary;
             case Item.Coin:
             default:
@@ -183,6 +184,20 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
     /// : 사용아이템인지 검사
     ////////////////////////////////////////////////////////////////////////////////
     public static bool IsUseItem(Item pItem)
+    {
+        switch (pItem)
+        {
+            case Item.Potion:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 마쉬는건지 검사
+    ////////////////////////////////////////////////////////////////////////////////
+    public static bool IsDrink(Item pItem)
     {
         switch (pItem)
         {
