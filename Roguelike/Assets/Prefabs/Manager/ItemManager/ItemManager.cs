@@ -120,6 +120,7 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
             }
         }
         totalUI.UpdateHp();
+        totalUI.UpdateShield();
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -149,20 +150,44 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
             case Item.MP133:
             case Item.NormalGun:
                 return ItemType.Weapon;
-            case Item.Coolness_Ring:
             case Item.Angry_Ring:
+            case Item.Curse_Angry_Ring:
+            case Item.Coolness_Ring:
+            case Item.Curse_Coolness_Ring:
             case Item.Guardian_Ring:
             case Item.Life_Ring:
             case Item.Curse_Life_Ring:
             case Item.Gold_Ring:
+            case Item.Silver_Ring:
             case Item.Leaf_Ring:
             case Item.Curse_Leaf_Ring:
             case Item.Skull_Ring:
+            case Item.Wood_Ring:
                 return ItemType.Accessary;
             case Item.Coin:
             default:
                 return ItemType.Etc;
         }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 저주가 해제된 상태의 아이템
+    ////////////////////////////////////////////////////////////////////////////////
+    public static Item UnCurseItem(Item pItem)
+    {
+        switch (pItem)
+        {
+            case Item.Curse_Leaf_Ring:
+                return Item.Leaf_Ring;
+            case Item.Curse_Life_Ring:
+                return Item.Life_Ring;
+            case Item.Curse_Angry_Ring:
+                return Item.Angry_Ring;
+            case Item.Curse_Coolness_Ring:
+                return Item.Coolness_Ring;
+        }
+
+        return pItem;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -174,6 +199,8 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
         {
             case Item.Curse_Life_Ring:
             case Item.Curse_Leaf_Ring:
+            case Item.Curse_Angry_Ring:
+            case Item.Curse_Coolness_Ring:
                 return true;
             default:
                 return false;
@@ -246,10 +273,44 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
         {
             if (itemStat.itemStat == pItemStat)
             {
-                //AddExp스텟이다 경험치 획득률에 더해준다.
+                //해당 스텟값을 더해준다.
                 sum += itemStat.GetValue();
             }
         }
         return sum;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 아이템에서 특정스텟값의 변환하는 함수
+    ////////////////////////////////////////////////////////////////////////////////
+    public static void SetTotalStatValue(ItemObjData pItemObjData, ItemStat pItemStat, int pValue)
+    {
+        if (pItemObjData == null)
+            return;
+
+        foreach (ItemStatData itemStat in pItemObjData.itemStats)
+        {
+            if (itemStat.itemStat == pItemStat)
+            {
+                //해당 스텟값을 0으로 초기화한다.
+                itemStat.SetValue(0);
+            }
+        }
+
+        foreach (ItemStatData itemStat in pItemObjData.itemStats)
+        {
+            if (itemStat.itemStat == pItemStat)
+            {
+                //스텟값을 정해준다.
+                itemStat.SetValue(pValue);
+                return;
+            }
+        }
+
+        //해당스텟이 그냥 없는것 같다.
+        //새로 추가해준다.
+        ItemStatData itemStatData = new ItemStatData(pItemStat, pValue, pValue);
+        itemStatData.GetValue();
+        pItemObjData.itemStats.Add(itemStatData);
     }
 }

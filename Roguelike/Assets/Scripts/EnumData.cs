@@ -70,14 +70,18 @@ public enum Item
     MP133 = 500,
 
     Coolness_Ring = 600,
+    Curse_Coolness_Ring = 610,
     Angry_Ring = 700,
+    Curse_Angry_Ring = 710,
     Guardian_Ring = 800,
     Life_Ring = 900,
     Curse_Life_Ring = 1000,
     Gold_Ring = 1100,
+    Silver_Ring = 1120,
     Leaf_Ring = 1200,
     Curse_Leaf_Ring = 1300,
     Skull_Ring = 1400,
+    Wood_Ring = 1500,
 
     Potion = 10000
 }
@@ -95,6 +99,7 @@ public enum ItemStat
     AddExp = 500,           //추가 경험치(%)
     AddGold = 600,          //추가 골드(%)
     HitDamage = 700,        //받는 데미지 추가
+    Shield = 800,        //일정량의 쉴드가 추가(해당 아이템 고유의 쉴드가 존재)
 
     Heal = 10000
 }

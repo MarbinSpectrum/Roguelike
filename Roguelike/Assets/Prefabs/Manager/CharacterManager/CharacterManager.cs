@@ -165,10 +165,6 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         BaseCriDamage = startCriDamage;
         BaseCriPer = startCriRate;
 
-        TotalUI totalUI = TotalUI.instance;
-        totalUI.UpdateHp();
-        totalUI.UpdateExp();
-
         ItemManager itemManager = ItemManager.instance;
         InventoryManager inventoryManager = InventoryManager.instance;
 
@@ -197,9 +193,18 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
             }
         }
 
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.UpdateHp();
+        totalUI.UpdateShield();
+        totalUI.UpdateExp();
+
+
         canControl = true;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 캐릭터의 게임좌표상 위치
+    ////////////////////////////////////////////////////////////////////////////////
     public Vector2Int CharactorGamePos()
     {
         if (character == null)
@@ -208,6 +213,10 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         }
         return character.GetPos();
     }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 캐릭터의 실제 위치
+    ////////////////////////////////////////////////////////////////////////////////
     public Vector3 CharactorTransPos()
     {
         if(character == null)
@@ -264,16 +273,67 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         totalDamage += ItemManager.GetTotalStatValue(nowAccessaryData, ItemStat.HitDamage);
         totalDamage += ItemManager.GetTotalStatValue(nowWeaponData, ItemStat.HitDamage);
 
-        //데미지를 받았다.
+        for (int cnt = 0; cnt < nowAccessaryData.Count; cnt++)
+        {
+            //쉴드가 있을경우 쉴드량이 작은 아이템부터 소비된다.
+            int minIdx = -1;
+            int minShield = int.MaxValue;
+
+            for (int idx = 0; idx < nowAccessaryData.Count; idx++)
+            {
+                ItemObjData accessaryObjData = nowAccessaryData[idx];
+                int shield = ItemManager.GetTotalStatValue(accessaryObjData, ItemStat.Shield);
+                if (shield > 0 && minShield > shield)
+                {
+                    //쉴드량이 가장 작은 아이템의 idx값을 기록
+                    minShield = shield;
+                    minIdx = idx;
+                }
+            }
+
+            if(minIdx == -1)
+            {
+                //쉴드가 없다.
+                //쉴드 처리 종료
+                break;
+            }
+            else
+            {
+                //쉴드가 있다.
+                //쉴드로 데미지를 상쇄시킨다.
+                if(totalDamage > minShield)
+                {
+                    totalDamage -= minShield;
+                    ItemManager.SetTotalStatValue(nowAccessaryData[minIdx], ItemStat.Shield, 0);
+                }
+                else
+                {
+                    minShield -= totalDamage;
+                    totalDamage = 0;
+                    ItemManager.SetTotalStatValue(nowAccessaryData[minIdx], ItemStat.Shield, minShield);
+
+                    //데미지가 쉴드로 모두 막혔다.
+                    //쉴드 처리 종료
+                    break;
+                }
+            }
+        }
+
+
+        //남은 데미지를 처리한다.
         if (nowHp > totalDamage)
             NowHp -= totalDamage;
         else
             NowHp = 0;
 
         totalUI.UpdateHp();
+        totalUI.UpdateShield();
         StartCoroutine(HitStunDelay());
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 플레이어 데미지 애니메이션
+    ////////////////////////////////////////////////////////////////////////////////
     public void PlayHitAni()
     {
         if(gudrdian_cnt > 0)
@@ -455,6 +515,23 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
 
         return hp;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 최종쉴드량을 구해준다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public int GetTotalShield()
+    {
+        int shield = 0;
+        InventoryManager inventoryManager = InventoryManager.instance;
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
+        List<ItemObjData> nowAccessary = inventoryManager.NowAccessaryList();
+
+        shield += ItemManager.GetTotalStatValue(nowWeapon, ItemStat.Shield);
+        shield += ItemManager.GetTotalStatValue(nowAccessary, ItemStat.Shield);
+
+        return shield;
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 최종 힘을 구해준다.

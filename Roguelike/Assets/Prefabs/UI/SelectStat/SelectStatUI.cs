@@ -85,6 +85,7 @@ public class SelectStatUI : MonoBehaviour
 
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateHp();
+        totalUI.UpdateShield();
 
         ActSelectStat(false);
 

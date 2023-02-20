@@ -25,16 +25,22 @@ public class Chest : MonoBehaviour
 
         List<ItemObjData> nowAccessary = inventoryManager.GetItemList(ItemType.Accessary);
         foreach (ItemObjData accessary in nowAccessary)
-        {   
+        {
+            //아이템들은 저주가 해제된 상태로 종류를 구분한다.
+            //일단 아이템의 저주가 해제된 상태로 목록에 넣는다.
+            Item unCurseItem = ItemManager.UnCurseItem(accessary.itemData.item);
+
             //현재 악세사리등록
-            hasItem.Add(accessary.itemData.item);
+            hasItem.Add(unCurseItem);
         }
 
 
         List<Item> itemList = new List<Item>();
         foreach(Item cItem in chestItemList)
         {
-            if (hasItem.Contains(cItem))
+            //저주가 해제된 상태로 존재여부를 검사를 한다.
+            Item unCurseItem = ItemManager.UnCurseItem(cItem);
+            if (hasItem.Contains(unCurseItem))
                 continue;
             itemList.Add(cItem);
         }

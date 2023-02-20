@@ -12,6 +12,8 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     [SerializeField]
     private LoadingUI loadingUI;
     [SerializeField]
+    private ShieldBar shieldBar;
+    [SerializeField]
     private HpBar hpBar;
     [SerializeField]
     private ExpBar expBar;
@@ -45,6 +47,8 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     {
         hpBar.UpdateHp(pMaxHp, pNowHp);
     }
+
+
     public void UpdateHp()
     {
         CharacterManager characterManager = CharacterManager.instance;
@@ -52,6 +56,22 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
         int maxHp = characterManager.GetTotalMaxHp();
         int nowHp = characterManager.nowHp;
         UpdateHp(maxHp, nowHp);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 쉴드 상태 갱신
+    ////////////////////////////////////////////////////////////////////////////////
+    public void UpdateShield(int pNowShield)
+    {
+        shieldBar.UpdateShield(pNowShield);
+    }
+
+    public void UpdateShield()
+    {
+        CharacterManager characterManager = CharacterManager.instance;
+
+        int nowShield = characterManager.GetTotalShield();
+        UpdateShield(nowShield);
     }
 
     ////////////////////////////////////////////////////////////////////////////////

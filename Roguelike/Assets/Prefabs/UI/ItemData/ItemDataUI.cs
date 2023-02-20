@@ -121,6 +121,25 @@ public class ItemDataUI : MonoBehaviour
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+    /// : pItemObjData기반으로 아이템 설명을
+    ////////////////////////////////////////////////////////////////////////////////
+    public string ItemExplainDataStr(ItemObjData pItemObjData)
+    {
+        List<ItemStatData> itemStatDatas = pItemObjData.itemStats;
+            Item item = pItemObjData.itemData.item;
+        switch (item)
+        {
+            case Item.Wood_Ring:
+                string str = LanguageManager.GetText(pItemObjData.itemData.explainKey);
+                int shield = ItemManager.GetTotalStatValue(pItemObjData, ItemStat.Shield);
+                str = string.Format(str, shield);
+                return str;
+            default:
+            return LanguageManager.GetText(pItemObjData.itemData.explainKey);
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     /// : pItemObjData기반으로 아이템정보표시
     ////////////////////////////////////////////////////////////////////////////////
     public void UpdateItemData(ItemObjData pItemObjData, int pIdx)
@@ -260,7 +279,7 @@ public class ItemDataUI : MonoBehaviour
             statBox.SetActive(true);
         }
 
-        explainText.text = LanguageManager.GetText(pItemObjData.itemData.explainKey);
+        explainText.text = ItemExplainDataStr(pItemObjData);
 
         string statStr = ItemStatDataStr(pItemObjData);
         statText.text = statStr;
@@ -287,6 +306,8 @@ public class ItemDataUI : MonoBehaviour
 
                 TotalUI totalUI = TotalUI.instance;
                 totalUI.ActInventory(true);
+                totalUI.UpdateHp();
+                totalUI.UpdateShield();
             }
 
         }
@@ -312,6 +333,7 @@ public class ItemDataUI : MonoBehaviour
                 TotalUI totalUI = TotalUI.instance;
                 totalUI.ActInventory(true);
                 totalUI.UpdateHp();
+                totalUI.UpdateShield();
             }
         }
     }
@@ -329,6 +351,7 @@ public class ItemDataUI : MonoBehaviour
             TotalUI totalUI = TotalUI.instance;
             totalUI.ActInventory(true);
             totalUI.UpdateHp();
+            totalUI.UpdateShield();
         }
     }
 

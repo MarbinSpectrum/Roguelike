@@ -36,4 +36,8 @@ public class ItemStatData
         dataValue = Random.Range(valueMinMax.x, valueMinMax.y);
         return dataValue;
     }
+    public void SetValue(int pValue)
+    {
+        dataValue = pValue;
+    }
 }

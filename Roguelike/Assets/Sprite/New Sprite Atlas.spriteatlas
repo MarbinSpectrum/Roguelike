@@ -181,6 +181,7 @@ SpriteAtlas:
   - {fileID: -808074414314866132, guid: 03024a28c4724cd44b4ffe16593f7e2f, type: 3}
   - {fileID: -8756287044432627385, guid: 03024a28c4724cd44b4ffe16593f7e2f, type: 3}
   - {fileID: 3985727111384835678, guid: 03024a28c4724cd44b4ffe16593f7e2f, type: 3}
+  - {fileID: 5658057615735673737, guid: 03024a28c4724cd44b4ffe16593f7e2f, type: 3}
   - {fileID: 1261875530217047754, guid: 03024a28c4724cd44b4ffe16593f7e2f, type: 3}
   - {fileID: 21300000, guid: f4fa1c488576b41418b672e690e44a5b, type: 3}
   - {fileID: 21300000, guid: eb8a0168325928c4bad8105c93bb7e67, type: 3}
@@ -293,6 +294,7 @@ SpriteAtlas:
   - UI_Hp_Bar0_4
   - UI_Hp_Bar0_3
   - UI_Hp_Bar0_2
+  - UI_Hp_Bar0_1
   - UI_Hp_Bar0_0
   - cat_pixel_run_front_7
   - 1080 1920
