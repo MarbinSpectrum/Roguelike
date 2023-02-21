@@ -41,7 +41,10 @@ public class Chest : MonoBehaviour
             //저주가 해제된 상태로 존재여부를 검사를 한다.
             Item unCurseItem = ItemManager.UnCurseItem(cItem);
             if (hasItem.Contains(unCurseItem))
+            {
+                itemList.Add(Item.Coin);
                 continue;
+            }
             itemList.Add(cItem);
         }
 

@@ -267,8 +267,6 @@ public class CatGirl : SerializedMonoBehaviour
                 animator.SetBool("shotGun", nowShotGun);
                 if(nowShotGun)
                     CameraVibrate.Vibrate(10, 0.1f, 0.15f);
-                else
-                    CameraVibrate.Vibrate(3, 0.02f, 0.15f);
 
                 yield return new WaitForSeconds(duration);
 

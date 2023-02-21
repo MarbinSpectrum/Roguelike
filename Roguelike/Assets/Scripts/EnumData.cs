@@ -32,7 +32,7 @@ public enum TileType
     Wall = 101,
 }
 
-public enum RoomType
+public enum RoomType1
 {
     Type0 = 0, //한쪽에만 문이 있는 타입
     Type1 = 1, //─ 모양으로 문이있는 타입
@@ -41,11 +41,19 @@ public enum RoomType
     Type4 = 4, //┼ 모양으로 문이있는 타입
 }
 
+public enum RoomType2
+{
+    NormalRoom = 0,
+    StartRoom = 1,
+    EndRoom = 2,
+}
+
 public enum Obj
 {
     Null = 0,
 
     StartPos = 100,
+    EndPos = 120,
 
     TorchLight = 500,
 
@@ -81,6 +89,7 @@ public enum Item
     Leaf_Ring = 1200,
     Curse_Leaf_Ring = 1300,
     Skull_Ring = 1400,
+    Curse_Skull_Ring = 1410,
     Wood_Ring = 1500,
 
     Potion = 10000

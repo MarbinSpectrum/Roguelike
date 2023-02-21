@@ -23067,9 +23067,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2736777785145459343, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Size.x
+      value: 2.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736777785145459343, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Size.y
+      value: 2.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736777785145459343, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: d1819be652c344e40ad474bd8d71c8e4, type: 3}
+      objectReference: {fileID: 21300000, guid: adcd690fb1de131418d2d015dec95b50, type: 3}
     - target: {fileID: 2768200900876547970, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -24219,6 +24227,14 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6234494973978846279, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: roomType1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6234494973978846279, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: roomType2
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6234494973978846279, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: isStartRoom
       value: 1
       objectReference: {fileID: 0}
@@ -24547,9 +24563,17 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7187802648456068196, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Size.x
+      value: 2.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 7187802648456068196, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Size.y
+      value: 2.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 7187802648456068196, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: d1819be652c344e40ad474bd8d71c8e4, type: 3}
+      objectReference: {fileID: 21300000, guid: adcd690fb1de131418d2d015dec95b50, type: 3}
     - target: {fileID: 7193585369841136748, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: tileType
       value: 101

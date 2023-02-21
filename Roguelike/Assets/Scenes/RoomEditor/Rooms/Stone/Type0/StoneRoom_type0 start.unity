@@ -25547,9 +25547,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5796916114902764311, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
     - target: {fileID: 5808075024597509189, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Size.x
+      value: 2.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 5808075024597509189, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Size.y
+      value: 2.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 5808075024597509189, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: d1819be652c344e40ad474bd8d71c8e4, type: 3}
+      objectReference: {fileID: 21300000, guid: adcd690fb1de131418d2d015dec95b50, type: 3}
     - target: {fileID: 5815378977581660326, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: serializationData.Prefab
       value: 
@@ -25693,6 +25701,10 @@ PrefabInstance:
     - target: {fileID: 6234494973978846279, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: roomType
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6234494973978846279, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: roomType2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6234494973978846279, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: isStartRoom
@@ -26595,9 +26607,17 @@ PrefabInstance:
       value: -3.0874844
       objectReference: {fileID: 0}
     - target: {fileID: 7708026410349130780, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Size.x
+      value: 2.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 7708026410349130780, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: m_Size.y
+      value: 2.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 7708026410349130780, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: d1819be652c344e40ad474bd8d71c8e4, type: 3}
+      objectReference: {fileID: 21300000, guid: adcd690fb1de131418d2d015dec95b50, type: 3}
     - target: {fileID: 7713497448929880062, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: serializationData.Prefab
       value: 

@@ -183,9 +183,19 @@ public abstract class MonsterObj : MonoBehaviour
 
     public virtual void Hit(uint pDamage, bool pCritical)
     {
-        stun = true;
-        moveStack = 0;
+        CharacterManager characterManager = CharacterManager.instance;
+        InventoryManager inventoryManager = InventoryManager.instance;
+        ItemObjData nowWeapon = inventoryManager.NowWeapon();
 
+        bool nowShotGun = ItemManager.IsShotGun(nowWeapon.itemData.item);
+
+        if(nowShotGun)
+        {
+            //샷건은 맞았을깨 스턴에 걸림
+            stun = true;
+            moveStack = 0;
+        }
+        
         DamageEffect damageEffect = DamageEffect.instance;
         damageEffect.DamageEffectRun(pos, (int)pDamage, pCritical);
 
@@ -207,7 +217,6 @@ public abstract class MonsterObj : MonoBehaviour
         if(hp == 0)
         {
             alive = false;
-            CharacterManager characterManager = CharacterManager.instance;
             characterManager.GetExp(exp);
         }
     }

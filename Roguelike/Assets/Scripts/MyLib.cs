@@ -253,6 +253,7 @@ namespace MyLib
         {
             uint mazeW = pWidth * 2 + 1;
             uint mazeH = pHeight * 2 + 1;
+            
             bool[,] isWall = new bool[mazeW, mazeH];
             for (int x = 0; x < mazeW; x++)
             {
@@ -302,6 +303,7 @@ namespace MyLib
                         //가장자리 길막기
                         isWall[x, y] = true;
                     }
+
 
             return isWall;
         }

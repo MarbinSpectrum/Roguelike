@@ -433,7 +433,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         totalUI.ActSelectStatUI(true);
 
         //다음 최대 경험치를 갱신해준다.
-        MaxExp = (uint)(maxExp * 1.5f);
+        MaxExp = maxExp + 5 * ((NowLevel / 10) + 1);
 
     }
 

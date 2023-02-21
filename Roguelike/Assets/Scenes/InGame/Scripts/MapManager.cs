@@ -21,6 +21,9 @@ public class MapManager : FieldObjectSingleton<MapManager>
     }
 
     [SerializeField]
+    private string mapNameKey;
+
+    [SerializeField]
     private CreateMap createMap;
     [SerializeField]
     private MiniMap miniMap;
@@ -84,6 +87,14 @@ public class MapManager : FieldObjectSingleton<MapManager>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+    /// : 마지막 지점의 좌표를 출력한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public Vector2Int GetEndPos()
+    {
+        return createMap.endPos;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     /// : 맵에 있는 몬스터를 가져온다.
     ////////////////////////////////////////////////////////////////////////////////
     public List<MapMonster> GetMonsterList()
@@ -135,5 +146,11 @@ public class MapManager : FieldObjectSingleton<MapManager>
     public Texture2D GetMiniMapTexture()
     {
         return miniMap.GetMiniMapTexture();
+    }
+
+    public void ShowMapName()
+    {
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.ShowMapName(LanguageManager.GetText(mapNameKey));
     }
 }

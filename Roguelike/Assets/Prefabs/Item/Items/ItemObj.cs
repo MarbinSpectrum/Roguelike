@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
+[System.Serializable]
+[SerializeField]
 public class ItemObjData
 {
     public int count;
     public ItemData itemData;
+    public Item item;
     public List<ItemStatData> itemStats = new List<ItemStatData>();
     public bool equip;
 
@@ -14,6 +17,7 @@ public class ItemObjData
     {
         count = 0;
         itemData = null;
+        item = Item.Null;
         itemStats.Clear();
         equip = false;
     }
@@ -22,6 +26,7 @@ public class ItemObjData
     {
         count = pItemObjData.count;
         itemData = pItemObjData.itemData;
+        item = itemData.item;
         itemStats.Clear();
         foreach (ItemStatData itemStatData in pItemObjData.itemStats)
             itemStats.Add(itemStatData);

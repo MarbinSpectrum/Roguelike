@@ -20201,7 +20201,7 @@ PrefabInstance:
     - target: {fileID: 334882770672936980, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: e9f06a3cefa6e6747894755120d9e7e6, type: 3}
+      objectReference: {fileID: 5238624078905246012, guid: 20b472b096d123446b2d9c55b91658e9, type: 3}
     - target: {fileID: 376982639018394176, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.4499998
@@ -23101,7 +23101,7 @@ PrefabInstance:
     - target: {fileID: 2126104999576822607, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: e9f06a3cefa6e6747894755120d9e7e6, type: 3}
+      objectReference: {fileID: 5238624078905246012, guid: 20b472b096d123446b2d9c55b91658e9, type: 3}
     - target: {fileID: 2177078006270638944, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.0899992
@@ -23361,11 +23361,11 @@ PrefabInstance:
     - target: {fileID: 2711913649567909192, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: e9f06a3cefa6e6747894755120d9e7e6, type: 3}
+      objectReference: {fileID: 5238624078905246012, guid: 20b472b096d123446b2d9c55b91658e9, type: 3}
     - target: {fileID: 2736777785145459343, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: e9f06a3cefa6e6747894755120d9e7e6, type: 3}
+      objectReference: {fileID: 5238624078905246012, guid: 20b472b096d123446b2d9c55b91658e9, type: 3}
     - target: {fileID: 2768200900876547970, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -24816,6 +24816,10 @@ PrefabInstance:
       objectReference: {fileID: 6234494973750585253, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
     - target: {fileID: 6234494973978846279, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: roomType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6234494973978846279, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: roomType1
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6234494973978846279, guid: 209deb53e3fa41f479111bad02d38273, type: 3}

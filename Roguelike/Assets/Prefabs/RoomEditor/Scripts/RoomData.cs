@@ -10,16 +10,16 @@ public class RoomData
 {
     public const uint roomSize = 7;
 
-    public bool isStartRoom;
-    public RoomType roomType;
+    public RoomType1 roomType1;
+    public RoomType2 roomType2;
     public List<TileType> tiles;
     public List<Obj> objs;
 
-    public RoomData(RoomType pRoomType,bool pIsStartRoom,
+    public RoomData(RoomType1 pRoomType1, RoomType2 pRoomType2,
         TileGroup pTileGroup, ObjGroup pObjGroup)
     {
-        roomType = pRoomType;
-        isStartRoom = pIsStartRoom;
+        roomType1 = pRoomType1;
+        roomType2 = pRoomType2;
         tiles = pTileGroup.GetTiles();
         objs = pObjGroup.GetObjs();
     }

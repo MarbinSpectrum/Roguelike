@@ -8,9 +8,9 @@ using MyLib;
 ////////////////////////////////////////////////////////////////////////////////
 public struct ChunkValue
 {
-    public RoomType roomType;
+    public RoomType1 roomType;
     public uint rotate;
-    public ChunkValue(RoomType pRoomType, uint pRotate)
+    public ChunkValue(RoomType1 pRoomType, uint pRotate)
     {
         roomType = pRoomType;
         rotate = pRotate;       
@@ -49,16 +49,21 @@ public class CreateMap : MonoBehaviour
 
     [SerializeField]
     private TileObj tileObj;
+    [SerializeField]
+    private GameObject exitStairsObj;
 
-    private Dictionary<RoomType, List<RoomData>> roomDatas 
-        = new Dictionary<RoomType, List<RoomData>>();
-    private Dictionary<RoomType, List<RoomData>> startRoomDatas
-    = new Dictionary<RoomType, List<RoomData>>();
-
+    private Dictionary<RoomType1, List<RoomData>> roomDatas 
+        = new Dictionary<RoomType1, List<RoomData>>();
+    private Dictionary<RoomType1, List<RoomData>> startRoomDatas
+        = new Dictionary<RoomType1, List<RoomData>>();
+    private Dictionary<RoomType1, List<RoomData>> endRoomDatas
+        = new Dictionary<RoomType1, List<RoomData>>();
     [HideInInspector]
     public TileObj[,] tileObjs;
     [HideInInspector]
     public List<Vector2Int> startPosList = new List<Vector2Int>();
+    [HideInInspector]
+    public Vector2Int endPos = new Vector2Int();
     [HideInInspector]
     public List<MapMonster> monsterList = new List<MapMonster>();
 
@@ -79,19 +84,59 @@ public class CreateMap : MonoBehaviour
         {
             RoomData roomData
                 = MyLib.Json.JsonToOject<RoomData>(textAsset.text);
-            if(roomData.isStartRoom)
+            if(roomData.roomType2 == RoomType2.StartRoom)
             {
-                if (startRoomDatas.ContainsKey(roomData.roomType) == false)
-                    startRoomDatas[roomData.roomType] = new List<RoomData>();
-                startRoomDatas[roomData.roomType].Add(roomData);
+                if (startRoomDatas.ContainsKey(roomData.roomType1) == false)
+                    startRoomDatas[roomData.roomType1] = new List<RoomData>();
+                startRoomDatas[roomData.roomType1].Add(roomData);
+            }
+            else if (roomData.roomType2 == RoomType2.EndRoom)
+            {
+                if (endRoomDatas.ContainsKey(roomData.roomType1) == false)
+                    endRoomDatas[roomData.roomType1] = new List<RoomData>();
+                endRoomDatas[roomData.roomType1].Add(roomData);
             }
             else
             {
-                if (roomDatas.ContainsKey(roomData.roomType) == false)
-                    roomDatas[roomData.roomType] = new List<RoomData>();
-                roomDatas[roomData.roomType].Add(roomData);
+                if (roomDatas.ContainsKey(roomData.roomType1) == false)
+                    roomDatas[roomData.roomType1] = new List<RoomData>();
+                roomDatas[roomData.roomType1].Add(roomData);
             }
         }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 미로 생성
+    ////////////////////////////////////////////////////////////////////////////////
+    private bool[,] MakeMaze(uint pWidth, uint pHeight)
+    {
+        bool[,] isWall = Algorithm.MakeMaze(mapWidth, mapHeight);  //미로를 생성한다.
+
+        List<Vector2Int> wallList = new List<Vector2Int>();
+        for (int y = 1; y < (mapHeight * 2 + 1); y++)
+        {
+            for (int x = (y % 2 == 0 ? 1 : 2); x < (mapWidth * 2 + 1); x += 2)
+            {
+                if (x >= mapWidth * 2 || y >= mapHeight * 2)
+                    continue;
+                if (isWall[x, y] == false)
+                    continue;
+                //없애버릴 벽 후보 선출
+                wallList.Add(new Vector2Int(x, y));
+            }
+        }
+
+        Algorithm.Shuffle(ref wallList);
+        int removeCnt = Mathf.Max((int)mapWidth, (int)mapHeight);
+        for (int i = 0; i < removeCnt; i++)
+        {
+            //임의의 벽 지우기
+            int x = wallList[i].x;
+            int y = wallList[i].y;
+            isWall[x, y] = false;
+        }
+
+        return isWall;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +147,7 @@ public class CreateMap : MonoBehaviour
     {
         ChunkValue[,] mapChucks = null;
 
-        bool[,] isWall = Algorithm.MakeMaze(mapWidth, mapHeight);  //미로를 생성한다.
+        bool[,] isWall = MakeMaze(mapWidth, mapHeight);  //미로를 생성한다.
 
         if (isWall == null)
             return mapChucks;
@@ -125,39 +170,39 @@ public class CreateMap : MonoBehaviour
                 bool right = !isWall[ax + 1, ay];
 
                 if (up == false && down == false && left == true && right == false)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type0, 0);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type0, 0);
                 else if (up == true && down == false && left == false && right == false)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type0, 1);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type0, 1);
                 else if (up == false && down == false && left == false && right == true)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type0, 2);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type0, 2);
                 else if (up == false && down == true && left == false && right == false)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type0, 3);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type0, 3);
 
                 else if (up == false && down == false && left == true && right == true)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type1, 0);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type1, 0);
                 else if (up == true && down == true && left == false && right == false)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type1, 1);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type1, 1);
 
                 else if (up == false && down == true && left == true && right == false)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type2, 0);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type2, 0);
                 else if (up == true && down == false && left == true && right == false)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type2, 1);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type2, 1);
                 else if (up == false && down == true && left == false && right == true)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type2, 3);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type2, 3);
                 else if (up == true && down == false && left == false && right == true)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type2, 2);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type2, 2);
 
                 else if (up == true && down == true && left == true && right == false)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type3, 0);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type3, 0);
                 else if (up == true && down == false && left == true && right == true)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type3, 1);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type3, 1);
                 else if (up == true && down == true && left == false && right == true)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type3, 2);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type3, 2);
                 else if (up == false && down == true && left == true && right == true)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type3, 3);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type3, 3);
 
                 else if (up == true && down == true && left == true && right == true)
-                    mapChucks[x, y] = new ChunkValue(RoomType.Type4, 0);
+                    mapChucks[x, y] = new ChunkValue(RoomType1.Type4, 0);
             }
         }
 
@@ -248,15 +293,20 @@ public class CreateMap : MonoBehaviour
         int startIdx = Random.Range(0, (int)mapWidth * (int)mapHeight);
         Vector2Int startPos = 
             new Vector2Int(startIdx% (int)mapWidth, startIdx / (int)mapWidth);
+        int endIdx = Random.Range(0, (int)mapWidth * (int)mapHeight);
+        Vector2Int endPos =
+            new Vector2Int(endIdx % (int)mapWidth, endIdx / (int)mapWidth);
 
         for (int x = 0; x < mapWidth; x++)
         {
             for (int y = 0; y < mapHeight; y++)
             {
                 bool startRoom = (startPos.x == x && startPos.y == y);
+                bool endRoom = (endPos.x == x && endPos.y == y);
 
-                List<RoomData> roomList = startRoom ?
-                    startRoomDatas[mapChucks[x, y].roomType] :
+                List<RoomData> roomList = 
+                    startRoom ? startRoomDatas[mapChucks[x, y].roomType] :
+                    endRoom ? endRoomDatas[mapChucks[x, y].roomType] :
                     roomDatas[mapChucks[x, y].roomType];
 
                 int dataSize = roomList.Count;
@@ -318,6 +368,13 @@ public class CreateMap : MonoBehaviour
                             case Obj.StartPos:
                                 {
                                     startPosList.Add(new Vector2Int(ax, ay));
+                                }
+                                break;
+                            case Obj.EndPos:
+                                {
+                                    endPos = new Vector2Int(ax, ay);
+                                    GameObject stairs = Instantiate(exitStairsObj);
+                                    stairs.transform.position = new Vector3(endPos.x * tileSize, endPos.y * tileSize, 0);
                                 }
                                 break;
                             case Obj.TorchLight:

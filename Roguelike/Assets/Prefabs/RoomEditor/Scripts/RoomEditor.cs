@@ -19,9 +19,9 @@ public class RoomEditor : SerializedMonoBehaviour
 
     [Title("RoomData")]
     [SerializeField]
-    private RoomType roomType;
+    private RoomType1 roomType1;
     [SerializeField]
-    private bool isStartRoom;
+    private RoomType2 roomType2;
 
     [Title("RequireData")]
     [SerializeField]
@@ -55,7 +55,7 @@ public class RoomEditor : SerializedMonoBehaviour
     [Button("Export Data", ButtonSizes.Large)]
     public void ExportData()
     {
-        RoomData roomData = new RoomData(roomType, isStartRoom, tileGroup, objGroup);
+        RoomData roomData = new RoomData(roomType1, roomType2, tileGroup, objGroup);
         string jsonData = Json.ObjectToJson(roomData);
         Json.CreateJsonFile(Application.dataPath, 
             "Resources/RoomDatas/" + SceneManager.GetActiveScene().name, jsonData);

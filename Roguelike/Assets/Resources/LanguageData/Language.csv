@@ -12,8 +12,8 @@ EXP,경험치,Exp
 POW,힘,Pow
 BALANCE,밸런스,Balance
 CRI_RATE,치명타 확률,Critical Rate
-CRI_DMG,치명타 데미지,Critical Damage
-SELECT_STAT_POW_TEXT,기본 데미지가\n증가합니다.\n(+{0}),
+CRI_DMG,치명타 피해,Critical Damage
+SELECT_STAT_POW_TEXT,기본 공격력이\n증가합니다.\n(+{0}),
 SELECT_STAT_HP_TEXT,최대 체력이\n증가합니다.\n(+{0}),
 SELECT_STAT_BALANCE_TEXT,밸런스가\n증가합니다.\n(+{0}),
 COIN_NAME,금화,Gold Coin
@@ -36,20 +36,23 @@ LIFE_RING_EXPLAIN,최대 체력이 증가한다.,
 CURSE_LIFE_RING_NAME,저주 받은 생명의 반지,
 CURSE_LIFE_RING_EXPLAIN,최대 체력이 크게 증가한다.\n(이 반지는 벗을 수 없다.),
 ANGRY_RING_NAME,분노의 반지,
-ANGRY_RING_EXPLAIN,치명타 데미지가 증가한다.,
+ANGRY_RING_EXPLAIN,치명타 피해가 증가한다.,
 CURSE_ANGRY_RING_NAME,저주 받은 분노의 반지,
-CURSE_ANGRY_RING_EXPLAIN,치명타 데미지가 크게 증가하는 대신.\n받는 데미지가 증가한다.\n(이 반지는 벗을 수 없다.),
+CURSE_ANGRY_RING_EXPLAIN,치명타 피해가 크게 증가하는 대신\n받는 피해가 증가한다.\n(이 반지는 벗을 수 없다.),
 COOLNESS_RING_NAME,침착의 반지,
 COOLNESS_RING_EXPLAIN,치명타 확률이 증가한다.,
 CURSE_COOLNESS_RING_NAME,저주 받은 침착의 반지,
-CURSE_COOLNESS_RING_EXPLAIN,치명타 확률이 크게 증가하는 대신.\n받는 데미지가 증가한다.\n(이 반지는 벗을 수 없다.),
+CURSE_COOLNESS_RING_EXPLAIN,치명타 확률이 크게 증가하는 대신\n받는 피해가 증가한다.\n(이 반지는 벗을 수 없다.),
 LEAF_RING_NAME,성장의 반지,
 LEAF_RING_EXPLAIN,얻는 경험치가 증가한다.,
 CURSE_LEAF_RING_NAME,저주 받은 성장의 반지,
 CURSE_LEAF_RING_EXPLAIN,얻는 경험치가 크게 증가한다.\n(이 반지는 벗을 수 없다.),
 SKULL_RING_NAME,해골 반지,
-SKULL_RING_EXPLAIN,공격력이 증가하는 대신\n받는 데미지가 증가한다.,
+SKULL_RING_EXPLAIN,공격력이 증가하는 대신\n받는 피해가 증가한다.,
+CURSE_SKULL_RING_NAME,저주 받은 해골 반지,
+CURSE_SKULL_RING_EXPLAIN,공격력이 크게 증가하는 대신\n피해를 받으면 즉사한다.\n(이 반지는 벗을 수 없다.),
 WOOD_RING_NAME,나무 반지,
 WOOD_RING_EXPLAIN,피해를 쉴드로 막아준다.\n\n<color=#5CF1E4><size=0.6>잔여 쉴드 : {0}</size></color>,
 POTION_NAME,체력 포션,
 POTION_EXPLAIN,체력을 1 회복 시켜준다.,
+STAGE1-1,지하던전 1층,

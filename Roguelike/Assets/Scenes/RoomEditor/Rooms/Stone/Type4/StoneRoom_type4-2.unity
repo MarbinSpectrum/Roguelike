@@ -24591,6 +24591,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6234494973978846279, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
+      propertyPath: roomType1
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6234494973978846279, guid: 209deb53e3fa41f479111bad02d38273, type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 6234494973978846279, guid: 209deb53e3fa41f479111bad02d38273, type: 3}

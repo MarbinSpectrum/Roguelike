@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
+[SerializeField]
 public class ItemStatData 
 {
     public ItemStat itemStat;

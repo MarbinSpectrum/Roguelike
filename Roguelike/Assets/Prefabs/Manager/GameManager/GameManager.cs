@@ -1,7 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Sirenix.OdinInspector;
+using System.Collections;
+using UnityEngine;
+using MyLib;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// : 게임에 전체적인 요소를 관리한다.
@@ -43,7 +44,7 @@ public class GameManager : FieldObjectSingleton<GameManager>
         characterManager.CreateCatGirl(createPos.x, createPos.y); //캐릭터 생성
 
         BulletManager bulletManager = BulletManager.instance;
-        yield return bulletManager.runCreateObj();
+        yield return bulletManager.runCreateObj(); //총알 객체 생성
 
         DamageEffect damageEffect = DamageEffect.instance;
         yield return damageEffect.runCreateObj(); //데미지 이펙트 생성
@@ -52,7 +53,7 @@ public class GameManager : FieldObjectSingleton<GameManager>
         yield return getGoldEffect.runCreateObj(); //골드획득 이펙트 생성
 
         MonsterManager monsterManager = MonsterManager.instance;
-        yield return monsterManager.runCreateMonster(mapManager.GetMonsterList()); //맵 생성
+        yield return monsterManager.runCreateMonster(mapManager.GetMonsterList()); //몬스터 생성
 
         JarManager jarManager = JarManager.instance;
         yield return jarManager.runCreateJarObj(); //항아리 생성
@@ -63,5 +64,18 @@ public class GameManager : FieldObjectSingleton<GameManager>
         BGMObj.PlayBGM();
 
         totalUI.ShowCreateMap(false);
+
+        mapManager.ShowMapName();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 플레이 기록을 Json파일로 내보낸다.
+    ////////////////////////////////////////////////////////////////////////////////
+    [Button("Export Data", ButtonSizes.Large)]
+    public void SaveGame()
+    {
+        PlayData playData = new PlayData();
+        string jsonData = Json.ObjectToJson(playData);
+        Json.CreateJsonFile(Application.dataPath,"Resources/PlayData/PlayData", jsonData);
     }
 }

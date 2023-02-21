@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -19,6 +20,8 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     private ExpBar expBar;
     [SerializeField]
     private KeyPad keyPad;
+    [SerializeField]
+    private MapName mapName;
     [SerializeField]
     private MiniMapUI miniMap;
     [SerializeField]
@@ -88,6 +91,11 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
         uint maxExp = characterManager.maxExp;
         uint nowExp = characterManager.nowExp;
         expBar.UpdateExp(maxExp, nowExp);
+    }
+
+    public void ShowMapName(string pStr)
+    {
+        mapName.ShowMapName(pStr);
     }
 
     ////////////////////////////////////////////////////////////////////////////////

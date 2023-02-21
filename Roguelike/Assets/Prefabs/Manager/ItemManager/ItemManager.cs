@@ -152,16 +152,24 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
                 return ItemType.Weapon;
             case Item.Angry_Ring:
             case Item.Curse_Angry_Ring:
+
             case Item.Coolness_Ring:
             case Item.Curse_Coolness_Ring:
+
             case Item.Guardian_Ring:
+
             case Item.Life_Ring:
             case Item.Curse_Life_Ring:
+
             case Item.Gold_Ring:
             case Item.Silver_Ring:
+
             case Item.Leaf_Ring:
             case Item.Curse_Leaf_Ring:
+
             case Item.Skull_Ring:
+            case Item.Curse_Skull_Ring:
+
             case Item.Wood_Ring:
                 return ItemType.Accessary;
             case Item.Coin:
@@ -185,6 +193,8 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
                 return Item.Angry_Ring;
             case Item.Curse_Coolness_Ring:
                 return Item.Coolness_Ring;
+            case Item.Curse_Skull_Ring:
+                return Item.Skull_Ring;
         }
 
         return pItem;
@@ -201,6 +211,7 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
             case Item.Curse_Leaf_Ring:
             case Item.Curse_Angry_Ring:
             case Item.Curse_Coolness_Ring:
+            case Item.Curse_Skull_Ring:
                 return true;
             default:
                 return false;
