@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 /// : 아이템의 정보를 관리하는 매니저
 ////////////////////////////////////////////////////////////////////////////////
 
-public class ItemManager : FieldObjectSingleton<ItemManager>
+public class ItemManager : DontDestroySingleton<ItemManager>
 {
     [SerializeField]
     private List<ItemData> itemDataList = new List<ItemData>();
@@ -77,10 +77,21 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
     public ItemObjData CreateItemObjData(Item pItem)
     {
         Init();
-        ItemObjData itemObjData = null;
-        if (itemDatas.ContainsKey(pItem))
-            itemObjData = itemDatas[pItem].createItemObjData();
-        return itemObjData;
+        ItemData itemData = GetItemData(pItem);
+        if(itemData != null)
+        {
+            ItemObjData itemObjData = itemData.createItemObjData();
+            return itemObjData;
+        }
+        return null;
+    }
+
+    public ItemData GetItemData(Item pItem)
+    {
+        Init();
+         if (itemDatas.ContainsKey(pItem))
+            return itemDatas[pItem];
+        return null;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +119,7 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
         foreach (ItemStatData itemStatData in useEffect)
         {
             ItemStat itemStat = itemStatData.itemStat;
-            int value = itemStatData.GetValue();
+            int value = itemStatData.dataValue;
             switch (itemStat)
             {
                 case ItemStat.Heal:
@@ -285,7 +296,7 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
             if (itemStat.itemStat == pItemStat)
             {
                 //해당 스텟값을 더해준다.
-                sum += itemStat.GetValue();
+                sum += itemStat.dataValue;
             }
         }
         return sum;
@@ -304,7 +315,7 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
             if (itemStat.itemStat == pItemStat)
             {
                 //해당 스텟값을 0으로 초기화한다.
-                itemStat.SetValue(0);
+                itemStat.dataValue = 0;
             }
         }
 
@@ -313,7 +324,7 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
             if (itemStat.itemStat == pItemStat)
             {
                 //스텟값을 정해준다.
-                itemStat.SetValue(pValue);
+                itemStat.dataValue = pValue;
                 return;
             }
         }
@@ -321,7 +332,7 @@ public class ItemManager : FieldObjectSingleton<ItemManager>
         //해당스텟이 그냥 없는것 같다.
         //새로 추가해준다.
         ItemStatData itemStatData = new ItemStatData(pItemStat, pValue, pValue);
-        itemStatData.GetValue();
+        int dValue = itemStatData.dataValue;
         pItemObjData.itemStats.Add(itemStatData);
     }
 }

@@ -37,6 +37,7 @@ public class TorchManager : FieldObjectSingleton<TorchManager>
         else
         {
             torch = Instantiate(torchPrefab);
+            torch.transform.parent = transform;
         }
 
         return torch;

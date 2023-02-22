@@ -3,16 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class LanguageManager : FieldObjectSingleton<LanguageManager>
+public class LanguageManager : DontDestroySingleton<LanguageManager>
 {
+    private bool isLoad = false;
+
     public string filePath;
     public Language nowLanguage;
-
+    
     private Dictionary<Language, Dictionary<string, string>> languageData 
         = new Dictionary<Language, Dictionary<string, string>>();
 
     public IEnumerator runLoadData()
     {
+        if(isLoad)
+        {
+            //이미 로드가 완료되어있다.
+            yield break;
+        }
+
         //,자 형식으로 저장된 csv파일을 읽는다.
         TextAsset textAsset = Resources.Load<TextAsset>(filePath);
         if (textAsset == null)
@@ -59,6 +67,8 @@ public class LanguageManager : FieldObjectSingleton<LanguageManager>
                 languageData[language].Add(keyValue, values[c]);
             }
         }
+
+        isLoad = true;
     }
 
     public static string GetText(string pKey)

@@ -1,1 +1,0 @@
-{"level":1,"baseMaxHp":3,"nowHp":3,"maxExp":10,"nowExp":0,"basePow":5,"baseBalance":0,"baseCriPer":5.0,"baseCriDamage":25.0,"etcItem":[{"count":40,"itemData":{"instanceID":25340},"item":100,"itemStats":[],"equip":false}],"weaponItem":[{"count":1,"itemData":{"instanceID":25342},"item":200,"itemStats":[{"itemStat":100,"valueMinMax":{"x":1,"y":1}}],"equip":true}],"accessaryItem":[]}

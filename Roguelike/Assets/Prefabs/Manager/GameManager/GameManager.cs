@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
+using System.IO;
 using MyLib;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -27,6 +28,7 @@ public class GameManager : FieldObjectSingleton<GameManager>
     {
         StartCoroutine(runStartGame());
     }
+
     public IEnumerator runStartGame()
     {
         LanguageManager languageManager = LanguageManager.instance;
@@ -34,7 +36,6 @@ public class GameManager : FieldObjectSingleton<GameManager>
 
         TotalUI totalUI = TotalUI.instance;
         totalUI.ShowCreateMap(true);
-
 
         MapManager mapManager = MapManager.instance;
         yield return mapManager.runCreateTileMap(); //맵 생성
@@ -56,9 +57,11 @@ public class GameManager : FieldObjectSingleton<GameManager>
         yield return monsterManager.runCreateMonster(mapManager.GetMonsterList()); //몬스터 생성
 
         JarManager jarManager = JarManager.instance;
+        jarManager.RemoveAll_JarObj();
         yield return jarManager.runCreateJarObj(); //항아리 생성
 
         ChestManager chestManager = ChestManager.instance;
+        chestManager.RemoveAll_ChestObj();
         yield return chestManager.runCreateChestObj(); //상자 생성
 
         BGMObj.PlayBGM();
@@ -71,11 +74,41 @@ public class GameManager : FieldObjectSingleton<GameManager>
     ////////////////////////////////////////////////////////////////////////////////
     /// : 플레이 기록을 Json파일로 내보낸다.
     ////////////////////////////////////////////////////////////////////////////////
-    [Button("Export Data", ButtonSizes.Large)]
-    public void SaveGame()
+    [Button("SaveData", ButtonSizes.Large)]
+    public static void SavePlayData()
     {
-        PlayData playData = new PlayData();
+        PlayData playData = new PlayData(InventoryManager.instance, CharacterManager.instance);
         string jsonData = Json.ObjectToJson(playData);
-        Json.CreateJsonFile(Application.dataPath,"Resources/PlayData/PlayData", jsonData);
+
+        if (Application.isEditor)
+            Json.CreateJsonFile(Application.dataPath, "Resources/PlayData/PlayData", jsonData);
+        else
+            Json.CreateJsonFile(Application.persistentDataPath, "PlayData", jsonData);
+    }
+
+    public static PlayData LoadPlayData()
+    {
+        if (Application.isEditor)
+        {
+            string filePath = Application.dataPath + "/Resources/PlayData/PlayData.json";
+            if (File.Exists(filePath))
+            {
+                PlayData playData = Json.LoadJsonFile<PlayData>(Application.dataPath, "Resources/PlayData/PlayData");
+                return playData;
+            }
+        }
+        else
+        {
+            string filePath = Application.persistentDataPath + "/PlayData.json";
+            if (File.Exists(filePath))
+            {
+                PlayData playData = Json.LoadJsonFile<PlayData>(Application.persistentDataPath, "PlayData");
+                return playData;
+            }
+        }
+
+        //아무 정보도 없으니 
+        //기본 데이터를 생성
+        return new PlayData();
     }
 }

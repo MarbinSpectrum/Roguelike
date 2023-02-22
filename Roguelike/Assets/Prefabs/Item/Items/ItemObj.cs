@@ -8,7 +8,23 @@ using Sirenix.OdinInspector;
 public class ItemObjData
 {
     public int count;
-    public ItemData itemData;
+    private ItemData ItemData;
+    public ItemData itemData
+    {
+        get
+        {
+            if(ItemData == null)
+            {
+                ItemManager itemManager = ItemManager.instance;
+                ItemData = itemManager.GetItemData(item);
+            }
+            return ItemData;
+        }
+        set
+        {
+            ItemData = value;
+        }
+    }
     public Item item;
     public List<ItemStatData> itemStats = new List<ItemStatData>();
     public bool equip;

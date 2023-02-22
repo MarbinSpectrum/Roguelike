@@ -5,14 +5,24 @@ using UnityEngine;
 ////////////////////////////////////////////////////////////////////////////////
 /// : 궤작오브젝트, 궤작에서 나오는 아이템과 나올 아이템이 결정된다.
 ////////////////////////////////////////////////////////////////////////////////
-public class Chest : MonoBehaviour
+public abstract class Chest : MonoBehaviour
 {
+    public Obj chestType;
     public Vector2Int pos;
     public GameObject close;
     public GameObject open;
+
     private Item chestItem;
     [SerializeField]
     private List<Item> chestItemList = new List<Item>();
+
+
+    public virtual void Init()
+    {
+        close.SetActive(true);
+        open.SetActive(false);
+        MakeChestItem();
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 궤작에서 나올 아이템 생성 

@@ -11,9 +11,14 @@ public class DamageEffect : FieldObjectSingleton<DamageEffect>
 
     private Queue<DamageAni> effectQueue = new Queue<DamageAni>();
     private Queue<DamageAni> effectCriQueue = new Queue<DamageAni>();
+    private bool isLoad = false;
 
     public IEnumerator runCreateObj()
     {
+        if (isLoad)
+            yield break;
+        isLoad = true;
+
         for (int i = 0; i < 2; i++)
         {
             DamageAni damageCriAni = Instantiate(damageCriAniPrefabs);

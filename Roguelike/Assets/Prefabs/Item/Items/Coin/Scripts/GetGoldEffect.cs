@@ -7,9 +7,13 @@ public class GetGoldEffect : FieldObjectSingleton<GetGoldEffect>
     [SerializeField]
     private GetGold getGoldPrefabs;
     private Queue<GetGold> effectQueue = new Queue<GetGold>();
-
+    private bool isLoad = false;
     public IEnumerator runCreateObj()
     {
+        if (isLoad)
+            yield break;
+        isLoad = true;
+
         for (int i = 0; i < 2; i++)
         {
             GetGold getGold = Instantiate(getGoldPrefabs);

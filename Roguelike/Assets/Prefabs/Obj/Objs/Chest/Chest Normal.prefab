@@ -226,6 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b42eebf95f74a3439e42c76cfb94749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chestType: 615
   pos: {x: 0, y: 0}
   close: {fileID: 3224636902573106739}
   open: {fileID: 3090885147779259663}

@@ -328,7 +328,7 @@ public class CatGirl : SerializedMonoBehaviour
 
                 int totalDamage = characterManager.GetTotalDamage();
 
-                damageEffect.DamageEffectRun(jarObj.pos, totalDamage, false);
+                //damageEffect.DamageEffectRun(jarObj.pos, totalDamage, false);
 
                 jarObj.RemoveJarObj();
 

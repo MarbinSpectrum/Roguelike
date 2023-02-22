@@ -90,8 +90,8 @@ public class ItemDataUI : MonoBehaviour
         foreach(ItemStatData itemStatData in itemStatDatas)
         {
             ItemStat itemStat = itemStatData.itemStat;
-            int statValue = itemStatData.GetValue();
-            switch(itemStat)
+            int statValue = itemStatData.dataValue;
+            switch (itemStat)
             {
                 case ItemStat.Pow:
                     str += string.Format("{0} +{1}", LanguageManager.GetText("ATK"), statValue);

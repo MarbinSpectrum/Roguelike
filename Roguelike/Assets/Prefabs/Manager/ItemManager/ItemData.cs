@@ -43,6 +43,11 @@ public class ItemData : ScriptableObject
     {
         ItemObjData itemObjData = new ItemObjData();
         itemObjData.itemData = this;
+        itemObjData.item = item;
+
+        //스텟을 초기화
+        foreach (ItemStatData itemStatData in itemStatDatas)
+            itemStatData.MakeDataValue();
 
         ItemType itemType = ItemManager.GetItemType(item);
 
@@ -62,12 +67,8 @@ public class ItemData : ScriptableObject
         if(itemType != ItemType.Etc || ItemManager.IsUseItem(item))
         {
             //스탯정보를 대입
-            foreach(ItemStatData itemStatData in itemStatDatas)
+            foreach (ItemStatData itemStatData in itemStatDatas)
                 itemObjData.itemStats.Add(new ItemStatData(itemStatData));
-
-            //값을 정해줌
-            foreach (ItemStatData itemStatData in itemObjData.itemStats)
-                itemStatData.GetValue();
         }
 
         return itemObjData;

@@ -5,23 +5,15 @@ using UnityEngine;
 ////////////////////////////////////////////////////////////////////////////////
 /// : 캐릭터를 관리하는 매니저
 ////////////////////////////////////////////////////////////////////////////////
-public class CharacterManager : FieldObjectSingleton<CharacterManager>
+public class CharacterManager : DontDestroySingleton<CharacterManager>
 {
-
-    [SerializeField]
-    private Item startWeapon;
-    [SerializeField]
-    private Item startAccessary;
-    [SerializeField]
-    private int startHp;
-    [SerializeField]
-    private int startPow;
-    [SerializeField]
-    private int startBalance;
-    [SerializeField]
-    private int startCriDamage;
-    [SerializeField]
-    private int startCriRate;
+    public Item startWeapon;
+    public Item startAccessary;
+    public int startHp;
+    public int startPow;
+    public int startBalance;
+    public int startCriDamage;
+    public int startCriRate;
 
     [Space(40)]
 
@@ -154,44 +146,45 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         character.gameObject.SetActive(true);
         character.SetPos(pX, pY);
 
-        MaxExp = 10;
-        NowExp = 0;
-        BaseMaxHp = startHp;
-        NowHp = GetTotalMaxHp();
-        NowLevel = 1;
+        PlayData playData = GameManager.LoadPlayData();
 
-        BasePow = startPow;
-        BaseBalance = startBalance;
-        BaseCriDamage = startCriDamage;
-        BaseCriPer = startCriRate;
+        MaxExp = playData.maxExp;
+        NowExp = playData.nowExp;
+        BaseMaxHp = playData.baseMaxHp;
+        NowHp = playData.nowHp;
+        NowLevel = playData.level;
+
+        BasePow = playData.basePow;
+        BaseBalance = playData.baseBalance;
+        BaseCriDamage = playData.baseCriDamage;
+        BaseCriPer = playData.baseCriPer;
 
         ItemManager itemManager = ItemManager.instance;
         InventoryManager inventoryManager = InventoryManager.instance;
 
-        //무기 장비 설정
-        ItemObjData weaponObjData = itemManager.CreateItemObjData(startWeapon);
-        if (weaponObjData != null)
-        {
-            //해당 장비를 장착한다.
-            weaponObjData.equip = true;
-
+        //무기 설정
+        List<ItemObjData> weapons = playData.weaponItem;
+        foreach (ItemObjData weaponObjData in weapons)
             if (inventoryManager.AddItem(weaponObjData))
             {
                 //인벤토리에 장비를 넣는다.
             }
-        }
 
-        //악세사리 장비 설정
-        ItemObjData accessaryObjData = itemManager.CreateItemObjData(startAccessary);
-        if (accessaryObjData != null)
-        {
-            //해당 장비를 장착한다.
-            accessaryObjData.equip = true;
+        //악세사리 설정
+        List<ItemObjData> accessarys = playData.accessaryItem;
+        foreach (ItemObjData accessaryObjData in accessarys)
             if (inventoryManager.AddItem(accessaryObjData))
             {
                 //인벤토리에 장비를 넣는다.
             }
-        }
+
+        //기타 아이템 설정
+        List<ItemObjData> etcs = playData.etcItem;
+        foreach (ItemObjData etcObjData in etcs)
+            if (inventoryManager.AddItem(etcObjData))
+            {
+                //인벤토리에 장비를 넣는다.
+            }
 
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdateHp();
@@ -256,8 +249,7 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
         ItemObjData nowWeaponData = inventoryManager.NowWeapon();
         for (int idx = 0; idx < nowAccessaryData.Count; idx++)
         {
-            ItemData accessaryData = nowAccessaryData[idx].itemData;
-            if (accessaryData.item == Item.Guardian_Ring)
+            if (nowAccessaryData[idx].item == Item.Guardian_Ring)
             {
                 //현재 악세사리로 수호의 링을 가지고 있다.
                 //데미지를 받는 대신 수호의 링이 파괴된다.
@@ -569,9 +561,18 @@ public class CharacterManager : FieldObjectSingleton<CharacterManager>
     ////////////////////////////////////////////////////////////////////////////////
     public int GetTotalDamage()
     {
-        //  Pow*(balance/maxBalance) ~ Pow 사이로 랜덤하게 데미지가 결정된다.
-        int totalPow = (int)GetTotalPow();
-        float per = GetTotalBalance() / (float)MAX_BALANCE;
+        //  minPow ~ Pow 사이로 랜덤하게 데미지가 결정된다.
+        int totalPow = GetTotalPow();
+
+        int totalBalance = GetTotalBalance();
+        float rate = (float)1 / (float)3;
+
+        //루트를 이용한 포물선 그래프를 토대로 값이 생성
+        //x값 초반에는 per의 증가 폭이 크지만
+        //x값 후반에는 per의 증가 폭이 점점 작아진다.
+        float lValue = Mathf.Pow(totalBalance, rate);
+        float rValue = Mathf.Pow(MAX_BALANCE, rate);
+        float per = lValue / rValue;
         int minPow = (int)(per * totalPow);
 
         int damage = Random.Range(minPow, totalPow);

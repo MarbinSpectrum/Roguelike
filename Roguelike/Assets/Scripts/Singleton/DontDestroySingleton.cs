@@ -13,5 +13,9 @@ public abstract class DontDestroySingleton<T> : SerializedMonoBehaviour where T 
             instance = gameObject.GetComponent<T>();
             DontDestroyOnLoad(gameObject);
         }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }

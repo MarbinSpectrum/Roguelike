@@ -471,8 +471,27 @@ namespace MyLib
         }
         #endregion
 
+        #region[GetAround4Pos]
+        public static int[,] Around4Pos = new int[,]
+        {
+            {0, 1}, {1, 0}, { 0, -1}, { -1, 0}
+        };
+        //x,y주변의 블럭을 구해준다.
+        public static List<Vector2Int> GetAround4Pos(int pX, int pY)
+        {
+            List<Vector2Int> aroundList = new List<Vector2Int>();
+            for (int idx = 0; idx < 8; idx++)
+            {
+                int newX = pX + Around4Pos[idx, 0];
+                int newY = pY + Around4Pos[idx, 1];
+                aroundList.Add(new Vector2Int(newX, newY));
+            }
+            return aroundList;
+        }
+        #endregion
+
         #region[GetAround8Pos]
-        private static int[,] Around8Pos = new int[,]
+        public static int[,] Around8Pos = new int[,]
         {
             {0, 1}, {+1, +1}, {1, 0}, {1, -1}, { 0, -1}, {-1, -1}, { -1, 0}, {-1, +1}
         };

@@ -14,17 +14,27 @@ public class BulletManager : FieldObjectSingleton<BulletManager>
     private Queue<Bullet> bulletQueue = new Queue<Bullet>();
     private Queue<GameObject> shotStartQueue = new Queue<GameObject>();
     private Queue<GameObject> shotEndQueue = new Queue<GameObject>();
+    private bool isLoad = false;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 총알 프리팹을 미리 오브젝트 큐에 넣는다.
     ////////////////////////////////////////////////////////////////////////////////
     public IEnumerator runCreateObj()
     {
+        if (isLoad)
+            yield break;
+        isLoad = true;
+
         for (int i = 0; i < 3; i++)
         {
             Bullet bullet = Instantiate(bulletPrefab);
             GameObject shotStart = Instantiate(shotStartPrefab);
             GameObject shotEnd = Instantiate(shotEndPrefab);
+
+            bullet.transform.parent = transform;
+            shotStart.transform.parent = transform;
+            shotEnd.transform.parent = transform;
+
             bullet.gameObject.SetActive(false);
             shotStart.SetActive(false);
             shotEnd.SetActive(false);

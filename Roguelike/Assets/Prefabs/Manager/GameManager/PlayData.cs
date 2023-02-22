@@ -9,6 +9,7 @@ public class PlayData
     //저장되야할 정보
     //1.플레이어 스텟
     //2.인벤토리 아이템
+    //3.현재 스테이지
 
     public uint level;
 
@@ -29,38 +30,83 @@ public class PlayData
     public List<ItemObjData> weaponItem = new List<ItemObjData>();
     public List<ItemObjData> accessaryItem = new List<ItemObjData>();
 
+    public string stageName;
+
+    public PlayData(InventoryManager pInv, CharacterManager pCha)
+    {
+        if (pInv == null || pCha == null)
+        {
+            return;
+        }
+        level = pCha.nowLevel;
+        baseMaxHp = pCha.baseMaxHp;
+        nowHp = pCha.nowHp;
+        maxExp = pCha.maxExp;
+        nowExp = pCha.nowExp;
+        basePow = pCha.basePow;
+        baseBalance = pCha.baseBalance;
+        baseCriPer = pCha.baseCriPer;
+        baseCriDamage = pCha.baseCriDamage;
+
+        List<ItemObjData> etcitemList = pInv.GetItemList(ItemType.Etc);
+        foreach (ItemObjData itemObjData in etcitemList)
+        {
+            etcItem.Add(new ItemObjData(itemObjData));
+        }
+        List<ItemObjData> weaponitemList = pInv.GetItemList(ItemType.Weapon);
+        foreach (ItemObjData itemObjData in weaponitemList)
+        {
+            weaponItem.Add(new ItemObjData(itemObjData));
+        }
+        List<ItemObjData> accessaritemList = pInv.GetItemList(ItemType.Accessary);
+        foreach (ItemObjData itemObjData in accessaritemList)
+        {
+            accessaryItem.Add(new ItemObjData(itemObjData));
+        }
+
+        stageName = "STAGE1-1";
+    }
+
     public PlayData()
     {
         InventoryManager inventoryManager = InventoryManager.instance;
         CharacterManager characterManager = CharacterManager.instance;
-        if (inventoryManager == null || characterManager == null)
+        ItemManager itemManager = ItemManager.instance;
+        MapManager mapManager = MapManager.instance;
+
+        if (inventoryManager == null || characterManager == null
+            || itemManager == null || mapManager == null)
         { 
             return; 
         }
-        level = characterManager.nowLevel;
-        baseMaxHp = characterManager.baseMaxHp;
-        nowHp = characterManager.nowHp;
-        maxExp = characterManager.maxExp;
-        nowExp = characterManager.nowExp;
-        basePow = characterManager.basePow;
-        baseBalance = characterManager.baseBalance;
-        baseCriPer = characterManager.baseCriPer;
-        baseCriDamage = characterManager.baseCriDamage;
+        level = 1;
+        baseMaxHp = characterManager.startHp;
+        nowHp = characterManager.startHp;
+        maxExp = 10;
+        nowExp = 0;
+        basePow = characterManager.startPow;
+        baseBalance = characterManager.startBalance;
+        baseCriPer = characterManager.startCriRate;
+        baseCriDamage = characterManager.startCriDamage;
 
-        List<ItemObjData> etcitemList = inventoryManager.GetItemList(ItemType.Etc);
-        foreach (ItemObjData item in etcitemList)
+        //무기 장비 설정
+        ItemObjData weaponObjData = itemManager.CreateItemObjData(characterManager.startWeapon);
+        if (weaponObjData != null)
         {
-            etcItem.Add(new ItemObjData(item));
+            //해당 장비를 장착한다.
+            weaponObjData.equip = true;
+            weaponItem.Add(weaponObjData);
         }
-        List<ItemObjData> weaponitemList = inventoryManager.GetItemList(ItemType.Weapon);
-        foreach (ItemObjData item in weaponitemList)
+
+        //악세사리 장비 설정
+        ItemObjData accessaryObjData = itemManager.CreateItemObjData(characterManager.startAccessary);
+        if (accessaryObjData != null)
         {
-            weaponItem.Add(new ItemObjData(item));
+            //해당 장비를 장착한다.
+            accessaryObjData.equip = true;
+            accessaryItem.Add(accessaryObjData);
         }
-        List<ItemObjData> accessaritemList = inventoryManager.GetItemList(ItemType.Accessary);
-        foreach (ItemObjData item in accessaritemList)
-        {
-            accessaryItem.Add(new ItemObjData(item));
-        }
+
+        stageName = mapManager.mapNameKey;
     }
 }

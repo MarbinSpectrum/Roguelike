@@ -8,37 +8,27 @@ public class ItemStatData
 {
     public ItemStat itemStat;
     public Vector2Int valueMinMax;
-    private bool hasValue;
-    private int dataValue;
+    public int dataValue = -1;
+
     public ItemStatData(ItemStat pItemStat,int pValueMin, int pValueMax)
     {
         itemStat = pItemStat;
         valueMinMax = new Vector2Int();
-        hasValue = false;
-        dataValue = 0;
         valueMinMax.Set(pValueMin, pValueMax);
+        MakeDataValue();
     }
 
     public ItemStatData(ItemStatData pItemStatData)
     {
         itemStat = pItemStatData.itemStat;
         valueMinMax = new Vector2Int(pItemStatData.valueMinMax.x, pItemStatData.valueMinMax.y);
-        hasValue = pItemStatData.hasValue;
         dataValue = pItemStatData.dataValue;
+        if(dataValue == -1)
+            MakeDataValue();
     }
 
-    public int GetValue()
+    public void MakeDataValue()
     {
-        if(hasValue)
-        {
-            return dataValue;
-        }
-        hasValue = true;
-        dataValue = Random.Range(valueMinMax.x, valueMinMax.y);
-        return dataValue;
-    }
-    public void SetValue(int pValue)
-    {
-        dataValue = pValue;
+        dataValue = UnityEngine.Random.Range(valueMinMax.x, valueMinMax.y);
     }
 }

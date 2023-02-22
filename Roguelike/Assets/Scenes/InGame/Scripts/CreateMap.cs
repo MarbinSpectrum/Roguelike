@@ -58,12 +58,16 @@ public class CreateMap : MonoBehaviour
         = new Dictionary<RoomType1, List<RoomData>>();
     private Dictionary<RoomType1, List<RoomData>> endRoomDatas
         = new Dictionary<RoomType1, List<RoomData>>();
+    private bool[,] IsWall;
+    private Vector2Int startPos;
+    private Vector2Int endPos;
+
     [HideInInspector]
     public TileObj[,] tileObjs;
     [HideInInspector]
     public List<Vector2Int> startPosList = new List<Vector2Int>();
-    [HideInInspector]
-    public Vector2Int endPos = new Vector2Int();
+    private Vector2Int gameEndPos;
+
     [HideInInspector]
     public List<MapMonster> monsterList = new List<MapMonster>();
 
@@ -108,9 +112,9 @@ public class CreateMap : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     /// : 미로 생성
     ////////////////////////////////////////////////////////////////////////////////
-    private bool[,] MakeMaze(uint pWidth, uint pHeight)
+    protected void MakeMap(uint pWidth, uint pHeight)
     {
-        bool[,] isWall = Algorithm.MakeMaze(mapWidth, mapHeight);  //미로를 생성한다.
+        IsWall = Algorithm.MakeMaze(mapWidth, mapHeight);  //미로를 생성한다.
 
         List<Vector2Int> wallList = new List<Vector2Int>();
         for (int y = 1; y < (mapHeight * 2 + 1); y++)
@@ -119,7 +123,7 @@ public class CreateMap : MonoBehaviour
             {
                 if (x >= mapWidth * 2 || y >= mapHeight * 2)
                     continue;
-                if (isWall[x, y] == false)
+                if (IsWall[x, y] == false)
                     continue;
                 //없애버릴 벽 후보 선출
                 wallList.Add(new Vector2Int(x, y));
@@ -133,10 +137,8 @@ public class CreateMap : MonoBehaviour
             //임의의 벽 지우기
             int x = wallList[i].x;
             int y = wallList[i].y;
-            isWall[x, y] = false;
+            IsWall[x, y] = false;
         }
-
-        return isWall;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -147,9 +149,9 @@ public class CreateMap : MonoBehaviour
     {
         ChunkValue[,] mapChucks = null;
 
-        bool[,] isWall = MakeMaze(mapWidth, mapHeight);  //미로를 생성한다.
+        MakeMap(mapWidth, mapHeight);  //미로를 생성한다.
 
-        if (isWall == null)
+        if (IsWall == null)
             return mapChucks;
 
         mapChucks = new ChunkValue[mapWidth, mapHeight];   //골목에 따른 청크를 배치하기위한 배열
@@ -164,10 +166,10 @@ public class CreateMap : MonoBehaviour
 
                 int ax = x * 2 + 1;
                 int ay = y * 2 + 1;
-                bool up = !isWall[ax,ay + 1];
-                bool down = !isWall[ax, ay - 1];
-                bool left = !isWall[ax - 1, ay];
-                bool right = !isWall[ax + 1, ay];
+                bool up = !IsWall[ax,ay + 1];
+                bool down = !IsWall[ax, ay - 1];
+                bool left = !IsWall[ax - 1, ay];
+                bool right = !IsWall[ax + 1, ay];
 
                 if (up == false && down == false && left == true && right == false)
                     mapChucks[x, y] = new ChunkValue(RoomType1.Type0, 0);
@@ -279,6 +281,52 @@ public class CreateMap : MonoBehaviour
         return objBoard;
     }
 
+    protected virtual void MakeStartPos()
+    {
+        int startIdx = Random.Range(0, (int)mapWidth * (int)mapHeight);
+        startPos = new Vector2Int(startIdx % (int)mapWidth, startIdx / (int)mapWidth);
+    }
+
+    protected virtual void MakeEndPos()
+    {
+        //큐를 사용해서 시작지점으로 부터 가장 멀리떨어진 위치를 구한다.
+
+        HashSet<Vector2Int> visit = new HashSet<Vector2Int>();
+        //x: 거리 ,y:x좌표 ,z:y좌표
+        Queue<Vector3> queue = new Queue<Vector3>();
+
+        Vector2Int startVec = new Vector2Int(startPos.x * 2 + 1, startPos.y * 2 + 1);
+        queue.Enqueue(new Vector3(0, startVec.x, startVec.y));
+        visit.Add(startVec);
+
+        while(queue.Count > 0)
+        {
+            Vector3 now = queue.Dequeue();
+            endPos = new Vector2Int((int)((now.y - 1) / 2), (int)((now.z - 1) / 2));
+
+            for (int i = 0; i < 4; i++)
+            {
+                int ax = (int)now.y + Calculator.Around4Pos[i, 0];
+                int ay = (int)now.z + Calculator.Around4Pos[i, 1];
+                if (ax < 0 || ay < 0 || ax >= IsWall.GetLength(0) || ay >= IsWall.GetLength(1))
+                    continue;
+                if (IsWall[ax, ay])
+                    continue;
+
+                ax = (int)now.y + Calculator.Around4Pos[i, 0] * 2;
+                ay = (int)now.z + Calculator.Around4Pos[i, 1] * 2;
+                if (ax < 0 || ay < 0 || ax >= IsWall.GetLength(0) || ay >= IsWall.GetLength(1))
+                    continue;
+                if (IsWall[ax, ay])
+                    continue;
+                if (visit.Contains(new Vector2Int(ax, ay)))
+                    continue;
+                queue.Enqueue(new Vector3(now.x+1, ax, ay));
+                visit.Add(new Vector2Int(ax, ay));
+            }
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     /// : 타일맵 생성
     ////////////////////////////////////////////////////////////////////////////////
@@ -290,12 +338,8 @@ public class CreateMap : MonoBehaviour
 
         tileObjs = new TileObj[mapWidth * RoomData.roomSize, mapHeight * RoomData.roomSize];
 
-        int startIdx = Random.Range(0, (int)mapWidth * (int)mapHeight);
-        Vector2Int startPos = 
-            new Vector2Int(startIdx% (int)mapWidth, startIdx / (int)mapWidth);
-        int endIdx = Random.Range(0, (int)mapWidth * (int)mapHeight);
-        Vector2Int endPos =
-            new Vector2Int(endIdx % (int)mapWidth, endIdx / (int)mapWidth);
+        MakeStartPos();
+        MakeEndPos();
 
         for (int x = 0; x < mapWidth; x++)
         {
@@ -372,9 +416,9 @@ public class CreateMap : MonoBehaviour
                                 break;
                             case Obj.EndPos:
                                 {
-                                    endPos = new Vector2Int(ax, ay);
+                                    gameEndPos = new Vector2Int(ax, ay);
                                     GameObject stairs = Instantiate(exitStairsObj);
-                                    stairs.transform.position = new Vector3(endPos.x * tileSize, endPos.y * tileSize, 0);
+                                    stairs.transform.position = new Vector3(gameEndPos.x * tileSize, gameEndPos.y * tileSize, 0);
                                 }
                                 break;
                             case Obj.TorchLight:
@@ -417,4 +461,6 @@ public class CreateMap : MonoBehaviour
             }
         }
     }
+
+
 }

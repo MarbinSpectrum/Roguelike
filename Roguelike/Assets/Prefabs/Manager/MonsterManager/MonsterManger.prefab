@@ -52,7 +52,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  monsterDatas:
-  - {fileID: 11400000, guid: 027a7371893a6a14d9a8ef6636d07656, type: 2}
+  monsterDataList:
   - {fileID: 11400000, guid: f43bf576adb19da41bbda6d1d34f9634, type: 2}
+  - {fileID: 11400000, guid: 027a7371893a6a14d9a8ef6636d07656, type: 2}
   monsterActRange: 10

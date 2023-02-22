@@ -9,29 +9,44 @@ using UnityEngine;
 public abstract class MonsterObj : MonoBehaviour
 {
     //체력
+    [HideInInspector]
     public uint hp;
 
     //데미지
+    [HideInInspector]
     public uint damage;
 
     //공격딜레이
+    [HideInInspector]
     public uint attackDelay;
+    [HideInInspector]
     public uint attackStack;
 
     //이동딜레이
+    [HideInInspector]
     public uint moveDelay;
+    [HideInInspector]
     public uint moveStack;
 
     //인식범위
+    [HideInInspector]
     public uint range;
 
     //처치시 얻는 경험치
+    [HideInInspector]
     public uint exp;
 
+    [HideInInspector]
+    public Obj monster;
+    [HideInInspector]
     public Vector2Int pos;
+    [HideInInspector]
     public bool alive;
+    [HideInInspector]
     public bool sleep = true;
+    [HideInInspector]
     public bool stun;
+
 
     public SpriteRenderer monsterSpr;
     public Material baseMaterial;
@@ -45,6 +60,7 @@ public abstract class MonsterObj : MonoBehaviour
     {
         sleep = true;
         alive = true;
+        monster = pMonsterData.monsterType;
 
         hp = pMonsterData.hp;
         damage = pMonsterData.damage;
@@ -185,7 +201,12 @@ public abstract class MonsterObj : MonoBehaviour
     {
         CharacterManager characterManager = CharacterManager.instance;
         InventoryManager inventoryManager = InventoryManager.instance;
+        MonsterManager monsterManager = MonsterManager.instance;
+        DamageEffect damageEffect = DamageEffect.instance;
+
         ItemObjData nowWeapon = inventoryManager.NowWeapon();
+
+        damageEffect.DamageEffectRun(pos, (int)pDamage, pCritical);
 
         bool nowShotGun = ItemManager.IsShotGun(nowWeapon.itemData.item);
 
@@ -196,9 +217,6 @@ public abstract class MonsterObj : MonoBehaviour
             moveStack = 0;
         }
         
-        DamageEffect damageEffect = DamageEffect.instance;
-        damageEffect.DamageEffectRun(pos, (int)pDamage, pCritical);
-
         if (hp < pDamage)
             hp = 0;
         else
@@ -216,6 +234,7 @@ public abstract class MonsterObj : MonoBehaviour
 
         if(hp == 0)
         {
+            monsterManager.RemoveMonsterObj(this);
             alive = false;
             characterManager.GetExp(exp);
         }

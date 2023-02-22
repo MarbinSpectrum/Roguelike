@@ -10,6 +10,13 @@ public class Jar : MonoBehaviour
     public Vector2Int pos;
     public GameObject body;
     public GameObject broken;
+    public int jarIdx;
+
+    public void Init()
+    {
+        body.SetActive(true);
+        broken.SetActive(false);
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 항아리 객체를 제거

@@ -20,8 +20,7 @@ public class MapManager : FieldObjectSingleton<MapManager>
         get { return ArrayH; }
     }
 
-    [SerializeField]
-    private string mapNameKey;
+    public string mapNameKey;
 
     [SerializeField]
     private CreateMap createMap;
@@ -84,14 +83,6 @@ public class MapManager : FieldObjectSingleton<MapManager>
         List<Vector2Int> startPosList = createMap.startPosList;
         int random = Random.Range(0, startPosList.Count);
         return startPosList[random];
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    /// : 마지막 지점의 좌표를 출력한다.
-    ////////////////////////////////////////////////////////////////////////////////
-    public Vector2Int GetEndPos()
-    {
-        return createMap.endPos;
     }
 
     ////////////////////////////////////////////////////////////////////////////////

@@ -6,15 +6,18 @@ using MyLib;
 ////////////////////////////////////////////////////////////////////////////////
 /// : 몬스터 객체들을 관리하는 매니저
 ////////////////////////////////////////////////////////////////////////////////
-public class MonsterManager : FieldObjectSingleton<MonsterManager>
+public class MonsterManager : DontDestroySingleton<MonsterManager>
 {
     private List<MonsterObj> fieldMonster = new List<MonsterObj>();     //필드의 몬스터 목록
     private HashSet<Vector2Int> moveToPos = new HashSet<Vector2Int>();  //이미 이동하기로 예정된 위치
     private Dictionary<Obj, MonsterObj> monsterObjs;                    
     private Dictionary<Obj, Sprite> previewSprites;
+    private Dictionary<Obj, MonsterData> monsterDatas;
+    private Dictionary<Obj, Queue<MonsterObj>> monsterQueue
+        = new Dictionary<Obj, Queue<MonsterObj>>();
 
     [SerializeField]
-    private List<MonsterData> monsterDatas = new List<MonsterData>();
+    private List<MonsterData> monsterDataList = new List<MonsterData>();
     [SerializeField]
     private int monsterActRange = 10;
 
@@ -27,15 +30,22 @@ public class MonsterManager : FieldObjectSingleton<MonsterManager>
             previewSprites = new Dictionary<Obj, Sprite>();
         if (monsterObjs == null)
             monsterObjs = new Dictionary<Obj, MonsterObj>();
+        if (monsterDatas == null)
+            monsterDatas = new Dictionary<Obj, MonsterData>();
+
         monsterObjs.Clear();
         previewSprites.Clear();
-        foreach (MonsterData monsterData in monsterDatas)
+        monsterDatas.Clear();
+
+        foreach (MonsterData monsterData in monsterDataList)
         {
             Obj monsterType = monsterData.monsterType;
             MonsterObj monsterObj = monsterData.monsterObj;
             monsterObj.Init(monsterData);
+
             monsterObjs[monsterType] = monsterObj;
             previewSprites[monsterType] = monsterData.previewSprite;
+            monsterDatas[monsterType] = monsterData;
         }
     }
 
@@ -95,19 +105,64 @@ public class MonsterManager : FieldObjectSingleton<MonsterManager>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+    /// : pMonsterType에 알맞는 몬스터 객체 생성
+    ////////////////////////////////////////////////////////////////////////////////
+    public MonsterObj CreateMonsterObj(Obj pMonsterType)
+    {
+        if (monsterQueue.ContainsKey(pMonsterType) == false)
+            monsterQueue[pMonsterType] = new Queue<MonsterObj>();
+
+        MonsterObj monsterObj = null;
+        if (monsterQueue[pMonsterType].Count > 0)
+            monsterObj = monsterQueue[pMonsterType].Dequeue();
+
+        if (monsterObj == null)
+            monsterObj = Instantiate(monsterObjs[pMonsterType]);
+        monsterObj.gameObject.SetActive(true);
+        MonsterData monsterData = monsterDatas[monsterObj.monster];
+        monsterObj.Init(monsterData);
+
+        return monsterObj;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 몬스터 객체를 제거한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void RemoveMonsterObj(MonsterObj pMonsterObj)
+    {
+        if (pMonsterObj == null)
+            return;
+        monsterQueue[pMonsterObj.monster].Enqueue(pMonsterObj);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 모든 몬스터 객체를 제거한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    private void RemoveAll_MonsterObj()
+    {
+        foreach (MonsterObj monsterObj in fieldMonster)
+        {
+            RemoveMonsterObj(monsterObj);
+            monsterObj.gameObject.SetActive(false);
+        }
+        fieldMonster.Clear();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     /// : 몬스터를 생성한다.
     ////////////////////////////////////////////////////////////////////////////////
     public IEnumerator runCreateMonster(List<MapMonster> pMapMonsters)
     {
         Init();
 
-        fieldMonster.Clear();
+        RemoveAll_MonsterObj();
         foreach (MapMonster mapMonster in pMapMonsters)
         {
             //몬스터가 생성될 정보를 토대로
             //몬스터 객체를 생성해준다.
             Vector2Int pos = mapMonster.pos;
-            MonsterObj monsterObj = Instantiate(monsterObjs[mapMonster.monsterType]);
+            MonsterObj monsterObj = CreateMonsterObj(mapMonster.monsterType);
+            monsterObj.transform.parent = transform;
             monsterObj.SetPos(pos);
 
             //몬스터 객체 등록
