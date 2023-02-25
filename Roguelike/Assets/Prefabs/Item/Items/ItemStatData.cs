@@ -8,6 +8,7 @@ public class ItemStatData
 {
     public ItemStat itemStat;
     public Vector2Int valueMinMax;
+    [HideInInspector]
     public int dataValue = -1;
 
     public ItemStatData(ItemStat pItemStat,int pValueMin, int pValueMax)

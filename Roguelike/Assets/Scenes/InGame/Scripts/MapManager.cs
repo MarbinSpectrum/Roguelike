@@ -20,6 +20,7 @@ public class MapManager : FieldObjectSingleton<MapManager>
         get { return ArrayH; }
     }
 
+    public bool showName = true;
     public string mapNameKey;
 
     [SerializeField]
@@ -86,6 +87,14 @@ public class MapManager : FieldObjectSingleton<MapManager>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+    /// : 도착지점 좌표를 출력한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public Vector2Int GetEndPos()
+    {
+        return createMap.gameEndPos;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     /// : 맵에 있는 몬스터를 가져온다.
     ////////////////////////////////////////////////////////////////////////////////
     public List<MapMonster> GetMonsterList()
@@ -142,6 +151,6 @@ public class MapManager : FieldObjectSingleton<MapManager>
     public void ShowMapName()
     {
         TotalUI totalUI = TotalUI.instance;
-        totalUI.ShowMapName(LanguageManager.GetText(mapNameKey));
+        totalUI.ShowMapName(LanguageManager.GetText(mapNameKey), showName);
     }
 }

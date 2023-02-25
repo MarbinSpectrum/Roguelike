@@ -541,7 +541,10 @@ namespace MyLib
 
         public static T LoadJsonFile<T>(string loadPath, string fileName)
         {
-            FileStream fileStream = new FileStream(string.Format("{0}/{1}.json", loadPath, fileName), FileMode.Open);
+            string filePath = string.Format("{0}/{1}.json", loadPath, fileName);
+            if (File.Exists(filePath) == false)
+                return default(T);
+            FileStream fileStream = new FileStream(filePath, FileMode.Open);
             byte[] data = new byte[fileStream.Length];
             fileStream.Read(data, 0, data.Length);
             fileStream.Close();

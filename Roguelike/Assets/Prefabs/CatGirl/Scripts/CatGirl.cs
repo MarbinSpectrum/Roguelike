@@ -321,8 +321,6 @@ public class CatGirl : SerializedMonoBehaviour
                 animator.SetBool("shotGun", nowShotGun);
                 if (nowShotGun)
                     CameraVibrate.Vibrate(10, 0.1f, 0.15f);
-                else
-                    CameraVibrate.Vibrate(3, 0.02f, 0.15f);
 
                 yield return new WaitForSeconds(duration);
 
@@ -388,6 +386,12 @@ public class CatGirl : SerializedMonoBehaviour
         characterManager.LevelUpCheck(); //레벨업이 가능한지 검사.
 
         ButtonInput = ButtonInput.None;
+
+        if(mapManager.GetEndPos() == pos)
+        {
+            yield return StageManager.LoadNextScene();
+            yield break;
+        }
 
         StartCoroutine(runCatEvent());
     }

@@ -20,19 +20,49 @@ public class ObjGroup : SerializedMonoBehaviour
     [Title("RequireData")]
     [SerializeField]
     private List<EditorObj> objs = new List<EditorObj>();
+    [SerializeField]
+    private EditorObj objPrefabs;
+    public RoomEditor roomEditor;
+    public CustomMapEditor customMapEditor;
+    private uint w;
+    private uint h;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : Update
     ////////////////////////////////////////////////////////////////////////////////
     private void Update()
     {
-        int idx = 0;
-        for (int x = 0; x < RoomData.roomSize; x++)
+        UpdateObjGroup();
+    }
+
+    public void UpdateObjGroup()
+    {
+        if (roomEditor != null)
         {
-            for (int y = 0; y < RoomData.roomSize; y++)
+            w = RoomData.roomSize;
+            h = RoomData.roomSize;
+        }
+        else if (customMapEditor != null)
+        {
+            w = customMapEditor.width;
+            h = customMapEditor.height;
+        }
+        else
+        {
+            return;
+        }
+
+        int idx = 0;
+        for (int x = 0; x < w; x++)
+        {
+            for (int y = 0; y < h; y++)
             {
                 if (objs.Count <= idx)
-                    continue;
+                {
+                    EditorObj newObj = Instantiate(objPrefabs);
+                    newObj.transform.parent = transform;
+                    objs.Add(newObj);
+                }
                 EditorObj eObj = objs[idx];
                 if (eObj == null)
                     continue;
@@ -41,10 +71,11 @@ public class ObjGroup : SerializedMonoBehaviour
                     = new Vector3(
                         startPos.x + x * tileWidth,
                         startPos.y + y * tileHeight, 0);
+                eObj.transform.parent = transform;
+                eObj.transform.localScale = new Vector3(1, 1, 1);
                 idx++;
             }
         }
-
 
         for (; idx < objs.Count; idx++)
         {
@@ -57,12 +88,27 @@ public class ObjGroup : SerializedMonoBehaviour
 
     public List<Obj> GetObjs()
     {
+        if (roomEditor != null)
+        {
+            w = RoomData.roomSize;
+            h = RoomData.roomSize;
+        }
+        else if (customMapEditor != null)
+        {
+            w = customMapEditor.width;
+            h = customMapEditor.height;
+        }
+        else
+        {
+            return null;
+        }
+
         List<Obj> roomObjData = new List<Obj>();
 
         int idx = 0;
-        for (int x = 0; x < RoomData.roomSize; x++)
+        for (int x = 0; x < w; x++)
         {
-            for (int y = 0; y < RoomData.roomSize; y++)
+            for (int y = 0; y < h; y++)
             {
                 if (objs.Count <= idx)
                     continue;
@@ -76,5 +122,17 @@ public class ObjGroup : SerializedMonoBehaviour
         }
 
         return roomObjData;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 맵을 초기화한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    [Button("Clear", ButtonSizes.Large)]
+    public void ExportData()
+    {
+        foreach(EditorObj editorObj in objs)
+        {
+            editorObj.obj = Obj.Null;
+        }
     }
 }

@@ -41,6 +41,4 @@ public class ObjManager : DontDestroySingleton<ObjManager>
         }
         return null;
     }
-
-
 }

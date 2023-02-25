@@ -20,8 +20,13 @@ MonoBehaviour:
   itemStatDatas:
   - itemStat: 200
     valueMinMax: {x: 20, y: 20}
+    dataValue: 0
   - itemStat: 700
     valueMinMax: {x: 1, y: 1}
+    dataValue: 0
+  - itemStat: 10
+    valueMinMax: {x: 1, y: 1}
+    dataValue: 0
   frontSprite: {fileID: -4815767593418093350, guid: 9d89a86c1ab94714dbea499f777ab298, type: 3}
   sideSprite: {fileID: 6441202284629174422, guid: 9d89a86c1ab94714dbea499f777ab298, type: 3}
   range: 2

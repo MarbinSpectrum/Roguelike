@@ -10,9 +10,6 @@ using MyLib;
 ////////////////////////////////////////////////////////////////////////////////
 public class GameManager : FieldObjectSingleton<GameManager>
 {
-    [SerializeField]
-    private PlayBGMObj BGMObj;
-
     ////////////////////////////////////////////////////////////////////////////////
     /// : Start
     ////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +28,8 @@ public class GameManager : FieldObjectSingleton<GameManager>
 
     public IEnumerator runStartGame()
     {
+        SoundManager.StopBGM();
+
         LanguageManager languageManager = LanguageManager.instance;
         yield return languageManager.runLoadData(); //언어 데이터 로드
 
@@ -43,6 +42,8 @@ public class GameManager : FieldObjectSingleton<GameManager>
         CharacterManager characterManager = CharacterManager.instance;
         Vector2Int createPos = mapManager.GetRandomStartPos();
         characterManager.CreateCatGirl(createPos.x, createPos.y); //캐릭터 생성
+
+        EtcObjManager.CreateStartStairs(createPos);
 
         BulletManager bulletManager = BulletManager.instance;
         yield return bulletManager.runCreateObj(); //총알 객체 생성
@@ -57,24 +58,23 @@ public class GameManager : FieldObjectSingleton<GameManager>
         yield return monsterManager.runCreateMonster(mapManager.GetMonsterList()); //몬스터 생성
 
         JarManager jarManager = JarManager.instance;
-        jarManager.RemoveAll_JarObj();
         yield return jarManager.runCreateJarObj(); //항아리 생성
 
         ChestManager chestManager = ChestManager.instance;
-        chestManager.RemoveAll_ChestObj();
         yield return chestManager.runCreateChestObj(); //상자 생성
 
-        BGMObj.PlayBGM();
-
+        ScreenDark.AnimationState(false); //화면이 서서히 나타남
         totalUI.ShowCreateMap(false);
+        yield return new WaitForSeconds(0.5f);
 
         mapManager.ShowMapName();
+        yield return new WaitForSeconds(1f);
+        StageBGM.PlayBgm();
     }
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 플레이 기록을 Json파일로 내보낸다.
     ////////////////////////////////////////////////////////////////////////////////
-    [Button("SaveData", ButtonSizes.Large)]
     public static void SavePlayData()
     {
         PlayData playData = new PlayData(InventoryManager.instance, CharacterManager.instance);
@@ -86,29 +86,31 @@ public class GameManager : FieldObjectSingleton<GameManager>
             Json.CreateJsonFile(Application.persistentDataPath, "PlayData", jsonData);
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : Json파일로 저장된 플레이 기록을 읽는다.
+    ////////////////////////////////////////////////////////////////////////////////
     public static PlayData LoadPlayData()
     {
+        PlayData playData = null;
+
+        //에디터와 기기에서 실행시 경로가 다르다.
+        //따로 처리한다.
         if (Application.isEditor)
         {
-            string filePath = Application.dataPath + "/Resources/PlayData/PlayData.json";
-            if (File.Exists(filePath))
-            {
-                PlayData playData = Json.LoadJsonFile<PlayData>(Application.dataPath, "Resources/PlayData/PlayData");
-                return playData;
-            }
+            playData = Json.LoadJsonFile<PlayData>(Application.dataPath, "Resources/PlayData/PlayData");
         }
         else
         {
-            string filePath = Application.persistentDataPath + "/PlayData.json";
-            if (File.Exists(filePath))
-            {
-                PlayData playData = Json.LoadJsonFile<PlayData>(Application.persistentDataPath, "PlayData");
-                return playData;
-            }
+            playData = Json.LoadJsonFile<PlayData>(Application.persistentDataPath, "PlayData");
         }
 
-        //아무 정보도 없으니 
-        //기본 데이터를 생성
-        return new PlayData();
+        if (playData == null)
+        {
+            //아무 정보도 없으니 
+            //기본 데이터를 생성
+            playData = new PlayData();
+        }
+
+        return playData;
     }
 }

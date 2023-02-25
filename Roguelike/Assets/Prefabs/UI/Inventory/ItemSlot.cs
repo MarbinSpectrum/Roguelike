@@ -57,24 +57,32 @@ public class ItemSlot : SerializedMonoBehaviour
 
     private void UpdateSlot()
     {
-        if (SlotNum <= 1)
-            numText.enabled = false;
-        else
-            numText.enabled = true;
-        numText.text = SlotNum.ToString();
-        if(item == Item.Coin)
-            numText.text += "$";
-        if (SlotSprite == null)
+        if(numText != null)
         {
-            slotImg.color = new Color(1, 1, 1, 0);
-            clickItem.SetActive(false);
+            if (SlotNum <= 1)
+                numText.enabled = false;
+            else
+                numText.enabled = true;
+            numText.text = SlotNum.ToString();
+
+            if (item == Item.Coin)
+                numText.text += "$";
         }
-        else
+
+        if (slotImg != null)
         {
-            slotImg.color = new Color(1, 1, 1, 1);
-            clickItem.SetActive(true);
+            if (SlotSprite == null)
+            {
+                slotImg.color = new Color(1, 1, 1, 0);
+                clickItem.SetActive(false);
+            }
+            else
+            {
+                slotImg.color = new Color(1, 1, 1, 1);
+                clickItem.SetActive(true);
+            }
+            slotImg.sprite = SlotSprite;
         }
-        slotImg.sprite = SlotSprite;
     }
 
     [SerializeField]

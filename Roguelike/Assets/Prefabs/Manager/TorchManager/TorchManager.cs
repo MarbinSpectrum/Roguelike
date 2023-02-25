@@ -51,6 +51,7 @@ public class TorchManager : FieldObjectSingleton<TorchManager>
         if (isTorch.ContainsKey(pPos))
             return;
         Torch torch = GetTorch();
+        torch.gameObject.SetActive(true);
         isTorch[pPos] = torch;
         torch.transform.position = new Vector3(pPos.x * CreateMap.tileSize, pPos.y * CreateMap.tileSize, 0);
 
@@ -73,9 +74,23 @@ public class TorchManager : FieldObjectSingleton<TorchManager>
         if(isTorch.ContainsKey(pPos))
         {
             Torch torch = isTorch[pPos];
+            torch.gameObject.SetActive(false);
             isTorch.Remove(pPos);
             torchQueue.Enqueue(torch);
         }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 모든 궤작을 제거
+    ////////////////////////////////////////////////////////////////////////////////
+    public void RemoveAll_TorchObj()
+    {
+        foreach (Vector2Int tPos in torchPos)
+        {
+            RemoveTorch(tPos);
+        }
+
+        torchPos.Clear();
     }
 
     ////////////////////////////////////////////////////////////////////////////////

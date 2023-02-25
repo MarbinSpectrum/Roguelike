@@ -20,12 +20,22 @@ MonoBehaviour:
   itemStatDatas:
   - itemStat: 100
     valueMinMax: {x: 10, y: 15}
+    dataValue: 0
   - itemStat: 150
     valueMinMax: {x: 25, y: 50}
+    dataValue: 0
   - itemStat: 200
     valueMinMax: {x: 10, y: 25}
+    dataValue: 0
   - itemStat: 300
     valueMinMax: {x: 10, y: 25}
+    dataValue: 0
+  - itemStat: 5100
+    valueMinMax: {x: 1, y: 1}
+    dataValue: 0
+  - itemStat: 200
+    valueMinMax: {x: 1, y: 1}
+    dataValue: 0
   frontSprite: {fileID: -4876602517551101454, guid: 6d2bf0dd5a6ee9240ac433988ad671b7, type: 3}
   sideSprite: {fileID: 4319395737909131107, guid: 6d2bf0dd5a6ee9240ac433988ad671b7, type: 3}
   range: 3

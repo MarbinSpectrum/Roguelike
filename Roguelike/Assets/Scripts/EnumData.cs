@@ -61,6 +61,8 @@ public enum Obj
     Chest_Normal_Pos = 610,
     Chest_Normal = 615,
 
+    GunBench = 700,
+
     Slime = 1000,
 
     Tentacle = 2000,
@@ -97,20 +99,44 @@ public enum Item
 
 public enum ItemStat
 {
-    Null = 0,
+    Null                = 0,
 
-    Pow = 100,              //공격력
-    Balance = 150,          //밸런스
-    CriPer = 200,           //크리티컬 확률(%)
-    CriDmg = 300,           //크리티컬 데미지(%)
+    Curse               = 10,           //저주아이템 벗을수가 없다.
 
-    Hp = 400,
-    AddExp = 500,           //추가 경험치(%)
-    AddGold = 600,          //추가 골드(%)
-    HitDamage = 700,        //받는 데미지 추가
-    Shield = 800,        //일정량의 쉴드가 추가(해당 아이템 고유의 쉴드가 존재)
+    Pow                 = 100,          //공격력
+    Balance             = 150,          //밸런스
+    CriRate             = 200,          //크리티컬 확률(%)
+    CriDmg              = 300,          //크리티컬 데미지(%)
 
-    Heal = 10000
+    Hp                  = 400,
+    AddExp              = 500,          //추가 경험치(%)
+    AddGold             = 600,          //추가 골드(%)
+    HitDamage           = 700,          //받는 데미지 추가
+    HitDie              = 720,          //데미지 받을시 즉사
+    Shield              = 800,          //일정량의 쉴드가 추가(해당 아이템 고유의 쉴드가 존재)
+
+
+    CanUpgradePow       = 5100,         //공격력 업그레이드 가능
+    CanUpgradeBalance   = 5150,         //밸런스 업그레이드 가능
+    CanUpgradeCriRate   = 5200,         //크리티컬 확률(%) 업그레이드 가능
+    CanUpgradeCriDmg    = 5250,         //크리티컬 데미지(%) 업그레이드 가능
+
+
+
+
+
+
+
+
+    Heal                = 10000,        //사용시 체력회복
+}
+
+public enum StageName
+{
+    Stage1_1 = 10100,
+    ShelterMap1_1 = 10101,
+    Stage1_2 = 10200,
+
 }
 
 public enum ItemType

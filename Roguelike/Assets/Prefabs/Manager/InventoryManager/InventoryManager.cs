@@ -17,6 +17,13 @@ public class InventoryManager : DontDestroySingleton<InventoryManager>
     [SerializeField]
     private SoundObj itemDrinkSE;
 
+    public void ClearItemData()
+    {
+        weaponItems.Clear();
+        accessaryItems.Clear();
+        etcItems.Clear();
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     /// : 아이템을 인벤토리에 추가한다.
     ////////////////////////////////////////////////////////////////////////////////
@@ -233,7 +240,7 @@ public class InventoryManager : DontDestroySingleton<InventoryManager>
 
         if (nowItemData != null)
         {
-            bool cantTakeOff = ItemManager.CantTakeOff(nowItemData.itemData.item);
+            bool cantTakeOff = ItemManager.CantTakeOff(nowItemData);
             if (cantTakeOff)
             {
                 //벗을수 없는 장비다.

@@ -93,14 +93,35 @@ public class ChestManager : FieldObjectSingleton<ChestManager>
     ////////////////////////////////////////////////////////////////////////////////
     public void RemoveAll_ChestObj()
     {
-        foreach(Vector2Int cPos in chestPos)
+        foreach (KeyValuePair<Obj, Queue<Chest>> chestQ in chestQueue)
+        {
+            Queue<Chest> tempQueue = new Queue<Chest>();
+            while (chestQ.Value.Count > 0)
+            {
+                Chest chestObj = chestQ.Value.Dequeue();
+                chestObj.gameObject.SetActive(false);
+                chestObj.Init();
+                tempQueue.Enqueue(chestObj);
+            }
+            while (tempQueue.Count > 0)
+            {
+                Chest chestObj = tempQueue.Dequeue();
+                chestQ.Value.Enqueue(chestObj);
+            }
+        }
+
+        foreach (Vector2Int cPos in chestPos)
         {
             Chest chestObj = GetChestObj(cPos);
             if (chestObj == null)
                 continue;
             chestObj.gameObject.SetActive(false);
-            RemoveChestObj(cPos);
+            chestQueue[chestObj.chestType].Enqueue(chestObj);
         }
+        randomChestPos.Clear();
+        makeChestPos.Clear();
+        chestPos.Clear();
+        chestObjs.Clear();
     }
 
     ////////////////////////////////////////////////////////////////////////////////

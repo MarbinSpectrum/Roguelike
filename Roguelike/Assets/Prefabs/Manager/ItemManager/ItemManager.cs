@@ -108,6 +108,129 @@ public class ItemManager : DontDestroySingleton<ItemManager>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+    /// : ItemStat의 텍스트를 출력
+    ////////////////////////////////////////////////////////////////////////////////
+    public static string ItemStatNameStr(ItemStat itemStat)
+    {
+        switch (itemStat)
+        {
+            case ItemStat.Pow:
+                return LanguageManager.GetText("ATK");
+            case ItemStat.Balance:
+                return LanguageManager.GetText("BALANCE");
+            case ItemStat.CriRate:
+                return LanguageManager.GetText("CRI_RATE");
+            case ItemStat.CriDmg:
+                return LanguageManager.GetText("CRI_DMG");
+            case ItemStat.Hp:
+                return LanguageManager.GetText("HP");
+            case ItemStat.AddExp:
+                return LanguageManager.GetText("ADD_EXP");
+            case ItemStat.AddGold:
+                return LanguageManager.GetText("ADD_GOLD");
+        }
+        return string.Empty;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : ItemStat에 따른 값 출력
+    ////////////////////////////////////////////////////////////////////////////////
+    public static string ItemStatValueStr(ItemStat itemStat,int pValue)
+    {
+        switch (itemStat)
+        {
+            case ItemStat.Pow:
+                return string.Format("{0}", pValue);
+            case ItemStat.Balance:
+                return string.Format("{0}", pValue);
+            case ItemStat.CriRate:
+                return string.Format("{0}%", pValue);
+            case ItemStat.CriDmg:
+                return string.Format("{0}%", pValue);
+            case ItemStat.Hp:
+                return string.Format("{0}", pValue);
+            case ItemStat.AddExp:
+                return string.Format("{0}%", pValue);
+            case ItemStat.AddGold:
+                return string.Format("{0}%", pValue);
+        }
+        return string.Empty;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : pItemObjData기반으로 아이템 능력치정보를 반환
+    ////////////////////////////////////////////////////////////////////////////////
+    public static string ItemStatDataStr(ItemObjData pItemObjData)
+    {
+        string str = "";
+        List<ItemStatData> itemStatDatas = pItemObjData.itemStats;
+        foreach (ItemStatData itemStatData in itemStatDatas)
+        {
+            ItemStat itemStat = itemStatData.itemStat;
+            int statValue = itemStatData.dataValue;
+            string nameText = ItemStatNameStr(itemStat);
+            string valueText = ItemStatValueStr(itemStat, statValue);
+            if (nameText == string.Empty || valueText == string.Empty)
+            {
+                //이름이나 값이 없으면 출력하지 않는다.
+                continue;
+            }
+            str += string.Format("{0} +{1}", nameText, valueText);
+            str += "\n";
+        }
+        return str;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : pItemObjData기반으로 아이템 설명을 출력
+    ////////////////////////////////////////////////////////////////////////////////
+    public static string ItemExplainDataStr(ItemObjData pItemObjData)
+    {
+        Item item = pItemObjData.itemData.item;
+        int curse = GetTotalStatValue(pItemObjData, ItemStat.Curse);
+        int hitDamage = GetTotalStatValue(pItemObjData, ItemStat.HitDamage);
+        int hitDie = GetTotalStatValue(pItemObjData, ItemStat.HitDie);
+        string str = LanguageManager.GetText(pItemObjData.itemData.explainKey);
+        switch (item)
+        {
+            case Item.Wood_Ring:
+                {
+                    int shield = GetTotalStatValue(pItemObjData, ItemStat.Shield);
+                    str = string.Format(str, shield);
+                    return str;
+                }
+
+        }
+
+        string str2 = "";
+
+        if (hitDie > 0)
+        {
+            str2 += LanguageManager.GetText("HIT_DIE");
+        }
+        else if (hitDamage > 0)
+        {
+            str2 += LanguageManager.GetText("HIT_DAMAGE");
+        }
+
+        if (curse > 0)
+        {
+            str2 += LanguageManager.GetText("CANT_TAKE_OFF");
+        }
+
+        if (str2.Length > 0)
+        {
+            //안좋은 효과와 본래효과 텍스트에
+            //간격을 준다.
+            str2 = "\n" + str2;
+        }
+
+        str += str2;
+
+        return str;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     /// : pItemObjData의 정보를 토대로 아이템 사용효과를 적용
     ////////////////////////////////////////////////////////////////////////////////
     public static void RunUseItemEffect(ItemObjData pItemObjData)
@@ -214,19 +337,12 @@ public class ItemManager : DontDestroySingleton<ItemManager>
     ////////////////////////////////////////////////////////////////////////////////
     /// : 벗을수 있는 템인지 검사
     ////////////////////////////////////////////////////////////////////////////////
-    public static bool CantTakeOff(Item pItem)
+    public static bool CantTakeOff(ItemObjData pItemObjData)
     {
-        switch (pItem)
-        {
-            case Item.Curse_Life_Ring:
-            case Item.Curse_Leaf_Ring:
-            case Item.Curse_Angry_Ring:
-            case Item.Curse_Coolness_Ring:
-            case Item.Curse_Skull_Ring:
-                return true;
-            default:
-                return false;
-        }
+        int value = GetTotalStatValue(pItemObjData, ItemStat.Curse);
+        if (value > 0)
+            return true;
+        return false;
     }
 
     ////////////////////////////////////////////////////////////////////////////////

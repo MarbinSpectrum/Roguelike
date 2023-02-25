@@ -50,8 +50,7 @@ public class SelectStatUI : MonoBehaviour
     }
     public void ActSelectStat(bool pState)
     {
-        SoundManager soundManager = SoundManager.instance;
-        soundManager.MuteBGM(pState);
+        SoundManager.MuteBGM(pState);
 
         TotalUI totalUI = TotalUI.instance;
         totalUI.ActKeyPad(!pState);

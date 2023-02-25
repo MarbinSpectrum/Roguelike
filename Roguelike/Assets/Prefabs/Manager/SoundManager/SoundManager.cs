@@ -14,9 +14,8 @@ public class SoundManager : DontDestroySingleton<SoundManager>
     [SerializeField]
     private AudioSource bgmSource;
 
-    private float SeVolume;
-    [SerializeField, PropertyOrder(-2),PropertyRange(0,1)]
-    public float seVolume
+    private static float SeVolume;
+    public static float seVolume
     {
         get
         {
@@ -26,13 +25,12 @@ public class SoundManager : DontDestroySingleton<SoundManager>
         {
             SeVolume = value;
             if (instance != null)
-                seSource.volume = SeVolume;
+                instance.seSource.volume = SeVolume;
         }
     }
 
-    private float BgmVolume;
-    [SerializeField, PropertyOrder(-1), PropertyRange(0, 1)]
-    public float bgmVolume
+    private static float BgmVolume;
+    public static float bgmVolume
     {
         get
         {
@@ -42,14 +40,14 @@ public class SoundManager : DontDestroySingleton<SoundManager>
         {
             BgmVolume = value;
             if (instance != null)
-                bgmSource.volume = BgmVolume;
+                instance.bgmSource.volume = BgmVolume;
         }
     }
 
-    public void PlaySE(AudioClip pAudioClipe)
+    public static void PlaySE(AudioClip pAudioClipe)
     {
         AudioSource audioSource = null;
-        foreach(AudioSource audio in seList)
+        foreach(AudioSource audio in instance.seList)
         {
             if (audio.isPlaying)
                 continue;
@@ -58,30 +56,36 @@ public class SoundManager : DontDestroySingleton<SoundManager>
 
         if(audioSource == null)
         {
-            audioSource = Instantiate(seSource);
-            audioSource.transform.parent = transform;
-            seList.Add(audioSource);
+            audioSource = Instantiate(instance.seSource);
+            audioSource.transform.parent = instance.transform;
+            instance.seList.Add(audioSource);
         }
 
         if (audioSource)
         {
             audioSource.clip = pAudioClipe;
             audioSource.Play();
-        }
-        
+        }     
     }
 
-    public void PlayBGM(AudioClip pAudioClipe)
+    public static void PlayBGM(AudioClip pAudioClipe)
     {
-        if (bgmSource)
-        {
-            bgmSource.clip = pAudioClipe;
-            bgmSource.Play();
-        }
+        AudioSource audioSource = instance.bgmSource;
+        if (audioSource == null)
+            return;
+
+        audioSource.clip = pAudioClipe;
+        audioSource.Play();
     }
 
-    public void MuteBGM(bool pState)
+    public static void StopBGM()
     {
-        bgmSource.mute = pState;
+        instance.bgmSource.Stop();
+    }
+
+
+    public static void MuteBGM(bool pState)
+    {
+        instance.bgmSource.mute = pState;
     }
 }

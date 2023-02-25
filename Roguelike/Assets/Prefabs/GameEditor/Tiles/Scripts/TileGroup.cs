@@ -24,17 +24,43 @@ public class TileGroup : SerializedMonoBehaviour
     [Title("RequireData")]
     [SerializeField]
     private List<EditorTileObj> tileObjs = new List<EditorTileObj>();
+    [SerializeField]
+    private EditorTileObj tilePrefabs;
+    public RoomEditor roomEditor;
+    public CustomMapEditor customMapEditor;
+    private uint w;
+    private uint h;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : Update
     ////////////////////////////////////////////////////////////////////////////////
     private void Update()
     {
-        EditorTileObj[,] tiles = new EditorTileObj[RoomData.roomSize, RoomData.roomSize];
+        UpdateTileGroup();
+    }
 
-        TileType GetTileType(int x,int y)
+    public void UpdateTileGroup()
+    {
+        if (roomEditor != null)
         {
-            if (x < 0 || y < 0 || x >= RoomData.roomSize || y >= RoomData.roomSize)
+            w = RoomData.roomSize;
+            h = RoomData.roomSize;
+        }
+        else if (customMapEditor != null)
+        {
+            w = customMapEditor.width;
+            h = customMapEditor.height;
+        }
+        else
+        {
+            return;
+        }
+
+        EditorTileObj[,] tiles = new EditorTileObj[w, h];
+
+        TileType GetTileType(int x, int y)
+        {
+            if (x < 0 || y < 0 || x >= w || y >= h)
                 return TileType.Wall;
             if (tiles[x, y] == null)
                 return TileType.Wall;
@@ -42,33 +68,38 @@ public class TileGroup : SerializedMonoBehaviour
         }
 
         int idx = 0;
-        for(int x = 0; x < RoomData.roomSize; x++)
+        for (int x = 0; x < w; x++)
         {
-            for (int y = 0; y < RoomData.roomSize; y++)
+            for (int y = 0; y < h; y++)
             {
                 if (tileObjs.Count <= idx)
-                    continue;
+                {
+                    EditorTileObj newTile = Instantiate(tilePrefabs);
+                    tileObjs.Add(newTile);
+                }
                 EditorTileObj eTileObj = tileObjs[idx];
                 if (eTileObj == null)
                     continue;
                 eTileObj.gameObject.SetActive(true);
                 eTileObj.transform.position
                     = new Vector3(
-                        startPos.x + x * tileWidth, 
+                        startPos.x + x * tileWidth,
                         startPos.y + y * tileHeight, 0);
+                eTileObj.transform.parent = transform;
+                eTileObj.transform.localScale = new Vector3(1, 1, 1);
                 tiles[x, y] = eTileObj;
                 idx++;
             }
         }
 
-        for (int x = 0; x < RoomData.roomSize; x++)
+        for (int x = 0; x < w; x++)
         {
-            for (int y = 0; y < RoomData.roomSize; y++)
+            for (int y = 0; y < h; y++)
             {
                 List<Vector2Int> aroundPos = Calculator.GetAround8Pos(x, y);
 
                 TileType[,] tileTypes = new TileType[3, 3];
-                foreach(Vector2Int pos in aroundPos)
+                foreach (Vector2Int pos in aroundPos)
                 {
                     tileTypes[pos.x - x + 1, pos.y - y + 1] = GetTileType(pos.x, pos.y);
                 }
@@ -91,12 +122,27 @@ public class TileGroup : SerializedMonoBehaviour
 
     public List<TileType> GetTiles()
     {
+        if (roomEditor != null)
+        {
+            w = RoomData.roomSize;
+            h = RoomData.roomSize;
+        }
+        else if (customMapEditor != null)
+        {
+            w = customMapEditor.width;
+            h = customMapEditor.height;
+        }
+        else
+        {
+            return null;
+        }
+
         List<TileType> tiles = new List<TileType>();
 
         int idx = 0;
-        for (int x = 0; x < RoomData.roomSize; x++)
+        for (int x = 0; x < w; x++)
         {
-            for (int y = 0; y < RoomData.roomSize; y++)
+            for (int y = 0; y < h; y++)
             {
                 if (tileObjs.Count <= idx)
                     continue;
@@ -110,5 +156,17 @@ public class TileGroup : SerializedMonoBehaviour
         }
 
         return tiles;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 맵을 초기화한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    [Button("Clear", ButtonSizes.Large)]
+    public void ExportData()
+    {
+        foreach (EditorTileObj editorTileObj in tileObjs)
+        {
+            editorTileObj.tileType = TileType.Wall;
+        }
     }
 }

@@ -93,9 +93,9 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
         expBar.UpdateExp(maxExp, nowExp);
     }
 
-    public void ShowMapName(string pStr)
+    public void ShowMapName(string pStr,bool pPlayAni)
     {
-        mapName.ShowMapName(pStr);
+        mapName.ShowMapName(pStr, pPlayAni);
     }
 
     ////////////////////////////////////////////////////////////////////////////////

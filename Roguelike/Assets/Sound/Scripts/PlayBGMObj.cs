@@ -17,11 +17,6 @@ public class PlayBGMObj : MonoBehaviour
 
     public void PlayBGM()
     {
-        SoundManager soundManager = SoundManager.instance;
-        if (soundManager != null)
-        {
-            soundManager.PlayBGM(clip);
-        }
-        Destroy(this);
+        SoundManager.PlayBGM(clip);
     }
 }

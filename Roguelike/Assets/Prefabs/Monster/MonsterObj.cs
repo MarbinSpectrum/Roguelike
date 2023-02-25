@@ -61,6 +61,7 @@ public abstract class MonsterObj : MonoBehaviour
         sleep = true;
         alive = true;
         monster = pMonsterData.monsterType;
+        monsterSpr.enabled = true;
 
         hp = pMonsterData.hp;
         damage = pMonsterData.damage;

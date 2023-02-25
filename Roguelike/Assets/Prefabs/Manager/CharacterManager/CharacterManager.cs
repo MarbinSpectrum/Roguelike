@@ -162,6 +162,8 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
         ItemManager itemManager = ItemManager.instance;
         InventoryManager inventoryManager = InventoryManager.instance;
 
+        inventoryManager.ClearItemData();
+
         //무기 설정
         List<ItemObjData> weapons = playData.weaponItem;
         foreach (ItemObjData weaponObjData in weapons)
@@ -590,8 +592,8 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
         ItemObjData nowWeapon = inventoryManager.NowWeapon();
         List<ItemObjData> nowAccessary = inventoryManager.NowAccessaryList();
 
-        criPer += ItemManager.GetTotalStatValue(nowWeapon, ItemStat.CriPer);
-        criPer += ItemManager.GetTotalStatValue(nowAccessary, ItemStat.CriPer);
+        criPer += ItemManager.GetTotalStatValue(nowWeapon, ItemStat.CriRate);
+        criPer += ItemManager.GetTotalStatValue(nowAccessary, ItemStat.CriRate);
         criPer = Mathf.Min(criPer, 100);
         return criPer;
     }

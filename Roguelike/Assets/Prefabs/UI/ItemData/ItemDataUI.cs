@@ -81,65 +81,6 @@ public class ItemDataUI : MonoBehaviour
     }
 
     ////////////////////////////////////////////////////////////////////////////////
-    /// : pItemObjData기반으로 아이템 능력치정보를 반환
-    ////////////////////////////////////////////////////////////////////////////////
-    public string ItemStatDataStr(ItemObjData pItemObjData)
-    {
-        string str = "";
-        List<ItemStatData> itemStatDatas = pItemObjData.itemStats;
-        foreach(ItemStatData itemStatData in itemStatDatas)
-        {
-            ItemStat itemStat = itemStatData.itemStat;
-            int statValue = itemStatData.dataValue;
-            switch (itemStat)
-            {
-                case ItemStat.Pow:
-                    str += string.Format("{0} +{1}", LanguageManager.GetText("ATK"), statValue);
-                    break;
-                case ItemStat.Balance:
-                    str += string.Format("{0} +{1}", LanguageManager.GetText("BALANCE"), statValue);
-                    break;
-                case ItemStat.CriPer:
-                    str += string.Format("{0} +{1}%", LanguageManager.GetText("CRI_RATE"), statValue);
-                    break;
-                case ItemStat.CriDmg:
-                    str += string.Format("{0} +{1}%", LanguageManager.GetText("CRI_DMG"), statValue);
-                    break;
-                case ItemStat.Hp:
-                    str += string.Format("{0} +{1}", LanguageManager.GetText("HP"), statValue);
-                    break;
-                case ItemStat.AddExp:
-                    str += string.Format("{0} +{1}%", LanguageManager.GetText("ADD_EXP"), statValue);
-                    break;
-                case ItemStat.AddGold:
-                    str += string.Format("{0} +{1}%", LanguageManager.GetText("ADD_GOLD"), statValue);
-                    break;
-            }
-            str += "\n";
-        }
-        return str;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    /// : pItemObjData기반으로 아이템 설명을
-    ////////////////////////////////////////////////////////////////////////////////
-    public string ItemExplainDataStr(ItemObjData pItemObjData)
-    {
-        List<ItemStatData> itemStatDatas = pItemObjData.itemStats;
-            Item item = pItemObjData.itemData.item;
-        switch (item)
-        {
-            case Item.Wood_Ring:
-                string str = LanguageManager.GetText(pItemObjData.itemData.explainKey);
-                int shield = ItemManager.GetTotalStatValue(pItemObjData, ItemStat.Shield);
-                str = string.Format(str, shield);
-                return str;
-            default:
-            return LanguageManager.GetText(pItemObjData.itemData.explainKey);
-        }
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
     /// : pItemObjData기반으로 아이템정보표시
     ////////////////////////////////////////////////////////////////////////////////
     public void UpdateItemData(ItemObjData pItemObjData, int pIdx)
@@ -158,7 +99,7 @@ public class ItemDataUI : MonoBehaviour
         //현재 무기 정보를 가져온다.
         ItemObjData nowWeapon = inventoryManager.NowWeapon();
         Item nowWeaponItem = nowWeapon.itemData.item;
-        bool cantTakeOffWeapon = ItemManager.CantTakeOff(nowWeaponItem);  
+        bool cantTakeOffWeapon = ItemManager.CantTakeOff(nowWeapon);  
 
         if (itemType == ItemType.Etc)
         {
@@ -198,7 +139,7 @@ public class ItemDataUI : MonoBehaviour
                     //악세사리 장비는 벗은 상태여도 되기 때문
                     equipBtn.SetActive(false);
 
-                    bool cantTakeOff = ItemManager.CantTakeOff(nowItem.itemData.item);
+                    bool cantTakeOff = ItemManager.CantTakeOff(nowItem);
                     if (cantTakeOff)
                     {
                         //벗을수 없는 장비다.
@@ -279,9 +220,9 @@ public class ItemDataUI : MonoBehaviour
             statBox.SetActive(true);
         }
 
-        explainText.text = ItemExplainDataStr(pItemObjData);
+        explainText.text = ItemManager.ItemExplainDataStr(pItemObjData);
 
-        string statStr = ItemStatDataStr(pItemObjData);
+        string statStr = ItemManager.ItemStatDataStr(pItemObjData);
         statText.text = statStr;
 
         equipText.text = LanguageManager.GetText("EQUIP");

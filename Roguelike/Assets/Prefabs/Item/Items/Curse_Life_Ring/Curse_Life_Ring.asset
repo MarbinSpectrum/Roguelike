@@ -20,6 +20,10 @@ MonoBehaviour:
   itemStatDatas:
   - itemStat: 400
     valueMinMax: {x: 5, y: 5}
+    dataValue: 0
+  - itemStat: 10
+    valueMinMax: {x: 1, y: 1}
+    dataValue: 0
   frontSprite: {fileID: 0}
   sideSprite: {fileID: 0}
   range: 0

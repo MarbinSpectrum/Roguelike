@@ -83,14 +83,33 @@ public class JarManager : FieldObjectSingleton<JarManager>
     ////////////////////////////////////////////////////////////////////////////////
     public void RemoveAll_JarObj()
     {
+        foreach (KeyValuePair<int, Queue<Jar>> jarQ in jarQueue)
+        {
+            Queue<Jar> tempQueue = new Queue<Jar>();
+            while (jarQ.Value.Count > 0)
+            {
+                Jar jarObj = jarQ.Value.Dequeue();
+                jarObj.gameObject.SetActive(false);
+                jarObj.Init();
+                tempQueue.Enqueue(jarObj);
+            }
+            while (tempQueue.Count > 0)
+            {
+                Jar jarObj = tempQueue.Dequeue();
+                jarQ.Value.Enqueue(jarObj);
+            }
+        }
+
         foreach (Vector2Int jPos in jarPos)
         {
             Jar jarObj = GetJarObj(jPos);
             if (jarObj == null)
                 continue;
             jarObj.gameObject.SetActive(false);
-            RemoveJarObj(jPos);
+            jarQueue[jarObj.jarIdx].Enqueue(jarObj);
         }
+        jarPos.Clear();
+        jarObjs.Clear();
     }
 
     public IEnumerator runCreateJarObj()
