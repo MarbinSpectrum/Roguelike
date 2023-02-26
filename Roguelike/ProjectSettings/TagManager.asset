@@ -44,7 +44,7 @@ TagManager:
   - name: Tile
     uniqueID: 1547528103
     locked: 0
-  - name: Obj
+  - name: Obj1
     uniqueID: 3778507483
     locked: 0
   - name: Bullet
@@ -58,6 +58,9 @@ TagManager:
     locked: 0
   - name: Effect
     uniqueID: 617078821
+    locked: 0
+  - name: Obj2
+    uniqueID: 622426497
     locked: 0
   - name: UI
     uniqueID: 4256578995

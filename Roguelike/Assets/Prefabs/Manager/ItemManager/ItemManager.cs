@@ -307,6 +307,7 @@ public class ItemManager : DontDestroySingleton<ItemManager>
             case Item.Wood_Ring:
                 return ItemType.Accessary;
             case Item.Coin:
+            case Item.ScrapMetal:
             default:
                 return ItemType.Etc;
         }

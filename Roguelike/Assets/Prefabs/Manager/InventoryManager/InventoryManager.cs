@@ -25,6 +25,24 @@ public class InventoryManager : DontDestroySingleton<InventoryManager>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+    /// : pItem에 해당하는 아이템의 갯수를 반환한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public int GetItemCnt(Item pItem)
+    {
+        int cnt = 0;
+        ItemType itemType = ItemManager.GetItemType(pItem);
+        List<ItemObjData> itemObjDatas = GetItemList(itemType);
+        foreach (ItemObjData itemObjData in itemObjDatas)
+        {
+            if(itemObjData.item == pItem)
+            {
+                cnt += itemObjData.count;
+            }
+        }
+        return cnt;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     /// : 아이템을 인벤토리에 추가한다.
     ////////////////////////////////////////////////////////////////////////////////
     public bool AddItem(ItemObjData pItemObjData)
@@ -160,20 +178,36 @@ public class InventoryManager : DontDestroySingleton<InventoryManager>
     ////////////////////////////////////////////////////////////////////////////////
     public void RemoveItem(ItemType pItemType, int pIdx)
     {
-        List<ItemObjData> itemObjDatas = null;
-        switch (pItemType)
-        {
-            case ItemType.Weapon:
-                itemObjDatas = weaponItems;
-                break;
-            case ItemType.Accessary:
-                itemObjDatas = accessaryItems;
-                break;
-            case ItemType.Etc:
-                itemObjDatas = etcItems;
-                break;
-        }
+        List<ItemObjData> itemObjDatas = GetItemList(pItemType);
         itemObjDatas.RemoveAt(pIdx);
+    }
+    public void RemoveItem(Item pItem,int pCnt)
+    {
+        List<int> deleteList = new List<int>();
+        ItemType itemType = ItemManager.GetItemType(pItem);
+        List<ItemObjData> itemObjDatas = GetItemList(itemType);
+        for(int idx = 0; idx < itemObjDatas.Count; idx++)
+        {
+            if (itemObjDatas[idx].item == pItem)
+            {
+                if(pCnt >= itemObjDatas[idx].count)
+                {
+                    pCnt -= itemObjDatas[idx].count;
+                    itemObjDatas[idx].count = 0;
+                    deleteList.Add(idx);
+                }
+                else
+                {
+                    itemObjDatas[idx].count -= pCnt;
+                    pCnt = 0;
+                }
+            }
+        }
+        foreach(int idx in deleteList)
+        {
+            RemoveItem(itemType, idx);
+        }
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////

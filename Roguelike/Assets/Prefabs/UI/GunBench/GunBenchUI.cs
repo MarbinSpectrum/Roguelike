@@ -40,6 +40,8 @@ public class GunBenchUI : SerializedMonoBehaviour
     private List<ItemSlot> itemSlot;
     [SerializeField]
     private List<GameObject> selectSlot;
+    [SerializeField]
+    private TextMeshProUGUI metalCntText;
 
     private int selectWeapon = 0;
 
@@ -49,12 +51,16 @@ public class GunBenchUI : SerializedMonoBehaviour
     [Button("Act UI", ButtonSizes.Large)]
     public void ActUI()
     {
-        isRun = !isRun;
+        TotalUI totalUI = TotalUI.instance;
+        IsRun = !isRun;
         ActUI(isRun);
     }
     public void ActUI(bool pState)
     {
         isRun = pState;
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.ActKeyPad(!IsRun);
+
         uiObj.SetActive(pState);
         if(pState)
         {
@@ -96,15 +102,18 @@ public class GunBenchUI : SerializedMonoBehaviour
         statList.UpdateUI(weaponList[selectWeapon].itemStats);
 
         UpdateUpgradeSlot(weaponList[selectWeapon]);
+        uint metalCnt = (uint)InventoryManager.instance.GetItemCnt(Item.ScrapMetal);
+        metalCntText.text = metalCnt.ToString();
     }
 
     private void UpdateUpgradeSlot(ItemObjData pItemObjData)
     {
+        uint metalCnt = (uint)InventoryManager.instance.GetItemCnt(Item.ScrapMetal);
         int idx = 0;
         int canUpgradePow = ItemManager.GetTotalStatValue(pItemObjData, ItemStat.CanUpgradePow);
         if(canUpgradePow > 0)
         {
-            gunUpgradeSlots[idx].UpdateUI((uint)(50 * canUpgradePow), 0, 
+            gunUpgradeSlots[idx].UpdateUI((uint)(50 * canUpgradePow), metalCnt, 
                 LanguageManager.GetText("UPGRADE_POW_EXPLAIN"));
             gunUpgradeSlots[idx].gameObject.SetActive(true);
             idx++;
@@ -115,7 +124,7 @@ public class GunBenchUI : SerializedMonoBehaviour
         int canUpgradeBalance = ItemManager.GetTotalStatValue(pItemObjData, ItemStat.CanUpgradeBalance);
         if (canUpgradeBalance > 0)
         {
-            gunUpgradeSlots[idx].UpdateUI((uint)(50 * canUpgradeBalance), 0,
+            gunUpgradeSlots[idx].UpdateUI((uint)(50 * canUpgradeBalance), metalCnt,
                 LanguageManager.GetText("UPGRADE_BALANCE_EXPLAIN"));
             gunUpgradeSlots[idx].gameObject.SetActive(true);
             idx++;
@@ -126,7 +135,7 @@ public class GunBenchUI : SerializedMonoBehaviour
         int canUpgradeCriDmg = ItemManager.GetTotalStatValue(pItemObjData, ItemStat.CanUpgradeCriDmg);
         if (canUpgradeCriDmg > 0)
         {
-            gunUpgradeSlots[idx].UpdateUI((uint)(50 * canUpgradeCriDmg), 0,
+            gunUpgradeSlots[idx].UpdateUI((uint)(50 * canUpgradeCriDmg), metalCnt,
                 LanguageManager.GetText("UPGRADE_CRI_DMG_EXPLAIN"));
             gunUpgradeSlots[idx].gameObject.SetActive(true);
             idx++;
@@ -137,7 +146,7 @@ public class GunBenchUI : SerializedMonoBehaviour
         int canUpgradeCriRate = ItemManager.GetTotalStatValue(pItemObjData, ItemStat.CanUpgradeCriRate);
         if (canUpgradeCriRate > 0)
         {
-            gunUpgradeSlots[idx].UpdateUI((uint)(50 * canUpgradeCriRate), 0,
+            gunUpgradeSlots[idx].UpdateUI((uint)(50 * canUpgradeCriRate), metalCnt,
                 LanguageManager.GetText("UPGRADE_CRI_RATE_EXPLAIN"));
             gunUpgradeSlots[idx].gameObject.SetActive(true);
             idx++;

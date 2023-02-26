@@ -34,6 +34,8 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     private ItemDataUI itemDataUI;
     [SerializeField]
     private SelectStatUI selectStatUI;
+    [SerializeField]
+    private GunBenchUI gunBenchUI;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 맵 생성중인지를 표시해줍니다.
@@ -50,8 +52,6 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     {
         hpBar.UpdateHp(pMaxHp, pNowHp);
     }
-
-
     public void UpdateHp()
     {
         CharacterManager characterManager = CharacterManager.instance;
@@ -68,7 +68,6 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     {
         shieldBar.UpdateShield(pNowShield);
     }
-
     public void UpdateShield()
     {
         CharacterManager characterManager = CharacterManager.instance;
@@ -178,6 +177,14 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+    /// : 총기 작업대 UI 실행
+    ////////////////////////////////////////////////////////////////////////////////
+    public void ActGunBench(bool pState)
+    {
+        gunBenchUI.ActUI(pState);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     /// : pItemObjData(아이템정보)를 토대로 아이템 정보를 표시한다.
     ////////////////////////////////////////////////////////////////////////////////
     public void ShowItemData(ItemObjData pItemObjData,int pIdx)
@@ -206,7 +213,11 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if (itemDataUI.isRun)
+            if(gunBenchUI.isRun)
+            {
+                gunBenchUI.ActUI();
+            }
+            else if (itemDataUI.isRun)
             {
                 itemDataUI.ActItemData();
             }

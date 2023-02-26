@@ -45,7 +45,9 @@ public abstract class CreateMap : SerializedMonoBehaviour
     [HideInInspector]
     public List<Vector2Int> startPosList = new List<Vector2Int>();
     [HideInInspector]
-    public Vector2Int gameEndPos;
+    public List<Vector2Int> gameEndPos;
+    [HideInInspector]
+    public List<Vector2Int> gunBenchPos;
     [HideInInspector]
     public List<MapMonster> monsterList = new List<MapMonster>();
 
@@ -94,8 +96,8 @@ public abstract class CreateMap : SerializedMonoBehaviour
                 break;
             case Obj.EndPos:
                 {
-                    gameEndPos = new Vector2Int(pX, pY);
-                    EtcObjManager.CreateExitStairs(gameEndPos);
+                    gameEndPos.Add(new Vector2Int(pX, pY));
+                    EtcObjManager.CreateExitStairs(gameEndPos[0]);
                 }
                 break;
             case Obj.TorchLight:
@@ -124,7 +126,8 @@ public abstract class CreateMap : SerializedMonoBehaviour
                 break;
             case Obj.GunBench:
                 {
-                    EtcObjManager.CreateGunbench(new Vector2Int(pX, pY));
+                    gunBenchPos.Add(new Vector2Int(pX, pY));
+                    EtcObjManager.CreateGunbench(gunBenchPos[0]);
                 }
                 break;
             //몬스터 객체 등록

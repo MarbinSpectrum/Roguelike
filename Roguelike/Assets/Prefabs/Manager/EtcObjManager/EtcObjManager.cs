@@ -27,8 +27,8 @@ public class EtcObjManager : FieldObjectSingleton<EtcObjManager>
 
     public static void CreateGunbench(Vector2Int pPos)
     {
-        GameObject stairs = Instantiate(instance.gunBench);
-        stairs.transform.position =
+        GameObject gunBench = Instantiate(instance.gunBench);
+        gunBench.transform.position =
             new Vector3(pPos.x * CreateMap.tileSize, pPos.y * CreateMap.tileSize, 0);
     }
 }

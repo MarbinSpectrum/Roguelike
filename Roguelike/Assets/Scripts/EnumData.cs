@@ -73,6 +73,8 @@ public enum Item
     Null = 0,
 
     Coin = 100,
+    ScrapMetal = 105,  
+
 
     NormalGun = 200, //±‚∫ª ¿Â√—
     Glock17 = 300,

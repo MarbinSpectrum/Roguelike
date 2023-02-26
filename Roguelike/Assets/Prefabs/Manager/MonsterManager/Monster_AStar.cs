@@ -10,6 +10,8 @@ public class Monster_AStar
     ////////////////////////////////////////////////////////////////////////////////
     public static List<Vector2Int> AstartRoute(Vector2Int pFrom, Vector2Int pTo, int[,] pMoveCost)
     {
+        MapManager mapManager = MapManager.instance;
+
         //4방향
         int[,] offset = { { 0, 1 }, { 0, -1 }, { -1, 0 }, { 1, 0 } };
         int arrayW = pMoveCost.GetLength(0);
@@ -46,6 +48,12 @@ public class Monster_AStar
                 int ay = node.pos.y + offset[i, 1];
                 if (ax < 0 || ay < 0 || ax >= arrayW || ay >= arrayH)
                     continue;
+
+                if (mapManager.CanMoveGunBench(node.pos, new Vector2Int(ax, ay)) == false)
+                {
+                    //총기 작업대 때문에 이동불가
+                    continue;
+                }
 
                 if (isClose[ax, ay])
                     continue;

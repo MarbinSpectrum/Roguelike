@@ -117,6 +117,11 @@ public class CatGirl : SerializedMonoBehaviour
         {
             return false;
         }
+        if (mapManager.CanMoveGunBench(pos, new Vector2Int(pX, pY)) == false)
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -389,8 +394,16 @@ public class CatGirl : SerializedMonoBehaviour
 
         if(mapManager.GetEndPos() == pos)
         {
+            //탈출구 발견
+            //다음 씬으로 이동한다.
             yield return StageManager.LoadNextScene();
             yield break;
+        }
+        else if (mapManager.GetGunBenchPos() == pos)
+        {
+            //총기 작업대 발견
+            //총기 작업대 UI실행
+            totalUI.ActGunBench(true);
         }
 
         StartCoroutine(runCatEvent());
