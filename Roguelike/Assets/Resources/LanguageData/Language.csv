@@ -3,10 +3,14 @@ LOAD,로딩중,Loading
 PLAYER_DATA,플레이어 정보,Player Data
 USE,사용,Use
 EQUIP,장착,Equip
+EQUIP_NOW,장착중,
+ITEM_DISMANTLE,장비 분해,
 DROP,버리기,Drop
 TAKE_OFF,벗기,Take Off
 OK,확인,Ok
 CANCLE,취소,Cancle
+YES,네,Yes
+NO,아니요,Np
 HP,체력,Hp
 EXP,경험치,Exp
 POW,힘,Pow
@@ -62,6 +66,7 @@ UPGRADE_POW_EXPLAIN,무기의 파워를 올립니다.,
 UPGRADE_BALANCE_EXPLAIN,무기의 밸런스를 상승시킵니다.,
 UPGRADE_CRI_DMG_EXPLAIN,무기의 치명타 피해를 높입니다.,
 UPGRADE_CRI_RATE_EXPLAIN,무기의 치명타 확률을 높입니다.,
+GUN_BENCH_UI_TEXT_0,강화가 되어있는 장비입니다.\n분해하시겠습니까?,
 SHELTER,아지트,
 STAGE1-1,지하던전 1층,
 STAGE1-2,지하던전 2층,

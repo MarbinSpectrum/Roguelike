@@ -61,9 +61,9 @@ public class TileGroup : SerializedMonoBehaviour
         TileType GetTileType(int x, int y)
         {
             if (x < 0 || y < 0 || x >= w || y >= h)
-                return TileType.Wall;
+                return TileType.Null;
             if (tiles[x, y] == null)
-                return TileType.Wall;
+                return TileType.Null;
             return tiles[x, y].tileType;
         }
 
@@ -166,7 +166,7 @@ public class TileGroup : SerializedMonoBehaviour
     {
         foreach (EditorTileObj editorTileObj in tileObjs)
         {
-            editorTileObj.tileType = TileType.Wall;
+            editorTileObj.tileType = TileType.Null;
         }
     }
 }

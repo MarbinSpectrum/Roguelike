@@ -155,7 +155,7 @@ public class MapManager : FieldObjectSingleton<MapManager>
             return true;
         if (tiles[x, y] == null)
             return true;
-        if (tiles[x, y].tileType == TileType.Wall)
+        if (TileManager.IsFloor(tiles[x, y].tileType) == false)
             return true;
         return false;
     }
@@ -170,7 +170,7 @@ public class MapManager : FieldObjectSingleton<MapManager>
         if (tiles[x, y] == null)
             return false;
         if (tiles[x, y].isTile != Tile.Null_Tile && 
-            tiles[x, y].tileType == TileType.Wall)
+            TileManager.IsFloor(tiles[x, y].tileType) == false)
             return true;
         return false;
     }

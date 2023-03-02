@@ -199,7 +199,11 @@ public class ItemDataUI : MonoBehaviour
         {
             //무기 장비는 설명이 없다.
             explainBox.SetActive(false);
-
+            int upgradeCnt = ItemManager.GetTotalStatValue(pItemObjData, ItemStat.IsUpgrade);
+            if(upgradeCnt > 0)
+            {
+                nameText.text += "(+" + upgradeCnt + ")";
+            }
         }
         else
         {

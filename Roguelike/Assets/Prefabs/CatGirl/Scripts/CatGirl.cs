@@ -19,7 +19,7 @@ public class CatGirl : SerializedMonoBehaviour
     private Transform gunBase;
 
     [SerializeField]
-    private float moveSpeed = 0.5f;
+    private float moveDuration = 0.5f;
     [SerializeField]
     private Material baseMaterial;
     [SerializeField]
@@ -359,7 +359,7 @@ public class CatGirl : SerializedMonoBehaviour
             StartCoroutine(monsterManager.RunMonster());
             animator.SetTrigger("run");
             Vector3 to = transform.position + new Vector3(dic.x * CreateMap.tileSize, dic.y * CreateMap.tileSize, 0);
-            yield return Action2D.MoveTo(transform, to, moveSpeed);
+            yield return Action2D.MoveTo(transform, to, moveDuration);
             animator.SetTrigger("idle");
         }
         else if(frontShowDic != showDic)

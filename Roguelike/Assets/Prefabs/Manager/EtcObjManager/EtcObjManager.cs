@@ -8,27 +8,53 @@ public class EtcObjManager : FieldObjectSingleton<EtcObjManager>
     protected GameObject startStairsObj;
     [SerializeField]
     protected GameObject exitStairsObj;
+
+    [SerializeField]
+    protected GameObject stoneDoorObj;
+
     [SerializeField]
     protected GameObject gunBench;
+    [SerializeField]
+    protected GameObject shopObj;
 
-    public static void CreateStartStairs(Vector2Int pPos)
+    public static void CreateEtcObj(Vector2Int pPos, Obj pObj)
     {
-        GameObject stairs = Instantiate(instance.startStairsObj);
-        stairs.transform.position =
-            new Vector3(pPos.x * CreateMap.tileSize, pPos.y * CreateMap.tileSize, 0);
-    }
+        GameObject etcObj = null;
+        switch (pObj)
+        {
+            case Obj.StartPos:
+                {
+                    etcObj = Instantiate(instance.startStairsObj);
+                }
+                break;
+            case Obj.EndPos:
+                {
+                    etcObj = Instantiate(instance.exitStairsObj);
+                }
+                break;
 
-    public static void CreateExitStairs(Vector2Int pPos)
-    {
-        GameObject stairs = Instantiate(instance.exitStairsObj);
-        stairs.transform.position =
-            new Vector3(pPos.x * CreateMap.tileSize, pPos.y * CreateMap.tileSize, 0);
-    }
+            case Obj.StoneDoor:
+                {
+                    etcObj = Instantiate(instance.stoneDoorObj);
+                }
+                break;
 
-    public static void CreateGunbench(Vector2Int pPos)
-    {
-        GameObject gunBench = Instantiate(instance.gunBench);
-        gunBench.transform.position =
-            new Vector3(pPos.x * CreateMap.tileSize, pPos.y * CreateMap.tileSize, 0);
+            case Obj.GunBench:
+                {
+                    etcObj = Instantiate(instance.gunBench);
+                }
+                break;
+
+            case Obj.ShopObj:
+                {
+                    etcObj = Instantiate(instance.shopObj);
+                }
+                break;
+        }
+        if(etcObj != null)
+        {
+            Vector3 objPos = new Vector3(pPos.x * CreateMap.tileSize, pPos.y * CreateMap.tileSize, 0);
+            etcObj.transform.position = objPos;
+        }
     }
 }

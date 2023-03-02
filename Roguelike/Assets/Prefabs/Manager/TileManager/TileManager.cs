@@ -51,4 +51,17 @@ public class TileManager : SerializedMonoBehaviour
 
         return tileType;
     }
+
+    public static bool IsFloor(TileType tileType)
+    {
+        switch (tileType)
+        {
+            case TileType.Stone_Floor:
+            case TileType.Mat_Floor:
+            case TileType.Wood_Floor:
+            case TileType.Stone_Stair:
+                return true;
+        }
+        return false;
+    }
 }

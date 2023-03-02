@@ -72,7 +72,7 @@ public abstract class CreateMap : SerializedMonoBehaviour
             int aroundY = pos.y - pY + 1;
             if (pos.x < 0 || pos.y < 0
                 || pos.x >= mapW || pos.y >= mapH)
-                aroundTile[aroundX, aroundY] = TileType.Wall;
+                aroundTile[aroundX, aroundY] = TileType.Null;
             else
                 aroundTile[aroundX, aroundY] = pTileType[pos.x, pos.y];
         }
@@ -97,8 +97,11 @@ public abstract class CreateMap : SerializedMonoBehaviour
             case Obj.EndPos:
                 {
                     gameEndPos.Add(new Vector2Int(pX, pY));
-                    EtcObjManager.CreateExitStairs(gameEndPos[0]);
+                    EtcObjManager.CreateEtcObj(gameEndPos[0], pObj);
                 }
+                break;
+            case Obj.StoneDoor:
+                    EtcObjManager.CreateEtcObj(new Vector2Int(pX, pY), pObj);
                 break;
             case Obj.TorchLight:
                 {
@@ -127,7 +130,13 @@ public abstract class CreateMap : SerializedMonoBehaviour
             case Obj.GunBench:
                 {
                     gunBenchPos.Add(new Vector2Int(pX, pY));
-                    EtcObjManager.CreateGunbench(gunBenchPos[0]);
+                    EtcObjManager.CreateEtcObj(gunBenchPos[0], pObj);
+                }
+                break;
+            case Obj.ShopObj:
+                {
+                    //gunBenchPos.Add(new Vector2Int(pX, pY));
+                    EtcObjManager.CreateEtcObj(new Vector2Int(pX, pY), pObj);
                 }
                 break;
             //몬스터 객체 등록

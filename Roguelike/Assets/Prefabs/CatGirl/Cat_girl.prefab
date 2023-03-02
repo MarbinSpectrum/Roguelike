@@ -376,7 +376,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 1410027969481209132}
   gunSprite: {fileID: 4163773032762391968}
   gunBase: {fileID: 6103674804894800051}
-  moveSpeed: 0.2
+  moveDuration: 0.2
   baseMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   hitMaterial: {fileID: 2100000, guid: 39f124793c6cf054ba28faee0da4d835, type: 2}
   hurtSE: {fileID: 1790094004629568564}

@@ -4,32 +4,92 @@ public enum Tile
     Null_Tile = 0,
 
     Stone_Floor_0 = 1,
-    Stone_Floor_1 = 2,
-    Stone_Floor_2 = 3,
-    Stone_Floor_3 = 4,
+    Stone_Floor_1,
+    Stone_Floor_2,
+    Stone_Floor_3,
+
+    Stone_Stair_0 = 30,
+
 
     Stone_Wall_0 = 101,
-    Stone_Wall_1 = 102,
-    Stone_Wall_2 = 103,
-    Stone_Wall_3 = 104,
-    Stone_Wall_4 = 105,
-    Stone_Wall_5 = 106,
-    Stone_Wall_6 = 107,
-    Stone_Wall_7 = 108,
-    Stone_Wall_8 = 109,
-    Stone_Wall_9 = 110,
-    Stone_Wall_10 = 111,
-    Stone_Wall_11 = 112,
-    Stone_Wall_12 = 113,
-    Stone_Wall_13 = 114,
-    Stone_Wall_14 = 115,
+    Stone_Wall_1,
+    Stone_Wall_2,
+    Stone_Wall_3,
+    Stone_Wall_4,
+    Stone_Wall_5,
+    Stone_Wall_6,
+    Stone_Wall_7,
+    Stone_Wall_8,
+    Stone_Wall_9,
+    Stone_Wall_10,
+    Stone_Wall_11,
+    Stone_Wall_12,
+    Stone_Wall_13,
+    Stone_Wall_14,
+
+
+    Mat_Floor_0 = 201,
+    Mat_Floor_1,
+    Mat_Floor_2,
+    Mat_Floor_3,
+    Mat_Floor_4,
+    Mat_Floor_5,
+    Mat_Floor_6,
+    Mat_Floor_7,
+    Mat_Floor_8,
+    Mat_Floor_9,
+    Mat_Floor_10,
+    Mat_Floor_11,
+    Mat_Floor_12,
+    Mat_Floor_13,
+    Mat_Floor_14,
+    Mat_Floor_15,
+    Mat_Floor_16,
+    Mat_Floor_17,
+    Mat_Floor_18,
+    Mat_Floor_19,
+    Mat_Floor_20,
+    Mat_Floor_21,
+    Mat_Floor_22,
+    Mat_Floor_23,
+    Mat_Floor_24,
+    Mat_Floor_25,
+    Mat_Floor_26,
+    Mat_Floor_27,
+    Mat_Floor_28,
+
+
+    Wood_Floor_0 = 401,
+
+    Wood_Wall_0 = 501,
+    Wood_Wall_1,
+    Wood_Wall_2,
+    Wood_Wall_3,
+    Wood_Wall_4,
+    Wood_Wall_5,
+    Wood_Wall_6,
+    Wood_Wall_7,
+    Wood_Wall_8,
+    Wood_Wall_9,
+    Wood_Wall_10,
+    Wood_Wall_11,
+    Wood_Wall_12,
+    Wood_Wall_13,
+    Wood_Wall_14,
 }
 
 public enum TileType
 {
-    Floor = 1,
+    Null = 0,
 
-    Wall = 101,
+    Stone_Floor = 1,
+    Wood_Floor = 2,
+    Mat_Floor = 3,
+
+    Stone_Stair = 51,
+
+    Stone_Wall = 101,
+    Wood_Wall = 102,
 }
 
 public enum RoomType1
@@ -55,6 +115,8 @@ public enum Obj
     StartPos = 100,
     EndPos = 120,
 
+    StoneDoor = 205,
+
     TorchLight = 500,
 
     Jar = 600,
@@ -62,6 +124,10 @@ public enum Obj
     Chest_Normal = 615,
 
     GunBench = 700,
+
+    ShopObj = 750,
+
+
 
     Slime = 1000,
 
@@ -123,7 +189,7 @@ public enum ItemStat
     CanUpgradeCriRate   = 5200,         //크리티컬 확률(%) 업그레이드 가능
     CanUpgradeCriDmg    = 5250,         //크리티컬 데미지(%) 업그레이드 가능
 
-
+    IsUpgrade           = 6000,         //해당 장비의 강화된 횟수
 
 
 

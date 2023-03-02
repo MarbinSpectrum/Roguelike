@@ -47,19 +47,13 @@ public class TileObj : SerializedMonoBehaviour
             {
                 IsRun = value;
                 TileType tileType = tileManager.GetType(IsTile);
-                switch (tileType)
+                if(TileManager.IsFloor(tileType))
                 {
-                    //타일 종류에 따라서 효과를 처리해줘야한다.
-                    case TileType.Floor:
-                        {
-                            shadowCaster2D.enabled = false;
-                            break;
-                        }
-                    case TileType.Wall:
-                        {
-                            shadowCaster2D.enabled = IsRun;
-                            break;
-                        }
+                    shadowCaster2D.enabled = false;
+                }
+                else
+                {
+                    shadowCaster2D.enabled = IsRun;
                 }
             }
         }

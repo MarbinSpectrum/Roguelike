@@ -10,6 +10,8 @@ using MyLib;
 ////////////////////////////////////////////////////////////////////////////////
 public class GameManager : FieldObjectSingleton<GameManager>
 {
+    public bool createStartStairs;
+
     ////////////////////////////////////////////////////////////////////////////////
     /// : Start
     ////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +45,11 @@ public class GameManager : FieldObjectSingleton<GameManager>
         Vector2Int createPos = mapManager.GetRandomStartPos();
         characterManager.CreateCatGirl(createPos.x, createPos.y); //캐릭터 생성
 
-        EtcObjManager.CreateStartStairs(createPos);
+        if(createStartStairs)
+        {
+            //시작위치에 계단을 생성
+            EtcObjManager.CreateEtcObj(createPos, Obj.StartPos);
+        }
 
         BulletManager bulletManager = BulletManager.instance;
         yield return bulletManager.runCreateObj(); //총알 객체 생성
@@ -108,7 +114,7 @@ public class GameManager : FieldObjectSingleton<GameManager>
         {
             //아무 정보도 없으니 
             //기본 데이터를 생성
-            playData = new PlayData();
+            playData = new PlayData(true);
         }
 
         return playData;

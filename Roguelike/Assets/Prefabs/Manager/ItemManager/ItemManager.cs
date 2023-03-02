@@ -175,7 +175,47 @@ public class ItemManager : DontDestroySingleton<ItemManager>
                 //이름이나 값이 없으면 출력하지 않는다.
                 continue;
             }
-            str += string.Format("{0} +{1}", nameText, valueText);
+            string statText = string.Format("{0} +{1}", nameText, valueText);
+
+            bool isUpgrade = false;
+            switch(itemStat)
+            {
+                case ItemStat.Pow:
+                    {
+                        int upgradeCnt = GetTotalStatValue(pItemObjData, ItemStat.CanUpgradePow);
+                        if (upgradeCnt > 1)
+                            isUpgrade = true;
+                    }
+                    break;
+                case ItemStat.Balance:
+                    {
+                        int upgradeCnt = GetTotalStatValue(pItemObjData, ItemStat.CanUpgradeBalance);
+                        if (upgradeCnt > 1)
+                            isUpgrade = true;
+                    }
+                    break;
+                case ItemStat.CriDmg:
+                    {
+                        int upgradeCnt = GetTotalStatValue(pItemObjData, ItemStat.CanUpgradeCriDmg);
+                        if (upgradeCnt > 1)
+                            isUpgrade = true;
+                    }
+                    break;
+                case ItemStat.CriRate:
+                    {
+                        int upgradeCnt = GetTotalStatValue(pItemObjData, ItemStat.CanUpgradeCriRate);
+                        if (upgradeCnt > 1)
+                            isUpgrade = true;
+                    }
+                    break;
+            }
+
+            if(isUpgrade)
+            {
+                statText = "<color=#9999ff>" + statText + "</color>";
+            }
+
+            str += statText;
             str += "\n";
         }
         return str;
@@ -389,6 +429,20 @@ public class ItemManager : DontDestroySingleton<ItemManager>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+    /// : 강화된 아이템인지 확인하는 함수
+    ////////////////////////////////////////////////////////////////////////////////
+    public static bool IsUpgradeItem(ItemObjData pItemObjData)
+    {
+        int value = GetTotalStatValue(pItemObjData, ItemStat.IsUpgrade);
+        if (value > 0)
+        {
+            //강화횟수가 1이상이다. 강화된장비다.
+            return true;
+        }
+        return false;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     /// : 아이템에서 특정스텟값의 총합을 반환하는 함수
     ////////////////////////////////////////////////////////////////////////////////
     public static int GetTotalStatValue(List<ItemObjData> pItemList,ItemStat pItemStat)
@@ -451,5 +505,14 @@ public class ItemManager : DontDestroySingleton<ItemManager>
         ItemStatData itemStatData = new ItemStatData(pItemStat, pValue, pValue);
         int dValue = itemStatData.dataValue;
         pItemObjData.itemStats.Add(itemStatData);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 아이템에서 특정스텟값을 추가하는 함수
+    ////////////////////////////////////////////////////////////////////////////////
+    public static void AddTotalStatValue(ItemObjData pItemObjData, ItemStat pItemStat, int pValue)
+    {
+        int StatValue = GetTotalStatValue(pItemObjData, pItemStat);
+        SetTotalStatValue(pItemObjData, pItemStat, StatValue + pValue);
     }
 }

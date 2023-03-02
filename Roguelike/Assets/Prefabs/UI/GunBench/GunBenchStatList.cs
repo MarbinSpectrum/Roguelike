@@ -42,14 +42,17 @@ public class GunBenchStatList : MonoBehaviour
                 newObj.transform.localScale = new Vector3(1, 1, 1);
                 gunStats.Add(newObj);
             }
-            statObj = gunStats[i];
-            statObj.gameObject.SetActive(true);
 
             //해당 정보를 스탯객체에 전달해서
             //스텟을 표시하도록한다.
             string statName = ItemManager.ItemStatNameStr(itemStat);
             string statValueStr = ItemManager.ItemStatValueStr(itemStat, statValue);
-            statObj.UpdateSlot(statName, statValueStr);
+            if(statName.Length > 0)
+            {
+                statObj = gunStats[i];
+                statObj.gameObject.SetActive(true);
+                statObj.UpdateSlot(statName, statValueStr);
+            }
         }
 
     }

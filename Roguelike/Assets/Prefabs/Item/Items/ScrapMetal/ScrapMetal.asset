@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: 105
   itemObj: {fileID: 174653822360929171, guid: ee7801ac6b6113146a145c2b230ce1db, type: 3}
-  itemSprite_UI: {fileID: 21300000, guid: 08a741a7214aec54cb07cf6c458d46c6, type: 3}
+  itemSprite_UI: {fileID: 21300000, guid: 2d1efbd0694b1764a8a60d2701a40bc1, type: 3}
   stockItem: 1
   valueMinMax: {x: 25, y: 25}
   itemStatDatas:
   - itemStat: 800
     valueMinMax: {x: 2, y: 2}
-    dataValue: 0
+    dataValue: 2
   frontSprite: {fileID: -4815767593418093350, guid: 9d89a86c1ab94714dbea499f777ab298, type: 3}
   sideSprite: {fileID: 6441202284629174422, guid: 9d89a86c1ab94714dbea499f777ab298, type: 3}
   range: 2

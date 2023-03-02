@@ -34,6 +34,8 @@ public class PlayData
 
     public PlayData(InventoryManager pInv, CharacterManager pCha)
     {
+        MapManager mapManager = MapManager.instance;
+
         if (pInv == null || pCha == null)
         {
             return;
@@ -49,25 +51,15 @@ public class PlayData
         baseCriDamage = pCha.baseCriDamage;
 
         List<ItemObjData> etcitemList = pInv.GetItemList(ItemType.Etc);
-        foreach (ItemObjData itemObjData in etcitemList)
-        {
-            etcItem.Add(new ItemObjData(itemObjData));
-        }
+        etcItem = etcitemList;
         List<ItemObjData> weaponitemList = pInv.GetItemList(ItemType.Weapon);
-        foreach (ItemObjData itemObjData in weaponitemList)
-        {
-            weaponItem.Add(new ItemObjData(itemObjData));
-        }
+        weaponItem = weaponitemList;
         List<ItemObjData> accessaritemList = pInv.GetItemList(ItemType.Accessary);
-        foreach (ItemObjData itemObjData in accessaritemList)
-        {
-            accessaryItem.Add(new ItemObjData(itemObjData));
-        }
-
-        stageName = "STAGE1-1";
+        accessaryItem = accessaritemList;
+        stageName = mapManager.mapNameKey;
     }
 
-    public PlayData()
+    public PlayData(bool pDefault)
     {
         InventoryManager inventoryManager = InventoryManager.instance;
         CharacterManager characterManager = CharacterManager.instance;

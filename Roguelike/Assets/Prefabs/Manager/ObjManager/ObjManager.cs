@@ -17,11 +17,17 @@ public class ObjManager : DontDestroySingleton<ObjManager>
     {
         if (objDatas == null)
         {
-            objDatas = new Dictionary<Obj, ObjData>();
-            foreach (ObjData objData in objDataList)
-            {
-                objDatas[objData.obj] = objData;
-            }
+            InitData();
+        }
+    }
+
+    [Button("InitData")]
+    private void InitData()
+    {
+        objDatas = new Dictionary<Obj, ObjData>();
+        foreach (ObjData objData in objDataList)
+        {
+            objDatas[objData.obj] = objData;
         }
     }
 
