@@ -20,19 +20,19 @@ MonoBehaviour:
   itemStatDatas:
   - itemStat: 100
     valueMinMax: {x: 1, y: 1}
-    dataValue: 0
+    dataValue: 1
   - itemStat: 5100
     valueMinMax: {x: 1, y: 1}
-    dataValue: 0
+    dataValue: 1
   - itemStat: 5150
     valueMinMax: {x: 1, y: 1}
-    dataValue: 0
+    dataValue: 1
   - itemStat: 5250
     valueMinMax: {x: 1, y: 1}
-    dataValue: 0
+    dataValue: 1
   frontSprite: {fileID: 4245052342988409972, guid: b79d2839f32b83649ae72ce0804f45c5, type: 3}
   sideSprite: {fileID: -6007857137893288414, guid: b79d2839f32b83649ae72ce0804f45c5, type: 3}
-  range: 3
+  range: 4
   reloadDelay: 0
   nameKey: NORMALGUN_NAME
   explainKey: NORMALGUN_EXPLAIN

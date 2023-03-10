@@ -56,14 +56,15 @@ public class TorchManager : FieldObjectSingleton<TorchManager>
         torch.transform.position = new Vector3(pPos.x * CreateMap.tileSize, pPos.y * CreateMap.tileSize, 0);
 
         MapManager mapManager = MapManager.instance;
-        if (mapManager.IsWall(pPos.x, pPos.y + 1) == false)
+
+        if (mapManager.IsWall(pPos.x, pPos.y - 1) == false)
+            torch.ActUpTorch(); 
+        else if (mapManager.IsWall(pPos.x, pPos.y + 1) == false)
             torch.ActDownTorch();
         else if (mapManager.IsWall(pPos.x - 1, pPos.y) == false)
             torch.ActLeftTorch();
         else if (mapManager.IsWall(pPos.x + 1, pPos.y) == false)
             torch.ActRightTorch();
-        else
-            torch.ActUpTorch();
     }
 
     ////////////////////////////////////////////////////////////////////////////////

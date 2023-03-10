@@ -46,12 +46,90 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 2208703988740019828, guid: 5124f6e9efb54f04b82b80ae1cf5d433, type: 3}
+    - {fileID: 4385501425044414559, guid: 5124f6e9efb54f04b82b80ae1cf5d433, type: 3}
+    - {fileID: 3029603797402824116, guid: 5124f6e9efb54f04b82b80ae1cf5d433, type: 3}
+    - {fileID: -3300396339194205850, guid: 5124f6e9efb54f04b82b80ae1cf5d433, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: itemBulletSprite
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[Item, Assembly-CSharp],[UnityEngine.Sprite,
+        UnityEngine.CoreModule]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[Item, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 200
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 400
+    - Name: $v
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 300
+    - Name: $v
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 500
+    - Name: $v
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   bulletPrefab: {fileID: 4457162050254765264, guid: 294a3710bea751042802df4354599f07, type: 3}
-  shotStartPrefab: {fileID: 1582867784175449292, guid: bdda23608a00c9c46951c4990e18c78e, type: 3}
-  shotEndPrefab: {fileID: 1582867784175449292, guid: 78f1fce989d50394fabce588760f7cde, type: 3}
+  shotStartPrefab: {fileID: 3254821824024774947, guid: bdda23608a00c9c46951c4990e18c78e, type: 3}
+  shotEndPrefab: {fileID: 5155736110536964903, guid: 78f1fce989d50394fabce588760f7cde, type: 3}

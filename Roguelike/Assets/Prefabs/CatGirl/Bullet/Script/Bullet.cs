@@ -8,10 +8,14 @@ using MyLib;
 public class Bullet : MonoBehaviour
 {
     [SerializeField]
-    private GameObject bulletBody;
+    private SpriteRenderer bulletBody;
+    [System.NonSerialized]
+    public Item isBulletType;
 
-    public void FireBullt(Vector3 pTo, float pAngle, float pDuration)
+
+    public void FireBullt(Item pIsBulletType, Vector3 pTo, float pAngle, float pDuration)
     {
+        isBulletType = pIsBulletType;
         StartCoroutine(RunFireBullet(pTo, pAngle, pDuration));
     }
 
@@ -19,20 +23,24 @@ public class Bullet : MonoBehaviour
     {
         BulletManager bulletManager = BulletManager.instance;
 
-        GameObject shotStartEffect = bulletManager.GetShotStart();
+        bulletBody.sprite = bulletManager.GetBulletSprite(isBulletType);
+
+        BulletEffect shotStartEffect = bulletManager.GetShotStart();
         shotStartEffect.transform.position = transform.position;
         shotStartEffect.gameObject.SetActive(true);
+        shotStartEffect.RunBulletAni(isBulletType);
         shotStartEffect.transform.eulerAngles = new Vector3(0, 0, pAngle);
 
-        bulletBody.SetActive(true);
+        bulletBody.enabled = true;
 
         yield return Action2D.MoveTo(transform, pTo, pDuration);
 
-        bulletBody.SetActive(false);
+        bulletBody.enabled = false;
 
-        GameObject shotEndEffect = bulletManager.GetShotEnd();
+        BulletEffect shotEndEffect = bulletManager.GetShotEnd();
         shotEndEffect.transform.position = transform.position;
         shotEndEffect.gameObject.SetActive(true);
+        shotEndEffect.RunBulletAni(isBulletType);
         shotEndEffect.transform.eulerAngles = new Vector3(0, 0, pAngle);
 
         bulletManager.DieBullet(this, shotStartEffect, shotEndEffect);

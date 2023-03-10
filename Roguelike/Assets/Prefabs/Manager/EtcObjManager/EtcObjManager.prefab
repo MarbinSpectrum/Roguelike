@@ -56,4 +56,4 @@ MonoBehaviour:
   exitStairsObj: {fileID: 6692329642022829622, guid: dc010a80b6117044abb77735cf5376a3, type: 3}
   stoneDoorObj: {fileID: 2754856245781954940, guid: ba55631b6d77b8f45865c09e15efa4e5, type: 3}
   gunBench: {fileID: 2140171516580295050, guid: e8109db5d1f7f354d86180a286cdf977, type: 3}
-  shopTable: {fileID: 246761286821188117, guid: 0b990531050bc3c4aac439d6b5f3f578, type: 3}
+  shopObj: {fileID: 246761286821188117, guid: 0b990531050bc3c4aac439d6b5f3f578, type: 3}

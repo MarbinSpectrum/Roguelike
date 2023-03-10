@@ -20,16 +20,16 @@ MonoBehaviour:
   itemStatDatas:
   - itemStat: 100
     valueMinMax: {x: 10, y: 15}
-    dataValue: 0
+    dataValue: 13
   - itemStat: 5100
     valueMinMax: {x: 1, y: 1}
-    dataValue: 0
+    dataValue: 1
   - itemStat: 5150
     valueMinMax: {x: 1, y: 1}
-    dataValue: 0
+    dataValue: 1
   frontSprite: {fileID: -4815767593418093350, guid: 9d89a86c1ab94714dbea499f777ab298, type: 3}
   sideSprite: {fileID: 6441202284629174422, guid: 9d89a86c1ab94714dbea499f777ab298, type: 3}
-  range: 2
+  range: 4
   reloadDelay: 0
   nameKey: M4_NAME
   explainKey: NORMALGUN_EXPLAIN

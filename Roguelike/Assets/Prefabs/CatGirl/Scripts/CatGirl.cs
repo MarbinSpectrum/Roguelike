@@ -258,11 +258,15 @@ public class CatGirl : SerializedMonoBehaviour
                 reloadStack = 0; //장전스택을 0으로한다.
 
                 float gameDis = Vector2.Distance(pos, targetMonster.pos);
-                float duration = 0.1f * gameDis;
+                float duration = 0.075f * gameDis;
 
                 Vector3 to = new Vector3(
-                      dic.x == 0 ? bPos.x : targetMonster.pos.x * CreateMap.tileSize
-                    , dic.y == 0 ? bPos.y : targetMonster.pos.y * CreateMap.tileSize, 0);
+                      dic.x == 0 ? bPos.x : targetMonster.pos.x * CreateMap.tileSize, 
+                      dic.y == 0 ? bPos.y : targetMonster.pos.y * CreateMap.tileSize, 0);
+
+                to += new Vector3(
+                    dic.x == 0 ? Random.Range(-1, 1) : 0, 
+                    dic.y == 0 ? Random.Range(-1, 1) : 0) * 0.2f;
 
                 bulletManager.FireBullet(bPos, to, duration);
 

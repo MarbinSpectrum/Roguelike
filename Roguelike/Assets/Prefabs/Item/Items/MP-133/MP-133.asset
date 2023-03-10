@@ -35,7 +35,7 @@ MonoBehaviour:
     dataValue: 0
   frontSprite: {fileID: -1649256847451581581, guid: 75024e77b3696a349b15d085551cdd80, type: 3}
   sideSprite: {fileID: 6805231783222318497, guid: 75024e77b3696a349b15d085551cdd80, type: 3}
-  range: 2
+  range: 3
   reloadDelay: 5
   nameKey: MP133_NAME
   explainKey: NORMALGUN_EXPLAIN
