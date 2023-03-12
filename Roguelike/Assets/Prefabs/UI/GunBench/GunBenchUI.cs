@@ -64,7 +64,6 @@ public class GunBenchUI : SerializedMonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     public void ActUI()
     {
-        TotalUI totalUI = TotalUI.instance;
         IsRun = !isRun;
         ActUI(isRun);
     }

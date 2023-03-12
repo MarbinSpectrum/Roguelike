@@ -121,6 +121,10 @@ public class CatGirl : SerializedMonoBehaviour
         {
             return false;
         }
+        if(mapManager.CanMoveShop(pos, new Vector2Int(pX, pY)) == false)
+        {
+            return false;
+        }
 
         return true;
     }
@@ -408,6 +412,12 @@ public class CatGirl : SerializedMonoBehaviour
             //총기 작업대 발견
             //총기 작업대 UI실행
             totalUI.ActGunBench(true);
+        }
+        else if (mapManager.GetShopPos() == pos)
+        {
+            //상점 발견
+            //상점 UI실행
+            totalUI.ActShop(true);
         }
 
         StartCoroutine(runCatEvent());

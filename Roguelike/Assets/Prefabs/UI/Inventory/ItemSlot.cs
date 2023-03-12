@@ -74,12 +74,14 @@ public class ItemSlot : SerializedMonoBehaviour
             if (SlotSprite == null)
             {
                 slotImg.color = new Color(1, 1, 1, 0);
-                clickItem.SetActive(false);
+                if(clickItem)
+                    clickItem.SetActive(false);
             }
             else
             {
                 slotImg.color = new Color(1, 1, 1, 1);
-                clickItem.SetActive(true);
+                if (clickItem)
+                    clickItem.SetActive(true);
             }
             slotImg.sprite = SlotSprite;
         }

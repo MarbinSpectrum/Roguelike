@@ -36,6 +36,8 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     private SelectStatUI selectStatUI;
     [SerializeField]
     private GunBenchUI gunBenchUI;
+    [SerializeField]
+    private ShopUI shopUI;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 맵 생성중인지를 표시해줍니다.
@@ -185,6 +187,15 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+    /// : 상점 UI 실행
+    ////////////////////////////////////////////////////////////////////////////////
+    public void ActShop(bool pState)
+    {
+        shopUI.ActUI(pState);
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////
     /// : pItemObjData(아이템정보)를 토대로 아이템 정보를 표시한다.
     ////////////////////////////////////////////////////////////////////////////////
     public void ShowItemData(ItemObjData pItemObjData,int pIdx)
@@ -213,7 +224,11 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if(gunBenchUI.isRun)
+            if (shopUI.isRun)
+            {
+                shopUI.ActUI();
+            }
+            else if (gunBenchUI.isRun)
             {
                 gunBenchUI.ActUI();
             }

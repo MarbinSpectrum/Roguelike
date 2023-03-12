@@ -55,6 +55,12 @@ public class Monster_AStar
                     continue;
                 }
 
+                if (mapManager.CanMoveShop(node.pos, new Vector2Int(ax, ay)) == false)
+                {
+                    //상점 때문에 이동불가
+                    continue;
+                }
+
                 if (isClose[ax, ay])
                     continue;
 

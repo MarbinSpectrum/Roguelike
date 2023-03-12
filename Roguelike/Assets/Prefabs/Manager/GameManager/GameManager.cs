@@ -69,6 +69,9 @@ public class GameManager : FieldObjectSingleton<GameManager>
         ChestManager chestManager = ChestManager.instance;
         yield return chestManager.runCreateChestObj(); //상자 생성
 
+        ShopManager shopManager = ShopManager.instance;
+        shopManager.CreateShopItem();   //상점 아이템 생성
+
         ScreenDark.AnimationState(false); //화면이 서서히 나타남
         totalUI.ShowCreateMap(false);
         yield return new WaitForSeconds(0.5f);

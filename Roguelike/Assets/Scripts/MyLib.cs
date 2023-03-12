@@ -228,10 +228,10 @@ namespace MyLib
 
             for (int i = n; i > n - m; i--)
             {
-                int rand = UnityEngine.Random.Range(0, i);
+                int rand = UnityEngine.Random.Range(0, i) + 1;
 
                 int left = 1;
-                int right = i;
+                int right = n;
                 while (left < right)
                 {
                     int mid = (left + right) / 2;

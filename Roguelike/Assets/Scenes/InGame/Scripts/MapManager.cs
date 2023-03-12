@@ -107,6 +107,16 @@ public class MapManager : FieldObjectSingleton<MapManager>
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+    /// : 상점의 좌표를 출력한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public Vector2Int GetShopPos()
+    {
+        if (createMap.shopPos.Count == 0)
+            return new Vector2Int(-1, -1);
+        return createMap.shopPos[0];
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     /// : 총기 작업대에서 이동 제한
     ////////////////////////////////////////////////////////////////////////////////
     public bool CanMoveGunBench(Vector2Int pFrom,Vector2Int pTo)
@@ -136,6 +146,41 @@ public class MapManager : FieldObjectSingleton<MapManager>
         return true;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 총기 작업대에서 이동 제한
+    ////////////////////////////////////////////////////////////////////////////////
+    public bool CanMoveShop(Vector2Int pFrom, Vector2Int pTo)
+    {
+        Vector2Int gPos = GetShopPos();
+        if (gPos != new Vector2Int(-1, -1))
+        {
+            if (pFrom == new Vector2Int(gPos.x, gPos.y + 2) &&
+                pTo == new Vector2Int(gPos.x - 1, gPos.y + 2))
+                return false;
+            if (pFrom == new Vector2Int(gPos.x, gPos.y + 1) &&
+                pTo == new Vector2Int(gPos.x - 1, gPos.y + 1))
+                return false;
+            if (pFrom == gPos &&
+                pTo == new Vector2Int(gPos.x - 1, gPos.y))
+                return false;
+            if (pFrom == new Vector2Int(gPos.x, gPos.y - 1) &&
+                pTo == new Vector2Int(gPos.x - 1, gPos.y - 1))
+                return false;
+            if (pFrom == new Vector2Int(gPos.x- 1, gPos.y + 2) &&
+                pTo == new Vector2Int(gPos.x, gPos.y + 2))
+                return false;
+            if (pFrom == new Vector2Int(gPos.x - 1, gPos.y + 1) &&
+                pTo == new Vector2Int(gPos.x, gPos.y + 1))
+                return false;
+            if (pFrom == new Vector2Int(gPos.x - 1, gPos.y) &&
+                pTo == gPos)
+                return false;
+            if (pFrom == new Vector2Int(gPos.x - 1, gPos.y - 1) &&
+                pTo == new Vector2Int(gPos.x, gPos.y - 1))
+                return false;
+        }
+        return true;
+    }
 
     //////////////////////////////////////////////////////////////////
     /// : 맵에 있는 몬스터를 가져온다.
