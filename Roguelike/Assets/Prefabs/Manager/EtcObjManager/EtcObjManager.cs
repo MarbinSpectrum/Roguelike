@@ -17,6 +17,9 @@ public class EtcObjManager : FieldObjectSingleton<EtcObjManager>
     [SerializeField]
     protected GameObject shopObj;
 
+    [SerializeField]
+    protected GameObject drumLight;
+
     public static void CreateEtcObj(Vector2Int pPos, Obj pObj)
     {
         GameObject etcObj = null;
@@ -48,6 +51,12 @@ public class EtcObjManager : FieldObjectSingleton<EtcObjManager>
             case Obj.ShopObj:
                 {
                     etcObj = Instantiate(instance.shopObj);
+                }
+                break;
+
+            case Obj.DrumLight:
+                {
+                    etcObj = Instantiate(instance.drumLight);
                 }
                 break;
         }

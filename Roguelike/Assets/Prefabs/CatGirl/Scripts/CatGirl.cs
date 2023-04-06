@@ -125,6 +125,10 @@ public class CatGirl : SerializedMonoBehaviour
         {
             return false;
         }
+        if (mapManager.CantMovePos(new Vector2Int(pX, pY)))
+        {
+            return false;
+        }
 
         return true;
     }
@@ -372,6 +376,8 @@ public class CatGirl : SerializedMonoBehaviour
         }
         else if(frontShowDic != showDic)
         {
+            spriteRenderer.flipX = spriteFiipX;
+            gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
             animator.SetTrigger("idle");
         }
 

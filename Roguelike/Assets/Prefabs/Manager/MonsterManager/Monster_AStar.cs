@@ -61,6 +61,12 @@ public class Monster_AStar
                     continue;
                 }
 
+                if (mapManager.CantMovePos(new Vector2Int(ax, ay)))
+                {
+                    //이동불가지역임 이동 불가
+                    continue;
+                }
+
                 if (isClose[ax, ay])
                     continue;
 

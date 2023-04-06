@@ -118,6 +118,7 @@ public class MonsterManager : DontDestroySingleton<MonsterManager>
 
         if (monsterObj == null)
             monsterObj = Instantiate(monsterObjs[pMonsterType]);
+
         monsterObj.gameObject.SetActive(true);
         MonsterData monsterData = monsterDatas[monsterObj.monster];
         monsterObj.Init(monsterData);

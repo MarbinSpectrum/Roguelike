@@ -32,6 +32,7 @@ public class MapManager : FieldObjectSingleton<MapManager>
     private int actSize;
 
     private TileObj[,] tiles;
+    private HashSet<Vector2Int> cantMovePos;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 타일맵을 생성한다.
@@ -41,6 +42,7 @@ public class MapManager : FieldObjectSingleton<MapManager>
         yield return createMap.runCreateGameMap();
 
         tiles = createMap.tileObjs;
+        cantMovePos = createMap.cantMovePos;
 
         ArrayW = tiles.GetLength(0);
         ArrayH = tiles.GetLength(1);
@@ -114,6 +116,16 @@ public class MapManager : FieldObjectSingleton<MapManager>
         if (createMap.shopPos.Count == 0)
             return new Vector2Int(-1, -1);
         return createMap.shopPos[0];
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 이동 불가능 지역인지 체크
+    ////////////////////////////////////////////////////////////////////////////////
+    public bool CantMovePos(Vector2Int pPos)
+    {
+        if(cantMovePos.Contains(pPos))
+            return true;
+        return false;
     }
 
     ////////////////////////////////////////////////////////////////////////////////

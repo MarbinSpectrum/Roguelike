@@ -50,9 +50,12 @@ public abstract class CreateMap : SerializedMonoBehaviour
     public List<Vector2Int> gunBenchPos;
     [HideInInspector]
     public List<Vector2Int> shopPos;
+
     [HideInInspector]
     public List<MapMonster> monsterList = new List<MapMonster>();
 
+    [HideInInspector]
+    public HashSet<Vector2Int> cantMovePos = new HashSet<Vector2Int>();
     [HideInInspector]
     public TileObj[,] tileObjs;
 
@@ -109,6 +112,12 @@ public abstract class CreateMap : SerializedMonoBehaviour
                 {
                     TorchManager torchManager = TorchManager.instance;
                     torchManager.AddTorchPos(new Vector2Int(pX, pY));
+                }
+                break;
+            case Obj.DrumLight:
+                {
+                    cantMovePos.Add(new Vector2Int(pX, pY));
+                    EtcObjManager.CreateEtcObj(new Vector2Int(pX, pY), pObj);
                 }
                 break;
             case Obj.Jar:

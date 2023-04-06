@@ -8,6 +8,7 @@ public class ItemData : ScriptableObject
     public Item item;
     public ItemObj itemObj;
     public Sprite itemSprite_UI;
+    public uint price;
 
     [ShowIf("@ItemManager.GetItemType(item) == ItemType.Etc")]
     public bool stockItem;
@@ -33,6 +34,7 @@ public class ItemData : ScriptableObject
     [ShowIf("@ItemManager.GetItemType(item) == ItemType.Weapon")]
     [BoxGroup("Box")]
     public uint reloadDelay;
+
 
     [Space(100)]
     public string nameKey;

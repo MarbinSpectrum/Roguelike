@@ -86,7 +86,7 @@ MonoBehaviour:
       Data: Stage1-1
     - Name: nextStage
       Entry: 3
-      Data: 10101
+      Data: 10200
     - Name: 
       Entry: 8
       Data: 
@@ -98,16 +98,16 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 3
-      Data: 10101
+      Data: 10000
     - Name: $v
       Entry: 7
       Data: StageData, Assembly-CSharp
     - Name: isSceneName
       Entry: 1
-      Data: ShelterMap1-1
+      Data: ShelterMap
     - Name: nextStage
       Entry: 3
-      Data: 10200
+      Data: 10100
     - Name: 
       Entry: 8
       Data: 
@@ -141,4 +141,4 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  firstStage: 10101
+  firstStage: 10000

@@ -118,6 +118,7 @@ public enum Obj
     StoneDoor = 205,
 
     TorchLight = 500,
+    DrumLight = 501,
 
     Jar = 600,
     Chest_Normal_Pos = 610,
@@ -201,10 +202,9 @@ public enum ItemStat
 
 public enum StageName
 {
-    Stage1_1 = 10100,
-    ShelterMap1_1 = 10101,
-    Stage1_2 = 10200,
-
+    ShelterMap  = 10000,
+    Stage1_1    = 10100,
+    Stage1_2    = 10200,
 }
 
 public enum ItemType
