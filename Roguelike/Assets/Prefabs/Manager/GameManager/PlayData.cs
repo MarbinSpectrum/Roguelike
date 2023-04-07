@@ -26,6 +26,9 @@ public class PlayData
     public float baseCriPer;
     public float baseCriDamage;
 
+    public int maxBullet;
+    public int nowBullet;
+
     public List<ItemObjData> etcItem = new List<ItemObjData>();
     public List<ItemObjData> weaponItem = new List<ItemObjData>();
     public List<ItemObjData> accessaryItem = new List<ItemObjData>();
@@ -49,6 +52,8 @@ public class PlayData
         baseBalance = pCha.baseBalance;
         baseCriPer = pCha.baseCriPer;
         baseCriDamage = pCha.baseCriDamage;
+        maxBullet = pCha.maxBullet;
+        nowBullet = pCha.nowBullet;
 
         List<ItemObjData> etcitemList = pInv.GetItemList(ItemType.Etc);
         etcItem = etcitemList;
@@ -80,6 +85,8 @@ public class PlayData
         baseBalance = characterManager.startBalance;
         baseCriPer = characterManager.startCriRate;
         baseCriDamage = characterManager.startCriDamage;
+        maxBullet = characterManager.startBullet;
+        nowBullet = characterManager.startBullet;
 
         //무기 장비 설정
         ItemObjData weaponObjData = itemManager.CreateItemObjData(characterManager.startWeapon);

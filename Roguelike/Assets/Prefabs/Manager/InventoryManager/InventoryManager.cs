@@ -11,6 +11,20 @@ public class InventoryManager : DontDestroySingleton<InventoryManager>
     private List<ItemObjData> weaponItems = new List<ItemObjData>();
     private List<ItemObjData> accessaryItems = new List<ItemObjData>();
     private List<ItemObjData> etcItems = new List<ItemObjData>();
+    private ItemObjData DefaultWeapon;
+    public ItemObjData defaultWeapon
+    {
+        get
+        {
+            if(DefaultWeapon == null)
+            {
+                ItemManager itemManager = ItemManager.instance;
+                ItemData itemData = itemManager.GetItemData(Item.NormalGun);
+                DefaultWeapon = itemData.createItemObjData();
+            }
+            return DefaultWeapon;
+        }
+    }
 
     [SerializeField]
     private SoundObj changeWeaponSE;
@@ -145,6 +159,12 @@ public class InventoryManager : DontDestroySingleton<InventoryManager>
     public ItemObjData NowWeapon()
     {
         ItemObjData nowWeapon = null;
+        CharacterManager characterManager = CharacterManager.instance;
+        if(characterManager.nowBullet == 0)
+        {
+            return defaultWeapon;
+        }
+
         foreach (ItemObjData itemObjData in weaponItems)
         {
             if (itemObjData.equip)

@@ -14,6 +14,7 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
     public int startBalance;
     public int startCriDamage;
     public int startCriRate;
+    public int startBullet;
 
     [Space(40)]
 
@@ -122,6 +123,28 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
     }
     #endregion
 
+    #region[public int maxBullet]
+    private int MaxBullet;
+    public int maxBullet
+    {
+        get
+        {
+            return MaxBullet;
+        }
+    }
+    #endregion
+
+    #region[public uint nowBullet]
+    private int NowBullet;
+    public int nowBullet
+    {
+        get
+        {
+            return NowBullet;
+        }
+    }
+    #endregion
+
     [HideInInspector]
     public bool canControl;
 
@@ -159,6 +182,9 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
         BaseCriDamage = playData.baseCriDamage;
         BaseCriPer = playData.baseCriPer;
 
+        MaxBullet = playData.maxBullet;
+        NowBullet = playData.nowBullet;
+
         ItemManager itemManager = ItemManager.instance;
         InventoryManager inventoryManager = InventoryManager.instance;
 
@@ -192,7 +218,7 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
         totalUI.UpdateHp();
         totalUI.UpdateShield();
         totalUI.UpdateExp();
-
+        totalUI.UpdatePlayerBullet();
 
         canControl = true;
     }
@@ -429,6 +455,30 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
         //다음 최대 경험치를 갱신해준다.
         MaxExp = maxExp + 5 * ((NowLevel / 10) + 1);
 
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 총알을 pValue만큼 소비한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void CostBullet(int pValue = 1)
+    {
+        NowBullet -= pValue;
+        if (NowBullet < 0)
+            NowBullet = 0;
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.UpdatePlayerBullet();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 총알을 pValue만큼 충전한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void GetBullet(int pValue = 1)
+    {
+        NowBullet += pValue;
+        if (NowBullet > MaxBullet)
+            NowBullet = MaxBullet;
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.UpdatePlayerBullet();
     }
 
     ////////////////////////////////////////////////////////////////////////////////

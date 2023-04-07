@@ -54,13 +54,14 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  startWeapon: 200
+  startWeapon: 300
   startAccessary: 0
   startHp: 3
   startPow: 5
   startBalance: 0
   startCriDamage: 25
   startCriRate: 5
+  startBullet: 40
   catGirl: {fileID: 1410027969481209121, guid: 5f0eaa1601ca279488992ea988ba579f, type: 3}
   canControl: 0
 --- !u!1 &1970226696092731733

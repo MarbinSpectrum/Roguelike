@@ -25,6 +25,8 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     [SerializeField]
     private MiniMapUI miniMap;
     [SerializeField]
+    private PlayerBulletUI playerBulletUI;
+    [SerializeField]
     private SetingUI setingUI;
     [SerializeField]
     private InventoryUI inventoryUI;
@@ -92,6 +94,15 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
         uint maxExp = characterManager.maxExp;
         uint nowExp = characterManager.nowExp;
         expBar.UpdateExp(maxExp, nowExp);
+    }
+
+    public void UpdatePlayerBullet()
+    {
+        CharacterManager characterManager = CharacterManager.instance;
+
+        int maxBullet = characterManager.maxBullet;
+        int nowBullet = characterManager.nowBullet;
+        playerBulletUI.UpdateUI(nowBullet, maxBullet);
     }
 
     public void ShowMapName(string pStr,bool pPlayAni)

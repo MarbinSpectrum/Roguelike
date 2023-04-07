@@ -185,10 +185,25 @@ public class CatGirl : SerializedMonoBehaviour
                 break;
         }
 
+        bool emptyBullet = false;
+        if(characterManager.nowBullet == 0)
+        {
+            //총알이 바닥났다. 디메리트 적용을 위해
+            //플래그를 적용한다.
+            emptyBullet = true;
+        }
+
         int frontShowDic = animator.GetInteger("showDic");
         animator.SetInteger("showDic", showDic);
 
         uint weaponRange = nowWeapon.itemData.range;
+        if(emptyBullet)
+        {
+            //총알이 바닥났다.
+            //공격사거리가 2로 적용된다.
+            weaponRange = 2;
+        }
+
 
         MonsterObj targetMonster = null;
         for (int i = 1; i <= weaponRange && targetMonster == null; i++)
@@ -245,6 +260,13 @@ public class CatGirl : SerializedMonoBehaviour
         //reloadStack은 플레이어가 다른 조작을 할때마다 쌓인다.
         //해당 방식으로 공격의 딜레이를 넣었다.
         uint reloadDelay = nowWeapon.itemData.reloadDelay;
+        if (emptyBullet)
+        {
+            //총알이 바닥났다.
+            //딜레이가 0으로 고정된다.
+            reloadDelay = 0;
+        }
+
         bool canFire = false;
         if (reloadDelay <= reloadStack)
         {
@@ -282,13 +304,30 @@ public class CatGirl : SerializedMonoBehaviour
                 gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
                 animator.SetTrigger("attack");
                 animator.SetBool("shotGun", nowShotGun);
-                if(nowShotGun)
-                    CameraVibrate.Vibrate(10, 0.1f, 0.15f);
+                if (emptyBullet)
+                {
+                    //총알이 바닥났다.
+                }
+                else
+                {
+                    if (nowShotGun)
+                        CameraVibrate.Vibrate(10, 0.1f, 0.15f);
+                    characterManager.CostBullet();
+                }
 
                 yield return new WaitForSeconds(duration);
 
                 int totalDamage = characterManager.GetTotalDamage();
                 bool critical = characterManager.CriticalProcess(ref totalDamage);
+
+                if (emptyBullet)
+                {
+                    //총알이 바닥났다.
+                    //공격력이 1
+                    //치명타는 없다.
+                    totalDamage = 1;
+                    critical = false;
+                }
 
                 targetMonster.Hit((uint)totalDamage, critical);
 
@@ -336,8 +375,20 @@ public class CatGirl : SerializedMonoBehaviour
                 gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
                 animator.SetTrigger("attack");
                 animator.SetBool("shotGun", nowShotGun);
-                if (nowShotGun)
-                    CameraVibrate.Vibrate(10, 0.1f, 0.15f);
+
+                if (emptyBullet)
+                {
+                    //총알이 바닥났다.
+                }
+                else
+                {
+                    if (nowShotGun)
+                    {
+                        CameraVibrate.Vibrate(10, 0.1f, 0.15f);
+                        //샷건 적용
+                    }
+                    characterManager.CostBullet();
+                }
 
                 yield return new WaitForSeconds(duration);
 
