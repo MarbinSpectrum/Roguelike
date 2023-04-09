@@ -16,6 +16,8 @@ public class CatGirl : SerializedMonoBehaviour
     [SerializeField]
     private SpriteRenderer gunSprite;
     [SerializeField]
+    private Transform effectBase;
+    [SerializeField]
     private Transform gunBase;
 
     [SerializeField]
@@ -185,28 +187,27 @@ public class CatGirl : SerializedMonoBehaviour
                 break;
         }
 
-        bool emptyBullet = false;
+        bool useKnife = false;
         if(characterManager.nowBullet == 0)
         {
-            //총알이 바닥났다. 디메리트 적용을 위해
+            //총알이 바닥났다. 단검플레이를 위해서
             //플래그를 적용한다.
-            emptyBullet = true;
+            useKnife = true;
         }
 
         int frontShowDic = animator.GetInteger("showDic");
         animator.SetInteger("showDic", showDic);
 
         uint weaponRange = nowWeapon.itemData.range;
-        if(emptyBullet)
+        if(useKnife)
         {
-            //총알이 바닥났다.
-            //공격사거리가 2로 적용된다.
-            weaponRange = 2;
+            //총알이 바닥났다. 단검으로 플레이한다.
+            //단검의 사거리는 1
+            weaponRange = 1;
         }
 
-
         MonsterObj targetMonster = null;
-        for (int i = 1; i <= weaponRange && targetMonster == null; i++)
+        for (int i = 1; i <= weaponRange; i++)
         {
             //이동 방향에 몬스터가 존재하는지 검사한다.
             //공격범위안에 몬스터가 있으면 해당 객체를 가져온다.
@@ -216,15 +217,16 @@ public class CatGirl : SerializedMonoBehaviour
                 //도중에 벽을 만났다. 탐색중지
                 break;
             }
-            if (targetMonster == null)
+            targetMonster = monsterManager.IsMonster(cPos.x, cPos.y);
+            if (targetMonster != null)
             {
                 //몬스터 발견
-                targetMonster = monsterManager.IsMonster(cPos.x, cPos.y);
+                break;
             }
         }
 
         Jar jarObj = null;
-        for (int i = 1; i <= weaponRange && jarObj == null; i++)
+        for (int i = 1; i <= weaponRange; i++)
         {
             //이동 방향에 항아리 객체가 존재하는지 검사한다.
             //공격범위안에 항아리가 있으면 해당 객체를 가져온다.
@@ -234,10 +236,16 @@ public class CatGirl : SerializedMonoBehaviour
                 //도중에 벽을 만났다. 탐색중지
                 break;
             }
-            if (jarObj == null)
+            jarObj = jarManager.GetJarObj(cPos);
+            if (jarObj != null)
             {
                 //항아리 발견
-                jarObj = jarManager.GetJarObj(cPos);
+                if(i == 1)
+                {
+                    //거리가 1밖에안되면 칼로 부순다.
+                    useKnife = true;
+                }
+                break;
             }
         }
 
@@ -252,6 +260,8 @@ public class CatGirl : SerializedMonoBehaviour
             }
         }
 
+        animator.SetBool("useKnife", useKnife);
+
         //현재무기가 샷건인지 여부 확인
         bool nowShotGun = ItemManager.IsShotGun(nowWeapon.itemData.item);
 
@@ -260,11 +270,11 @@ public class CatGirl : SerializedMonoBehaviour
         //reloadStack은 플레이어가 다른 조작을 할때마다 쌓인다.
         //해당 방식으로 공격의 딜레이를 넣었다.
         uint reloadDelay = nowWeapon.itemData.reloadDelay;
-        if (emptyBullet)
+        if (useKnife)
         {
-            //총알이 바닥났다.
-            //딜레이가 0으로 고정된다.
-            reloadDelay = 0;
+            //총알이 바닥났다. 단검으로 플레이한다.
+            //공격딜레이는 2
+            reloadDelay = 2;
         }
 
         bool canFire = false;
@@ -283,65 +293,81 @@ public class CatGirl : SerializedMonoBehaviour
         {
             if (canFire)
             {
-                //몬스터를 발견했고 발사가능한 상태
+                //몬스터를 발견했고 공격이 가능한 상태
 
-                reloadStack = 0; //장전스택을 0으로한다.
+                reloadStack = 0; //장전스택(공격스택)을 0으로한다.
 
-                float gameDis = Vector2.Distance(pos, targetMonster.pos);
-                float duration = 0.075f * gameDis;
-
-                Vector3 to = new Vector3(
-                      dic.x == 0 ? bPos.x : targetMonster.pos.x * CreateMap.tileSize, 
-                      dic.y == 0 ? bPos.y : targetMonster.pos.y * CreateMap.tileSize, 0);
-
-                to += new Vector3(
-                    dic.x == 0 ? Random.Range(-1, 1) : 0, 
-                    dic.y == 0 ? Random.Range(-1, 1) : 0) * 0.2f;
-
-                bulletManager.FireBullet(bPos, to, duration);
-
-                spriteRenderer.flipX = spriteFiipX;
-                gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
-                animator.SetTrigger("attack");
-                animator.SetBool("shotGun", nowShotGun);
-                if (emptyBullet)
+                if (useKnife)
                 {
-                    //총알이 바닥났다.
+                    //단검으로 공격
+                    spriteRenderer.flipX = spriteFiipX;
+                    effectBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
+                    animator.SetTrigger("attack");
+                    animator.SetBool("shotGun", nowShotGun);
+
+                    int totalDamage = 1;
+                    bool critical = false;
+
+                    yield return new WaitForSeconds(0.1f);
+
+                    targetMonster.Hit((uint)totalDamage, critical);
+
+                    yield return new WaitForSeconds(0.1f);
                 }
                 else
                 {
+                    float gameDis = Vector2.Distance(pos, targetMonster.pos);
+                    float duration = 0.075f * gameDis;
+
+                    Vector3 to = new Vector3(
+                          dic.x == 0 ? bPos.x : targetMonster.pos.x * CreateMap.tileSize,
+                          dic.y == 0 ? bPos.y : targetMonster.pos.y * CreateMap.tileSize, 0);
+
+                    to += new Vector3(
+                        dic.x == 0 ? Random.Range(-1, 1) : 0,
+                        dic.y == 0 ? Random.Range(-1, 1) : 0) * 0.2f;
+
+                    bulletManager.FireBullet(bPos, to, duration);
+
+                    spriteRenderer.flipX = spriteFiipX;
+                    gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
+                    animator.SetTrigger("attack");
+                    animator.SetBool("shotGun", nowShotGun);
+
                     if (nowShotGun)
                         CameraVibrate.Vibrate(10, 0.1f, 0.15f);
                     characterManager.CostBullet();
+
+                    yield return new WaitForSeconds(duration);
+
+                    int totalDamage = characterManager.GetTotalDamage();
+                    bool critical = characterManager.CriticalProcess(ref totalDamage);
+
+                    targetMonster.Hit((uint)totalDamage, critical);
+
+                    float remainTime = Mathf.Max(0, aniTime - duration);
+                    yield return new WaitForSeconds(remainTime);
                 }
-
-                yield return new WaitForSeconds(duration);
-
-                int totalDamage = characterManager.GetTotalDamage();
-                bool critical = characterManager.CriticalProcess(ref totalDamage);
-
-                if (emptyBullet)
-                {
-                    //총알이 바닥났다.
-                    //공격력이 1
-                    //치명타는 없다.
-                    totalDamage = 1;
-                    critical = false;
-                }
-
-                targetMonster.Hit((uint)totalDamage, critical);
-
-                float remainTime = Mathf.Max(0, aniTime - duration);
-                yield return new WaitForSeconds(remainTime);
             }
             else
             {
-                //공격 불가능이다.
-                //장전 애니메이션 실행
-                spriteRenderer.flipX = spriteFiipX;
-                gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
-                animator.SetTrigger("reload");
-                yield return new WaitForSeconds(aniTime);
+                if (useKnife)
+                {
+                    //공격 불가능이다.
+                    //단검상태이므로 대기
+                    spriteRenderer.flipX = spriteFiipX;
+                    animator.SetTrigger("idle");
+                    yield return new WaitForSeconds(aniTime);
+                }
+                else
+                {
+                    //공격 불가능이다.
+                    //장전 애니메이션 실행
+                    spriteRenderer.flipX = spriteFiipX;
+                    gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
+                    animator.SetTrigger("reload");
+                    yield return new WaitForSeconds(aniTime);
+                }
             }
 
             StartCoroutine(monsterManager.RunMonster());
@@ -361,52 +387,67 @@ public class CatGirl : SerializedMonoBehaviour
             if (canFire)
             {
                 reloadStack = 0;
-
-                float gameDis = Vector2.Distance(pos, jarObj.pos);
-                float duration = 0.1f * gameDis;
-
-                Vector3 to = new Vector3(
-                      dic.x == 0 ? bPos.x : jarObj.pos.x * CreateMap.tileSize
-                    , dic.y == 0 ? bPos.y : jarObj.pos.y * CreateMap.tileSize, 0);
-
-                bulletManager.FireBullet(bPos, to, duration);
-
-                spriteRenderer.flipX = spriteFiipX;
-                gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
-                animator.SetTrigger("attack");
-                animator.SetBool("shotGun", nowShotGun);
-
-                if (emptyBullet)
+                if (useKnife)
                 {
-                    //총알이 바닥났다.
+                    //단검으로 공격
+                    spriteRenderer.flipX = spriteFiipX;
+                    effectBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
+                    animator.SetTrigger("attack");
+                    animator.SetBool("shotGun", nowShotGun);
+
+                    yield return new WaitForSeconds(0.1f);
+
+                    jarObj.RemoveJarObj();
+
+                    yield return new WaitForSeconds(0.1f);
                 }
                 else
                 {
+                    float gameDis = Vector2.Distance(pos, jarObj.pos);
+                    float duration = 0.1f * gameDis;
+
+                    Vector3 to = new Vector3(
+                          dic.x == 0 ? bPos.x : jarObj.pos.x * CreateMap.tileSize
+                        , dic.y == 0 ? bPos.y : jarObj.pos.y * CreateMap.tileSize, 0);
+
+                    bulletManager.FireBullet(bPos, to, duration);
+
+                    spriteRenderer.flipX = spriteFiipX;
+                    gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
+                    animator.SetTrigger("attack");
+                    animator.SetBool("shotGun", nowShotGun);
+
                     if (nowShotGun)
-                    {
                         CameraVibrate.Vibrate(10, 0.1f, 0.15f);
-                        //샷건 적용
-                    }
                     characterManager.CostBullet();
+
+                    yield return new WaitForSeconds(duration);
+
+                    jarObj.RemoveJarObj();
+
+                    float remainTime = Mathf.Max(0, aniTime - duration);
+                    yield return new WaitForSeconds(remainTime);
                 }
-
-                yield return new WaitForSeconds(duration);
-
-                int totalDamage = characterManager.GetTotalDamage();
-
-                //damageEffect.DamageEffectRun(jarObj.pos, totalDamage, false);
-
-                jarObj.RemoveJarObj();
-
-                float remainTime = Mathf.Max(0, aniTime - duration);
-                yield return new WaitForSeconds(remainTime);
             }
             else
             {
-                spriteRenderer.flipX = spriteFiipX;
-                gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
-                animator.SetTrigger("reload");
-                yield return new WaitForSeconds(aniTime);
+                if (useKnife)
+                {
+                    //공격 불가능이다.
+                    //단검상태이므로 대기
+                    spriteRenderer.flipX = spriteFiipX;
+                    animator.SetTrigger("idle");
+                    yield return new WaitForSeconds(aniTime);
+                }
+                else
+                {
+                    //공격 불가능이다.
+                    //장전 애니메이션 실행
+                    spriteRenderer.flipX = spriteFiipX;
+                    gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
+                    animator.SetTrigger("reload");
+                    yield return new WaitForSeconds(aniTime);
+                }
             }
 
             StartCoroutine(monsterManager.RunMonster());
@@ -425,10 +466,12 @@ public class CatGirl : SerializedMonoBehaviour
             yield return Action2D.MoveTo(transform, to, moveDuration);
             animator.SetTrigger("idle");
         }
-        else if(frontShowDic != showDic)
+        else //if(frontShowDic != showDic)
         {
             spriteRenderer.flipX = spriteFiipX;
             gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
+            yield return monsterManager.RunMonster();
+            yield return new WaitForSeconds(aniTime);
             animator.SetTrigger("idle");
         }
 

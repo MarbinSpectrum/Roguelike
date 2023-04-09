@@ -140,13 +140,16 @@ public enum Item
     Null = 0,
 
     Coin = 100,
-    ScrapMetal = 105,  
+    ScrapMetal = 105,
+    Gun_Magazine = 110, //√—æÀ
 
 
     NormalGun = 200, //±‚∫ª ¿Â√—
     Glock17 = 300,
     M4 = 400,
     MP133 = 500,
+
+
 
     Coolness_Ring = 600,
     Curse_Coolness_Ring = 610,

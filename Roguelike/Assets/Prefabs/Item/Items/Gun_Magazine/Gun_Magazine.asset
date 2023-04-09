@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2731fdd0cf886cf4394818f5a370f3ea, type: 3}
+  m_Name: Gun_Magazine
+  m_EditorClassIdentifier: 
+  item: 110
+  itemObj: {fileID: 6119377905668723865, guid: 5b8bff97df8b8f446834349103c0a0a2, type: 3}
+  itemSprite_UI: {fileID: 21300000, guid: 40e94bf5aa729b342a513e695a86950d, type: 3}
+  price: 50
+  stockItem: 1
+  valueMinMax: {x: 8, y: 8}
+  itemStatDatas: []
+  frontSprite: {fileID: 0}
+  sideSprite: {fileID: 0}
+  range: 0
+  reloadDelay: 0
+  nameKey: GUN_MAGAZINE_NAME
+  explainKey: GUN_MAGAZINE_EXPLAIN

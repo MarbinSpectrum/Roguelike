@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// : 몬스터 오브젝트의 원형
@@ -11,6 +11,7 @@ public abstract class MonsterObj : MonoBehaviour
     //체력
     [HideInInspector]
     public uint hp;
+    private uint maxHp;
 
     //데미지
     [HideInInspector]
@@ -51,6 +52,8 @@ public abstract class MonsterObj : MonoBehaviour
     public SpriteRenderer monsterSpr;
     public Material baseMaterial;
     public Material hitMaterial;
+    public Image hpBarImg;
+    public Image hpBarBack;
     private IEnumerator hitCor;
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -64,6 +67,7 @@ public abstract class MonsterObj : MonoBehaviour
         monsterSpr.enabled = true;
 
         hp = pMonsterData.hp;
+        maxHp = hp;
         damage = pMonsterData.damage;
         range = pMonsterData.range;
         moveDelay = pMonsterData.moveDelay;
@@ -233,8 +237,15 @@ public abstract class MonsterObj : MonoBehaviour
             hp -= pDamage;
         }
 
-        if(hp == 0)
+        hpBarImg.enabled = true;
+        hpBarBack.enabled = true;
+        float barFillAmount = hp / (float)maxHp;
+        hpBarImg.fillAmount = barFillAmount;
+
+        if (hp == 0)
         {
+            hpBarImg.enabled = false;
+            hpBarBack.enabled = false;
             monsterManager.RemoveMonsterObj(this);
             alive = false;
             characterManager.GetExp(exp);

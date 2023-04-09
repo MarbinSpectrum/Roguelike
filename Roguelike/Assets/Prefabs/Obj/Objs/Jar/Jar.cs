@@ -29,7 +29,18 @@ public class Jar : MonoBehaviour
         jarManager.RemoveJarObj(pos);
 
         ItemManager itemManager = ItemManager.instance;
-        itemManager.CreateItem(pos.x, pos.y, Item.Coin);
+
+        int r = Random.RandomRange(0, 100);
+        if(r < 10)
+        {
+            //10퍼센트의 확률로 탄창 드랍
+            itemManager.CreateItem(pos.x, pos.y, Item.Gun_Magazine);
+        }
+        else
+        {
+            //대부분 동전드랍
+            itemManager.CreateItem(pos.x, pos.y, Item.Coin);
+        }
 
     }
 }
