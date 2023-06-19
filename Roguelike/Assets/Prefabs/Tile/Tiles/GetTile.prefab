@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7953438780204910674
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6695638907793582109}
+  - component: {fileID: 6552657154026959577}
+  m_Layer: 0
+  m_Name: GetTile
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6695638907793582109
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7953438780204910674}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6552657154026959577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7953438780204910674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3ab96cf3188a164690eb0b7d0502acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stoneBunble: {fileID: 2270957124665720264, guid: 4c9c29abb198ef34da9c9e60f24f70c0, type: 3}
+  stoneStairTile: {fileID: 887208245496219859, guid: 98a525366104b4f4db43be202b5452f8, type: 3}
+  woodBunble: {fileID: 8485007052824737315, guid: e3131bd45535e994dab43454b2d02237, type: 3}
+  matBunble: {fileID: 8499786468585535739, guid: 95116b405c04eb8428af953b7f091294, type: 3}
+  concreteBunble: {fileID: 2481921593022469640, guid: 3c915843a177e2847bb59dfec7f9b78b, type: 3}
+  concreteSand: {fileID: 3962761888861633181, guid: e31b9a0e02f2d6a49a4358204725cfee, type: 3}
+  nullTile: {fileID: 11400000, guid: 87a6c0ebae32bde41a3bbb494b4443bf, type: 2}

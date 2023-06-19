@@ -335,7 +335,7 @@ MonoBehaviour:
   tileWidth: 0.492
   tileHeight: 0.492
   startPos: {x: -3.57, y: -3.57}
-  getTile: {fileID: 9191058642015946776, guid: 1a9b089c96189b14993c32bcab38c2a9, type: 3}
+  getTile: {fileID: 6552657154026959577, guid: 1a9b089c96189b14993c32bcab38c2a9, type: 3}
   tileObjs:
   - {fileID: 7370789110855617037}
   - {fileID: 8176347389848216732}

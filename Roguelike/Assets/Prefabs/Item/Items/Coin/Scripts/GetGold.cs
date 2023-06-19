@@ -14,7 +14,8 @@ public class GetGold : MonoBehaviour
 
     public void AnimationEnd()
     {
-        GetGoldEffect getGoldEffect = GetGoldEffect.instance;
+        UIEffectManager uIEffectManager = UIEffectManager.instance;
+        GetGoldEffect getGoldEffect = uIEffectManager.getGoldEffect;
         getGoldEffect.Enqueue(this);
         gameObject.SetActive(false);
     }

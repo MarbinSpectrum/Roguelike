@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MyLib;
+using Sirenix.OdinInspector;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// : 맵을 관리하는 매니저입니다.
@@ -20,19 +21,30 @@ public class MapManager : FieldObjectSingleton<MapManager>
         get { return ArrayH; }
     }
 
-    public bool showName = true;
+
+    [Title("맵의 이름 키 값 / 씬 실행시 맵이름 보이는 여부")]
     public string mapNameKey;
+    public bool showName = true;
 
-    [SerializeField]
-    private CreateMap createMap;
-    [SerializeField]
-    private MiniMap miniMap;
+    [Title("actSize만큼의 크기의 주변블록만 활성화된다.")]
+    [SerializeField] private int actSize;
 
-    [SerializeField]
-    private int actSize;
-
+    [Space(30)]
+    [Title("-------------------------------------------------------------")]
+    [SerializeField] private CreateMap createMap;
+    [SerializeField] private MiniMap miniMap;
     private TileObj[,] tiles;
     private HashSet<Vector2Int> cantMovePos;
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : Start
+    ////////////////////////////////////////////////////////////////////////////////
+    private void Start()
+    {
+
+        gameMgr.StartGame();
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : 타일맵을 생성한다.
@@ -164,33 +176,48 @@ public class MapManager : FieldObjectSingleton<MapManager>
     public bool CanMoveShop(Vector2Int pFrom, Vector2Int pTo)
     {
         Vector2Int gPos = GetShopPos();
-        if (gPos != new Vector2Int(-1, -1))
+        //if (GameManager.gunBenchAct)
         {
-            if (pFrom == new Vector2Int(gPos.x, gPos.y + 2) &&
-                pTo == new Vector2Int(gPos.x - 1, gPos.y + 2))
-                return false;
-            if (pFrom == new Vector2Int(gPos.x, gPos.y + 1) &&
-                pTo == new Vector2Int(gPos.x - 1, gPos.y + 1))
-                return false;
-            if (pFrom == gPos &&
-                pTo == new Vector2Int(gPos.x - 1, gPos.y))
-                return false;
-            if (pFrom == new Vector2Int(gPos.x, gPos.y - 1) &&
-                pTo == new Vector2Int(gPos.x - 1, gPos.y - 1))
-                return false;
-            if (pFrom == new Vector2Int(gPos.x- 1, gPos.y + 2) &&
-                pTo == new Vector2Int(gPos.x, gPos.y + 2))
-                return false;
-            if (pFrom == new Vector2Int(gPos.x - 1, gPos.y + 1) &&
-                pTo == new Vector2Int(gPos.x, gPos.y + 1))
-                return false;
-            if (pFrom == new Vector2Int(gPos.x - 1, gPos.y) &&
-                pTo == gPos)
-                return false;
-            if (pFrom == new Vector2Int(gPos.x - 1, gPos.y - 1) &&
-                pTo == new Vector2Int(gPos.x, gPos.y - 1))
-                return false;
+            if (gPos != new Vector2Int(-1, -1))
+            {
+                if (pFrom == new Vector2Int(gPos.x, gPos.y + 2) &&
+                    pTo == new Vector2Int(gPos.x - 1, gPos.y + 2))
+                    return false;
+                if (pFrom == new Vector2Int(gPos.x, gPos.y + 1) &&
+                    pTo == new Vector2Int(gPos.x - 1, gPos.y + 1))
+                    return false;
+                if (pFrom == gPos &&
+                    pTo == new Vector2Int(gPos.x - 1, gPos.y))
+                    return false;
+                if (pFrom == new Vector2Int(gPos.x, gPos.y - 1) &&
+                    pTo == new Vector2Int(gPos.x - 1, gPos.y - 1))
+                    return false;
+                if (pFrom == new Vector2Int(gPos.x - 1, gPos.y + 2) &&
+                    pTo == new Vector2Int(gPos.x, gPos.y + 2))
+                    return false;
+                if (pFrom == new Vector2Int(gPos.x - 1, gPos.y + 1) &&
+                    pTo == new Vector2Int(gPos.x, gPos.y + 1))
+                    return false;
+                if (pFrom == new Vector2Int(gPos.x - 1, gPos.y) &&
+                    pTo == gPos)
+                    return false;
+                if (pFrom == new Vector2Int(gPos.x - 1, gPos.y - 1) &&
+                    pTo == new Vector2Int(gPos.x, gPos.y - 1))
+                    return false;
+            }
         }
+        //else
+        //{
+        //    if (gPos != new Vector2Int(-1, -1))
+        //    {
+        //        if (pTo == new Vector2Int(gPos.x - 1, gPos.y))
+        //            return false;
+        //        if (pTo == new Vector2Int(gPos.x, gPos.y))
+        //            return false;
+        //        if (pTo == new Vector2Int(gPos.x + 1, gPos.y))
+        //            return false;
+        //    }
+        //}
         return true;
     }
 

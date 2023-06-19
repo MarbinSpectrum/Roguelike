@@ -19,13 +19,11 @@ public class CoinItem : ItemObj
         float addGoldRate = (100 + GetAddGoldRate()) / 100f;
         itemObjData.count = (int)(itemObjData.count * addGoldRate);
 
-        InventoryManager inventoryManager = InventoryManager.instance;
-        if (inventoryManager.AddItem(itemObjData))
+        if (inventoryMgr.AddItem(itemObjData))
         {
-            ItemManager itemManager = ItemManager.instance;
-            itemManager.RemoveItem(pos.x, pos.y);
+            itemMgr.RemoveItem(pos.x, pos.y);
 
-            GetGoldEffect getGoldEffect = GetGoldEffect.instance;
+            GetGoldEffect getGoldEffect = uIEffectMgr.getGoldEffect;
             getGoldEffect.GetGoldEffectRun(itemObjData.count);
 
             spawnAni.SetActive(false);
@@ -36,9 +34,8 @@ public class CoinItem : ItemObj
     public int GetAddGoldRate()
     {
         int rate = 0;
-        InventoryManager inventoryManager = InventoryManager.instance;
-        List<ItemObjData> nowAccessary = inventoryManager.NowAccessaryList();
-        ItemObjData nowWeapon = inventoryManager.NowWeapon();
+        List<ItemObjData> nowAccessary = inventoryMgr.NowAccessaryList();
+        ItemObjData nowWeapon = inventoryMgr.NowWeapon();
 
         rate += ItemManager.GetTotalStatValue(nowWeapon, ItemStat.AddGold);
         rate += ItemManager.GetTotalStatValue(nowAccessary, ItemStat.AddGold);

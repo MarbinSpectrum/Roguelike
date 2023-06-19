@@ -19,5 +19,5 @@ MonoBehaviour:
   damage: 1
   attackDelay: 2
   moveDelay: 3
-  range: 5
+  range: 2
   exp: 3

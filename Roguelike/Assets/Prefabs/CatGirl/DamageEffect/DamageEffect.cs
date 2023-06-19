@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageEffect : FieldObjectSingleton<DamageEffect>
+public class DamageEffect : MonoBehaviour
 {
     [SerializeField]
     private DamageAni damageAniPrefabs;
@@ -21,10 +21,8 @@ public class DamageEffect : FieldObjectSingleton<DamageEffect>
 
         for (int i = 0; i < 2; i++)
         {
-            DamageAni damageCriAni = Instantiate(damageCriAniPrefabs);
-            DamageAni damageAni = Instantiate(damageAniPrefabs);
-            damageCriAni.transform.parent = transform;
-            damageAni.transform.parent = transform;
+            DamageAni damageCriAni = Instantiate(damageCriAniPrefabs,transform);
+            DamageAni damageAni = Instantiate(damageAniPrefabs, transform);
             Enqueue(damageCriAni, true);
             Enqueue(damageAni, false);
             yield return new WaitForSeconds(0.1f);
@@ -67,10 +65,9 @@ public class DamageEffect : FieldObjectSingleton<DamageEffect>
         }
         damageAni.UpdateText(pDamage.ToString());
         damageAni.gameObject.SetActive(true);
-        damageAni.transform.parent = transform;
 
         damageAni.transform.position = 
-            new Vector3(CreateMap.tileSize*pPos.x, CreateMap.tileSize * pPos.y, 0)
-            + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f),0);
+            new Vector3(CreateMap.tileSize*pPos.x, CreateMap.tileSize * pPos.y + 0.5f, 0)
+            + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(0, 0.5f),0);
     }
 }

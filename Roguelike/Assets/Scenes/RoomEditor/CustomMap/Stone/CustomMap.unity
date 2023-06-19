@@ -11843,10 +11843,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3437635088991800559, guid: 505799bedb66b934fb7d52e7f2ab5520, type: 3}
-      propertyPath: getTile
-      value: 
-      objectReference: {fileID: 2250127768029943527, guid: 1a9b089c96189b14993c32bcab38c2a9, type: 3}
-    - target: {fileID: 3437635088991800559, guid: 505799bedb66b934fb7d52e7f2ab5520, type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 3437635088991800559, guid: 505799bedb66b934fb7d52e7f2ab5520, type: 3}

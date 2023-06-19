@@ -8,12 +8,12 @@ public class Gun_Magazine : ItemObj
     public SoundObj getSound;
     public override void GetItem()
     {
-        CharacterManager characterManager = CharacterManager.instance;
-        ItemManager itemManager = ItemManager.instance;
+        characterMgr.GetBullet(itemObjData.count);
+        itemMgr.RemoveItem(pos.x, pos.y);
 
-        characterManager.GetBullet(itemObjData.count);
-        itemManager.RemoveItem(pos.x, pos.y);
+        TotalUI totalUI = TotalUI.instance;
 
+        totalUI.ShowExplainText(LanguageManager.GetText("AMMO_GET"));
         spriteRenderer.enabled = false;
         getSound.PlaySE();
     }

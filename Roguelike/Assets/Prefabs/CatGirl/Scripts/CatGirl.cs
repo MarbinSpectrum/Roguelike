@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 ////////////////////////////////////////////////////////////////////////////////
 /// : CatGirl 캐릭터의 스크립트
 ////////////////////////////////////////////////////////////////////////////////
-public class CatGirl : SerializedMonoBehaviour
+public class CatGirl : Mgr
 {
     [SerializeField]
     private Animator animator;
@@ -80,7 +80,7 @@ public class CatGirl : SerializedMonoBehaviour
         //해당 위치의 블록을 활성화한다.
         MapManager.instance.ActAreaTile(pos.x, pos.y);
 
-        TorchManager.instance.ActAreaTorch(pos.x, pos.y);
+        torchMgr.ActAreaTorch(pos.x, pos.y);
     }
 
 
@@ -99,23 +99,20 @@ public class CatGirl : SerializedMonoBehaviour
     private bool CanMove(int pX,int pY)
     {
         MapManager mapManager = MapManager.instance;
-        MonsterManager monsterManager = MonsterManager.instance;
-        JarManager jarManager = JarManager.instance;
-        ChestManager chestManager = ChestManager.instance;
 
         if (mapManager.IsWall(pX, pY))
         {
             return false;
         }
-        if (monsterManager.IsMonster(pX, pY))
+        if (monsterMgr.IsMonster(pX, pY))
         {
             return false;
         }
-        if(jarManager.IsJar(pX,pY))
+        if(jarMgr.IsJar(pX,pY))
         {
             return false;
         }
-        if (chestManager.IsChest(pX, pY))
+        if (chestMgr.IsChest(pX, pY))
         {
             return false;
         }
@@ -140,23 +137,17 @@ public class CatGirl : SerializedMonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     public IEnumerator runCatEvent()
     {
-        MonsterManager monsterManager = MonsterManager.instance;
         MapManager mapManager = MapManager.instance;
-        CharacterManager characterManager = CharacterManager.instance;
-        ItemManager itemManager = ItemManager.instance;
         TotalUI totalUI = TotalUI.instance;
-        TorchManager torchManager = TorchManager.instance;
-        DamageEffect damageEffect = DamageEffect.instance;
-        BulletManager bulletManager = BulletManager.instance;
-        JarManager jarManager = JarManager.instance;
-        ChestManager chestManager = ChestManager.instance;
-        InventoryManager inventoryManager = InventoryManager.instance;
 
-        ItemObjData nowWeapon = inventoryManager.NowWeapon();
+        GetGoldEffect getGoldEffect = uIEffectMgr.getGoldEffect;
+        DamageEffect damageEffect = uIEffectMgr.damageEffect;
+
+        ItemObjData nowWeapon = inventoryMgr.NowWeapon();
 
         yield return new WaitUntil(()=> (buttonInput != ButtonInput.None)); //버튼 입력이 없는 상태면 대기
 
-        yield return new WaitUntil(() => (characterManager.canControl == true)); //컨트롤 불가 상태일경우 대기
+        yield return new WaitUntil(() => (characterMgr.canControl == true)); //컨트롤 불가 상태일경우 대기
 
         int showDic = 0;
         Vector2Int dic = Vector2Int.zero;
@@ -188,7 +179,7 @@ public class CatGirl : SerializedMonoBehaviour
         }
 
         bool useKnife = false;
-        if(characterManager.nowBullet == 0)
+        if(characterMgr.nowBullet == 0)
         {
             //총알이 바닥났다. 단검플레이를 위해서
             //플래그를 적용한다.
@@ -207,56 +198,43 @@ public class CatGirl : SerializedMonoBehaviour
         }
 
         MonsterObj targetMonster = null;
+        Jar jarObj = null;
+        Chest chestObj = null;
         for (int i = 1; i <= weaponRange; i++)
         {
-            //이동 방향에 몬스터가 존재하는지 검사한다.
-            //공격범위안에 몬스터가 있으면 해당 객체를 가져온다.
+            //이동 방향에 오브젝트가 존재하는지 검사한다.
+            //공격범위안에 오브젝트가 있으면 해당 객체를 가져온다.
             Vector2Int cPos = new Vector2Int(pos.x + dic.x * i, pos.y + dic.y * i);
             if (mapManager.IsWall(cPos.x, cPos.y))
             {
                 //도중에 벽을 만났다. 탐색중지
                 break;
             }
-            targetMonster = monsterManager.IsMonster(cPos.x, cPos.y);
+
+            targetMonster = monsterMgr.IsMonster(cPos.x, cPos.y);
             if (targetMonster != null)
             {
                 //몬스터 발견
                 break;
             }
-        }
 
-        Jar jarObj = null;
-        for (int i = 1; i <= weaponRange; i++)
-        {
-            //이동 방향에 항아리 객체가 존재하는지 검사한다.
-            //공격범위안에 항아리가 있으면 해당 객체를 가져온다.
-            Vector2Int cPos = new Vector2Int(pos.x + dic.x * i, pos.y + dic.y * i);
-            if (mapManager.IsWall(cPos.x, cPos.y))
-            {
-                //도중에 벽을 만났다. 탐색중지
-                break;
-            }
-            jarObj = jarManager.GetJarObj(cPos);
+            jarObj = jarMgr.GetJarObj(cPos);
             if (jarObj != null)
             {
                 //항아리 발견
-                if(i == 1)
+                if (i == 1)
                 {
                     //거리가 1밖에안되면 칼로 부순다.
                     useKnife = true;
                 }
                 break;
             }
-        }
 
-        Chest chestObj = null;
-        {
-            //이동 방향에 궤작 객체가 존재하는지 검사한다.
-            Vector2Int cPos = new Vector2Int(pos.x + dic.x, pos.y + dic.y);
-            if (chestObj == null)
+            chestObj = chestMgr.GetChestObj(cPos);
+            if (i == 1 && chestObj != null)
             {
                 //궤작 발견
-                chestObj = chestManager.GetChestObj(cPos);
+                break;
             }
         }
 
@@ -327,7 +305,7 @@ public class CatGirl : SerializedMonoBehaviour
                         dic.x == 0 ? Random.Range(-1, 1) : 0,
                         dic.y == 0 ? Random.Range(-1, 1) : 0) * 0.2f;
 
-                    bulletManager.FireBullet(bPos, to, duration);
+                    bulletMgr.FireBullet(bPos, to, duration);
 
                     spriteRenderer.flipX = spriteFiipX;
                     gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
@@ -336,12 +314,12 @@ public class CatGirl : SerializedMonoBehaviour
 
                     if (nowShotGun)
                         CameraVibrate.Vibrate(10, 0.1f, 0.15f);
-                    characterManager.CostBullet();
+                    characterMgr.CostBullet();
 
                     yield return new WaitForSeconds(duration);
 
-                    int totalDamage = characterManager.GetTotalDamage();
-                    bool critical = characterManager.CriticalProcess(ref totalDamage);
+                    int totalDamage = characterMgr.GetTotalDamage();
+                    bool critical = characterMgr.CriticalProcess(ref totalDamage);
 
                     targetMonster.Hit((uint)totalDamage, critical);
 
@@ -370,7 +348,7 @@ public class CatGirl : SerializedMonoBehaviour
                 }
             }
 
-            StartCoroutine(monsterManager.RunMonster());
+            StartCoroutine(monsterMgr.RunMonster());
 
         }
         else if(chestObj != null)
@@ -410,7 +388,7 @@ public class CatGirl : SerializedMonoBehaviour
                           dic.x == 0 ? bPos.x : jarObj.pos.x * CreateMap.tileSize
                         , dic.y == 0 ? bPos.y : jarObj.pos.y * CreateMap.tileSize, 0);
 
-                    bulletManager.FireBullet(bPos, to, duration);
+                    bulletMgr.FireBullet(bPos, to, duration);
 
                     spriteRenderer.flipX = spriteFiipX;
                     gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
@@ -419,7 +397,7 @@ public class CatGirl : SerializedMonoBehaviour
 
                     if (nowShotGun)
                         CameraVibrate.Vibrate(10, 0.1f, 0.15f);
-                    characterManager.CostBullet();
+                    characterMgr.CostBullet();
 
                     yield return new WaitForSeconds(duration);
 
@@ -450,7 +428,7 @@ public class CatGirl : SerializedMonoBehaviour
                 }
             }
 
-            StartCoroutine(monsterManager.RunMonster());
+            StartCoroutine(monsterMgr.RunMonster());
         }
         else if (CanMove(pos.x + dic.x, pos.y + dic.y))
         {
@@ -460,7 +438,7 @@ public class CatGirl : SerializedMonoBehaviour
             pos.y += dic.y;
             spriteRenderer.flipX = spriteFiipX;
             gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
-            StartCoroutine(monsterManager.RunMonster());
+            StartCoroutine(monsterMgr.RunMonster());
             animator.SetTrigger("run");
             Vector3 to = transform.position + new Vector3(dic.x * CreateMap.tileSize, dic.y * CreateMap.tileSize, 0);
             yield return Action2D.MoveTo(transform, to, moveDuration);
@@ -470,19 +448,22 @@ public class CatGirl : SerializedMonoBehaviour
         {
             spriteRenderer.flipX = spriteFiipX;
             gunBase.localScale = new Vector3(spriteFiipX ? -1 : 1, 1, 1);
-            yield return monsterManager.RunMonster();
-            yield return new WaitForSeconds(aniTime);
-            animator.SetTrigger("idle");
+            yield return monsterMgr.RunMonster();
+            //yield return new WaitForSeconds(aniTime);
+            if (frontShowDic != showDic)
+            {
+                animator.SetTrigger("idle");
+            }
         }
 
         //해당 위치의 블록을 활성화한다.
         mapManager.ActAreaTile(pos.x, pos.y);
 
         //해당 위치의 토치를 활성화시킨다.
-        torchManager.ActAreaTorch(pos.x, pos.y);
+        torchMgr.ActAreaTorch(pos.x, pos.y);
 
         //이동 위치에 아이템이 존재하는지 확인한다.
-        ItemObj itemObj = itemManager.GetItem(pos.x, pos.y);
+        ItemObj itemObj = itemMgr.GetItem(pos.x, pos.y);
         if(itemObj != null)
         {
             //존재하면 아이템을 얻는다.
@@ -494,9 +475,9 @@ public class CatGirl : SerializedMonoBehaviour
 
         //수호의 링을 사용했다면
         //이펙트와 함께 수호의 링을 없애준다.
-        characterManager.UseGuardianRing();
+        characterMgr.UseGuardianRing();
 
-        characterManager.LevelUpCheck(); //레벨업이 가능한지 검사.
+        characterMgr.LevelUpCheck(); //레벨업이 가능한지 검사.
 
         ButtonInput = ButtonInput.None;
 
@@ -507,7 +488,7 @@ public class CatGirl : SerializedMonoBehaviour
             yield return StageManager.LoadNextScene();
             yield break;
         }
-        else if (mapManager.GetGunBenchPos() == pos)
+        else if (mapManager.GetGunBenchPos() == pos && GameManager.gunBenchAct)
         {
             //총기 작업대 발견
             //총기 작업대 UI실행
@@ -544,16 +525,14 @@ public class CatGirl : SerializedMonoBehaviour
 
     public void GunSpriteFront()
     {
-        InventoryManager inventoryManager = InventoryManager.instance;
-        ItemObjData nowWeapon = inventoryManager.NowWeapon();
+        ItemObjData nowWeapon = inventoryMgr.NowWeapon();
         Sprite sprite = nowWeapon.itemData.frontSprite;
         gunSprite.sprite = sprite;
     }
 
     public void GunSpriteSide()
     {
-        InventoryManager inventoryManager = InventoryManager.instance;
-        ItemObjData nowWeapon = inventoryManager.NowWeapon();
+        ItemObjData nowWeapon = inventoryMgr.NowWeapon();
         Sprite sprite = nowWeapon.itemData.sideSprite;
         gunSprite.sprite = sprite;
     }

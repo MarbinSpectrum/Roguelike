@@ -227,6 +227,7 @@ SpriteAtlas:
   - {fileID: -2228808821108250459, guid: 7103554d27a08bb418a9f6028e761ac1, type: 3}
   - {fileID: -5236941042702450860, guid: 7103554d27a08bb418a9f6028e761ac1, type: 3}
   - {fileID: -575846659623337753, guid: 7103554d27a08bb418a9f6028e761ac1, type: 3}
+  - {fileID: -5437283355542546560, guid: 7103554d27a08bb418a9f6028e761ac1, type: 3}
   - {fileID: 21300000, guid: 33518aad7d5acb54caaf40a3bfd1035d, type: 3}
   - {fileID: 21300000, guid: 9aef23cd58603494e9427066d030de34, type: 3}
   - {fileID: 1309125190302641584, guid: 92e5ac5ebd84c3841a189ec7c5e3f5bf, type: 3}
@@ -340,6 +341,7 @@ SpriteAtlas:
   - Stone Wall_4
   - Stone Wall_9
   - Stone Wall_8
+  - Stone Wall_21
   - cat_pixel_attack_front_2
   - JarBroken
   - ArrowKey_Up_0

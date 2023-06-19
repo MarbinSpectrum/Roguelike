@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-public abstract class FieldObjectSingleton<T> : SerializedMonoBehaviour where T : SerializedMonoBehaviour
+public abstract class FieldObjectSingleton<T> : Mgr where T : Mgr
 {
     public static T instance = null;
     protected virtual void Awake()

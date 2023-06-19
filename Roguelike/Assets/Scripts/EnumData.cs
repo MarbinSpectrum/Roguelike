@@ -27,6 +27,8 @@ public enum Tile
     Stone_Wall_13,
     Stone_Wall_14,
 
+    Stone_Pillar_0 = 121,
+
 
     Mat_Floor_0 = 201,
     Mat_Floor_1,
@@ -76,20 +78,42 @@ public enum Tile
     Wood_Wall_12,
     Wood_Wall_13,
     Wood_Wall_14,
+
+    Concrete_Floor_0 = 601,
+
+    Concrete_Wall_0 = 701,
+    Concrete_Wall_1,
+    Concrete_Wall_2,
+    Concrete_Wall_3,
+    Concrete_Wall_4,
+    Concrete_Wall_5,
+    Concrete_Wall_6,
+    Concrete_Wall_7,
+    Concrete_Wall_8,
+    Concrete_Wall_9,
+    Concrete_Wall_10,
+    Concrete_Wall_11,
+    Concrete_Wall_12,
+    Concrete_Wall_13,
+    Concrete_Wall_14,
 }
 
 public enum TileType
 {
     Null = 0,
 
-    Stone_Floor = 1,
+    Stone_Floor = 1,    
     Wood_Floor = 2,
     Mat_Floor = 3,
+    Concrete_Floor = 4,
 
     Stone_Stair = 51,
 
     Stone_Wall = 101,
     Wood_Wall = 102,
+    Concrete_Wall = 103,
+
+    Stone_Pillar = 151,
 }
 
 public enum RoomType1
@@ -117,6 +141,13 @@ public enum Obj
 
     StoneDoor = 205,
 
+    Locker0 = 210,
+    Locker1 = 211,
+
+    WoodBoxs0 = 215,
+
+    Shelter_Interior = 230,
+
     TorchLight = 500,
     DrumLight = 501,
 
@@ -125,9 +156,10 @@ public enum Obj
     Chest_Normal = 615,
 
     GunBench = 700,
-
+    PlayerChest = 725,
     ShopObj = 750,
 
+    
 
 
     Slime = 1000,
@@ -206,8 +238,8 @@ public enum ItemStat
 public enum StageName
 {
     ShelterMap  = 10000,
-    Stage1_1    = 10100,
-    Stage1_2    = 10200,
+    Stage1      = 10100,
+    Stage2      = 10200,
 }
 
 public enum ItemType

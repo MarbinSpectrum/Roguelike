@@ -17,6 +17,9 @@ POW,힘,Pow
 BALANCE,밸런스,Balance
 CRI_RATE,치명타 확률,Critical Rate
 CRI_DMG,치명타 피해,Critical Damage
+AMMO_GET,총알획득,
+AMMO_EMPTY,총알이\n부족하다.,
+AMMO_IS_LACK,총알이 거의\n떨어졌다.,
 SELECT_STAT_POW_TEXT,기본 공격력이\n증가합니다.\n(+{0}),
 SELECT_STAT_HP_TEXT,최대 체력이\n증가합니다.\n(+{0}),
 SELECT_STAT_BALANCE_TEXT,밸런스가\n증가합니다.\n(+{0}),
@@ -68,5 +71,5 @@ UPGRADE_CRI_DMG_EXPLAIN,무기의 치명타 피해를 높입니다.,
 UPGRADE_CRI_RATE_EXPLAIN,무기의 치명타 확률을 높입니다.,
 GUN_BENCH_UI_TEXT_0,강화가 되어있는 장비입니다.\n분해하시겠습니까?,
 SHELTER,아지트,
-STAGE1-1,지하던전 1층,
-STAGE1-2,지하던전 2층,
+STAGE1,지하던전,
+STAGE2,지하던전,

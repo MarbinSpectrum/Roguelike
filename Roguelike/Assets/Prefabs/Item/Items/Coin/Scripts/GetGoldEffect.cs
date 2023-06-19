@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GetGoldEffect : FieldObjectSingleton<GetGoldEffect>
+public class GetGoldEffect : MonoBehaviour
 {
     [SerializeField]
     private GetGold getGoldPrefabs;
@@ -16,8 +16,7 @@ public class GetGoldEffect : FieldObjectSingleton<GetGoldEffect>
 
         for (int i = 0; i < 2; i++)
         {
-            GetGold getGold = Instantiate(getGoldPrefabs);
-            getGold.transform.parent = transform;
+            GetGold getGold = Instantiate(getGoldPrefabs,transform);
             Enqueue(getGold);
             yield return new WaitForSeconds(0.1f);
         }
@@ -44,9 +43,10 @@ public class GetGoldEffect : FieldObjectSingleton<GetGoldEffect>
 
         getGold.UpdateText(pGold + "$");
         getGold.gameObject.SetActive(true);
-        getGold.transform.parent = transform;
 
         CharacterManager characterManager = CharacterManager.instance;
-        getGold.transform.position = characterManager.CharactorTransPos();
+        Vector3 goldPos = characterManager.CharactorTransPos();
+        goldPos += new Vector3(0, 1f, 0);
+        getGold.transform.position = goldPos;
     }
 }

@@ -6,12 +6,17 @@ public class StoneTileBundle : TileBundle
 {
     public List<TileData> tileWall;
     public List<TileData> tileFloor;
+    public TileData tilePillar;
     public TileData baseFloor;
     public TileData nullTile;
 
     public override TileData GetTileData(TileType[,] pTile)
     {
-        if (pTile[1, 1] == TileType.Stone_Floor)
+        if(pTile[1,1] == TileType.Stone_Pillar)
+        {
+            return tilePillar;
+        }
+        else if (pTile[1, 1] == TileType.Stone_Floor)
         {
             if (Application.isPlaying)
             {

@@ -27,6 +27,8 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     [SerializeField]
     private PlayerBulletUI playerBulletUI;
     [SerializeField]
+    private Explain_Text explainTextUI;
+    [SerializeField]
     private SetingUI setingUI;
     [SerializeField]
     private InventoryUI inventoryUI;
@@ -103,6 +105,11 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
         int maxBullet = characterManager.maxBullet;
         int nowBullet = characterManager.nowBullet;
         playerBulletUI.UpdateUI(nowBullet, maxBullet);
+    }
+
+    public void ShowExplainText(string pText)
+    {
+        explainTextUI.ShowUI(pText);
     }
 
     public void ShowMapName(string pStr,bool pPlayAni)

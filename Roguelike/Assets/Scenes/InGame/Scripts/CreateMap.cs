@@ -33,7 +33,7 @@ public struct MapMonster
 ////////////////////////////////////////////////////////////////////////////////
 /// : 랜덤하게 맵을 생성하는 부분
 ////////////////////////////////////////////////////////////////////////////////
-public abstract class CreateMap : SerializedMonoBehaviour
+public abstract class CreateMap : Mgr
 {
     public const float tileSize = 2.46f;
 
@@ -94,61 +94,76 @@ public abstract class CreateMap : SerializedMonoBehaviour
         {
             case Obj.Null:
                 break;
+            //시작위치
             case Obj.StartPos:
                 {
                     startPosList.Add(new Vector2Int(pX, pY));
                 }
                 break;
+            //끝위치
             case Obj.EndPos:
                 {
                     gameEndPos.Add(new Vector2Int(pX, pY));
                     EtcObjManager.CreateEtcObj(gameEndPos[0], pObj);
                 }
                 break;
-            case Obj.StoneDoor:
-                    EtcObjManager.CreateEtcObj(new Vector2Int(pX, pY), pObj);
-                break;
+            //횟불
             case Obj.TorchLight:
                 {
-                    TorchManager torchManager = TorchManager.instance;
-                    torchManager.AddTorchPos(new Vector2Int(pX, pY));
+                    torchMgr.AddTorchPos(new Vector2Int(pX, pY));
                 }
                 break;
-            case Obj.DrumLight:
-                {
-                    cantMovePos.Add(new Vector2Int(pX, pY));
-                    EtcObjManager.CreateEtcObj(new Vector2Int(pX, pY), pObj);
-                }
-                break;
+            //항아리
             case Obj.Jar:
                 {
-                    JarManager jarManager = JarManager.instance;
-                    jarManager.AddJarPos(new Vector2Int(pX, pY));
+                    jarMgr.AddJarPos(new Vector2Int(pX, pY));
                 }
                 break;
+            //보물상자
             case Obj.Chest_Normal:
                 {
-                    ChestManager chestManager = ChestManager.instance;
-                    chestManager.AddMakeChestPos(new Vector2Int(pX, pY), Obj.Chest_Normal);
+                    chestMgr.AddMakeChestPos(new Vector2Int(pX, pY), Obj.Chest_Normal);
                 }
                 break;
             case Obj.Chest_Normal_Pos:
                 {
-                    ChestManager chestManager = ChestManager.instance;
-                    chestManager.AddRandomChestPos(new Vector2Int(pX, pY), Obj.Chest_Normal);
+                    chestMgr.AddRandomChestPos(new Vector2Int(pX, pY), Obj.Chest_Normal);
                 }
                 break;
+            //총기작업대
             case Obj.GunBench:
                 {
                     gunBenchPos.Add(new Vector2Int(pX, pY));
                     EtcObjManager.CreateEtcObj(gunBenchPos[0], pObj);
                 }
                 break;
+            //상점
             case Obj.ShopObj:
                 {
                     shopPos.Add(new Vector2Int(pX, pY));
                     EtcObjManager.CreateEtcObj(shopPos[0], pObj);
                 }
+                break;
+            //해당 오브젝트위로 이동할수 없는 오브젝트
+            case Obj.Locker0:
+            case Obj.Locker1:
+            case Obj.DrumLight:
+                {
+                    cantMovePos.Add(new Vector2Int(pX, pY));
+                    EtcObjManager.CreateEtcObj(new Vector2Int(pX, pY), pObj);
+                }
+                break;
+            case Obj.WoodBoxs0:
+                {
+                    cantMovePos.Add(new Vector2Int(pX, pY));
+                    cantMovePos.Add(new Vector2Int(pX + 1, pY));
+                    EtcObjManager.CreateEtcObj(new Vector2Int(pX, pY), pObj);
+                }
+                break;
+            //해당 오브젝트위로 이동할수 있는 오브젝트
+            case Obj.StoneDoor:
+            case Obj.Shelter_Interior:
+                EtcObjManager.CreateEtcObj(new Vector2Int(pX, pY), pObj);
                 break;
             //몬스터 객체 등록
             case Obj.Slime:

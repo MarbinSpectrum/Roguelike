@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1784710781665494054
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1784710781665494052}
+  - component: {fileID: 2481921593022469640}
+  m_Layer: 0
+  m_Name: ConcreteTileBundle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1784710781665494052
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1784710781665494054}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2481921593022469640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1784710781665494054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b0fb6ba63a9ad24aa37064b252ee036, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileWall:
+  - {fileID: 11400000, guid: 0ab56811f02560c4e80d6a42d374d57f, type: 2}
+  - {fileID: 11400000, guid: b1f62e94e1165b641a42cd095c9a681f, type: 2}
+  - {fileID: 11400000, guid: 526281c451c88144985b7e921f3c7387, type: 2}
+  - {fileID: 11400000, guid: b6c395a5e9c147c4daefb44c9d1c6624, type: 2}
+  - {fileID: 11400000, guid: 3c433caaabe10784381e7187fd625d33, type: 2}
+  - {fileID: 11400000, guid: d7b225511026b844288339c58bc6958d, type: 2}
+  - {fileID: 11400000, guid: ef07e65a15014044cb5c5c6a28c0db6c, type: 2}
+  - {fileID: 11400000, guid: 4f6ed2b1b59e3784bb07f1f32069ba06, type: 2}
+  - {fileID: 11400000, guid: f74173057efdc794fbed2704f3a723d9, type: 2}
+  - {fileID: 11400000, guid: 0a5446302fff5ed4aa38a3d906ef18c2, type: 2}
+  - {fileID: 11400000, guid: d2a7c4dff752e324fbf68def53ae3123, type: 2}
+  - {fileID: 11400000, guid: ac621a64bde8c574b83f338654d07b8c, type: 2}
+  - {fileID: 11400000, guid: 3eb5ff0459fc9c44082941f1e42fdc14, type: 2}
+  - {fileID: 11400000, guid: 81e5826bdb6ea41488ce178e81969808, type: 2}
+  - {fileID: 11400000, guid: f67be812a95a6504dba3ab55f27aee40, type: 2}
+  tileFloor: {fileID: 11400000, guid: 6cd60af915a13fd44856d74a7a5fe97a, type: 2}
+  nullTile: {fileID: 11400000, guid: 87a6c0ebae32bde41a3bbb494b4443bf, type: 2}

@@ -15,8 +15,7 @@ public class ItemObjData
         {
             if(ItemData == null)
             {
-                ItemManager itemManager = ItemManager.instance;
-                ItemData = itemManager.GetItemData(item);
+                ItemData = Mgr.itemMgr.GetItemData(item);
             }
             return ItemData;
         }
@@ -50,7 +49,7 @@ public class ItemObjData
     }
 }
 
-public class ItemObj : SerializedMonoBehaviour
+public class ItemObj : Mgr
 {
     [System.NonSerialized]
     public Vector2Int pos;
@@ -63,11 +62,9 @@ public class ItemObj : SerializedMonoBehaviour
 
     public virtual void GetItem()
     {
-        InventoryManager inventoryManager = InventoryManager.instance;
-        if (inventoryManager.AddItem(itemObjData))
+        if (inventoryMgr.AddItem(itemObjData))
         {
-            ItemManager itemManager = ItemManager.instance;
-            itemManager.RemoveItem(pos.x, pos.y);
+            itemMgr.RemoveItem(pos.x, pos.y);
         }
     }
 }

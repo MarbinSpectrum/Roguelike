@@ -31,9 +31,9 @@ public class Jar : MonoBehaviour
         ItemManager itemManager = ItemManager.instance;
 
         int r = Random.RandomRange(0, 100);
-        if(r < 10)
+        if(r <= 3)
         {
-            //10ÆÛ¼¾Æ®ÀÇ È®·ü·Î ÅºÃ¢ µå¶ø
+            //3ÆÛ¼¾Æ®ÀÇ È®·ü·Î ÅºÃ¢ µå¶ø
             itemManager.CreateItem(pos.x, pos.y, Item.Gun_Magazine);
         }
         else

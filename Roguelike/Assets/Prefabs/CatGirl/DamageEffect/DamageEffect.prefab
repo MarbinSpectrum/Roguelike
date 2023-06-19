@@ -135,7 +135,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1234
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6f4f1f074785dde418783c65fdfe6e3a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ec2f3ae692251ab49b2beb9a938bf3c2, type: 2}
   m_sharedMaterial: {fileID: -639032017324448129, guid: 6f4f1f074785dde418783c65fdfe6e3a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &2028624648651803124
@@ -315,15 +315,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3ae47b32f64f894899ccd4518068b3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   damageAniPrefabs: {fileID: 2028624648651803083}
   damageCriAniPrefabs: {fileID: 344093540261494143}
 --- !u!1 &4159011645790823431
@@ -394,7 +385,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 4
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6f4f1f074785dde418783c65fdfe6e3a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ec2f3ae692251ab49b2beb9a938bf3c2, type: 2}
   m_sharedMaterial: {fileID: -639032017324448129, guid: 6f4f1f074785dde418783c65fdfe6e3a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -458,7 +449,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &1770744702963370564

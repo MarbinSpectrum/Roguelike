@@ -19,11 +19,7 @@ public class Tentacle : MonsterObj
         if (pRoute == null || pRoute.Count == 0)
             return;
 
-        MonsterManager monsterManager = MonsterManager.instance;
-        CharacterManager characterManager = CharacterManager.instance;
         MapManager mapManager = MapManager.instance;
-        JarManager jarManager = JarManager.instance;
-        ChestManager chestManager = ChestManager.instance;
 
         if (alive == false)
         {
@@ -50,17 +46,19 @@ public class Tentacle : MonsterObj
                 //플레이어가 인식범위까지 들어왔다.
                 //잠에서 깨어난다.
                 sleep = false;
+                if(sleepEffect != null)
+                    sleepEffect.SetActive(false);
             }
             return;
         }
 
         Vector2Int gamePos = pRoute[pRoute.Count - 1];
-        if (monsterManager.IsMonster(gamePos.x, gamePos.y))
+        if (monsterMgr.IsMonster(gamePos.x, gamePos.y))
         {
             //해당위치에 몬스터가 있다. 이동하지 않는다.
             return;
         }
-        if (monsterManager.IsMoveToPos(gamePos.x, gamePos.y))
+        if (monsterMgr.IsMoveToPos(gamePos.x, gamePos.y))
         {
             //해당위치에 몬스터가 이동하기로 했다. 이동하지 않는다.
             return;
@@ -70,12 +68,12 @@ public class Tentacle : MonsterObj
             //해당위치는 벽이다 이동하지 않는다.
             return;
         }
-        if(chestManager.IsChest(gamePos.x,gamePos.y))
+        if(chestMgr.IsChest(gamePos.x,gamePos.y))
         {
             //상자는 부술수없다. 이동하지 않는다.
             return;
         }
-        if (gamePos == characterManager.CharactorGamePos())
+        if (gamePos == characterMgr.CharactorGamePos())
         {
             //캐릭터가 공격범위에 있다.
             //이동하지않고 플레이어를 공격한다.
@@ -115,7 +113,7 @@ public class Tentacle : MonsterObj
                 monsterSpr.flipX = false;
             }
 
-            characterManager.Hit((int)damage);
+            characterMgr.Hit((int)damage);
 
 
 
@@ -133,10 +131,10 @@ public class Tentacle : MonsterObj
             return;
         }
 
-        if(jarManager.IsJar(gamePos.x, gamePos.y))
+        if(jarMgr.IsJar(gamePos.x, gamePos.y))
         {
             //이동위치에 항아리가 있으면 항아리를 부순다.
-            Jar jarObj = jarManager.GetJarObj(gamePos);
+            Jar jarObj = jarMgr.GetJarObj(gamePos);
             jarObj.RemoveJarObj();
         }
 
@@ -167,7 +165,7 @@ public class Tentacle : MonsterObj
         moveStack = 0;
 
         //이동위치 갱신
-        monsterManager.AddMoveToPos(gamePos.x, gamePos.y);
+        monsterMgr.AddMoveToPos(gamePos.x, gamePos.y);
         pos = gamePos;
 
         //실질적인 이동명령

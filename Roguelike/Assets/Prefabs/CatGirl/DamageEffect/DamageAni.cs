@@ -15,7 +15,8 @@ public class DamageAni : MonoBehaviour
 
     public void AnimationEnd()
     {
-        DamageEffect damageEffect = DamageEffect.instance;
+        UIEffectManager uIEffectManager = UIEffectManager.instance;
+        DamageEffect damageEffect = uIEffectManager.damageEffect;
         damageEffect.Enqueue(this, isCritical);
         gameObject.SetActive(false);
     }

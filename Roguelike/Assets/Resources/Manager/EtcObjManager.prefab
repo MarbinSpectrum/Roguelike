@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4043324937141060214
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6759120161227054352}
+  - component: {fileID: 8266799542432681361}
+  m_Layer: 0
+  m_Name: EtcObjManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6759120161227054352
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4043324937141060214}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8266799542432681361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4043324937141060214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16b47b402024d04488ccdd6e650028b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  startStairsObj: {fileID: 7009414553840828925, guid: 1eb72c04f0ac4844580e246515dd8ea5, type: 3}
+  exitStairsObj: {fileID: 6692329642022829622, guid: dc010a80b6117044abb77735cf5376a3, type: 3}
+  stoneDoorObj: {fileID: 2754856245781954940, guid: ba55631b6d77b8f45865c09e15efa4e5, type: 3}
+  shelterInterior: {fileID: 8501390410085222010, guid: 6478f17f8b00a824e999968cba023681, type: 3}
+  woodBoxs:
+  - {fileID: 6788175284067294558, guid: 362b7fc141ad645479013755e5dd9ee9, type: 3}
+  gunBench: {fileID: 2140171516580295050, guid: e8109db5d1f7f354d86180a286cdf977, type: 3}
+  shopObj: {fileID: 246761286821188117, guid: 0b990531050bc3c4aac439d6b5f3f578, type: 3}
+  drumLight: {fileID: 8669590484429752408, guid: be2968027129951419df3bf97a4d5ab8, type: 3}
+  locker:
+  - {fileID: 2392487982676599027, guid: 136091b23a774a14eb67acee426d9cef, type: 3}
+  - {fileID: 5644054804289476627, guid: 87e217480c9a9d748a566ba7f9ff5efd, type: 3}
