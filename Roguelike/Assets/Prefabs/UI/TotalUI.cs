@@ -122,6 +122,7 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
     ////////////////////////////////////////////////////////////////////////////////
     public void UpdateMiniMap(Vector2Int pPos, uint pDis)
     {
+#if MiniMap
         //밝혀줄공간을 큐를 통해서 탐색한다.
         MapManager mapManager = MapManager.instance;
         Dictionary<Vector2Int,int> Map = new Dictionary<Vector2Int, int>();
@@ -178,6 +179,9 @@ public class TotalUI : FieldObjectSingleton<TotalUI>
         //텍스쳐변경
         Texture2D miniMapTexture = mapManager.GetMiniMapTexture();
         miniMap.UpdateMiniMap(miniMapTexture);
+#else
+        miniMap.gameObject.SetActive(false);
+#endif
     }
 
     ////////////////////////////////////////////////////////////////////////////////

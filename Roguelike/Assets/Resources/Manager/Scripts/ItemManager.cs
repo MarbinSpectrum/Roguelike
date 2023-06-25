@@ -94,6 +94,28 @@ public class ItemManager : DontDestroySingleton<ItemManager>
         return null;
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 필드의 모든 아이템을 제거한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void RemoveAll_Item()
+    {
+        Init();
+
+        List<Vector2Int> posList = new List<Vector2Int>();
+
+        foreach(KeyValuePair<Vector2Int, ItemObj> items in items)
+        {
+            posList.Add(items.Key);
+        }
+
+        foreach(Vector2Int pos in posList)
+        {
+            Destroy(items[pos]);
+            items.Remove(new Vector2Int(pos.x, pos.y));
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     /// : pX pY 위치에 아이템을 제거한다.
     ////////////////////////////////////////////////////////////////////////////////

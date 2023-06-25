@@ -212,8 +212,7 @@ MonoBehaviour:
   gameEndPos: []
   gunBenchPos: []
   shopPos: []
-  mapDatas:
-  - {fileID: 4900000, guid: 70ef0aa9efb4f9d49b8024bc44b5779f, type: 3}
+  mapType: 100
 --- !u!114 &17564109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,15 +321,15 @@ PrefabInstance:
       objectReference: {fileID: 2011926178463271004, guid: f0bf8365741371249a5403a673422695, type: 3}
     - target: {fileID: 2011926178668680720, guid: f0bf8365741371249a5403a673422695, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2011926178668680720, guid: f0bf8365741371249a5403a673422695, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 34.7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2011926178668680720, guid: f0bf8365741371249a5403a673422695, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 17.220001
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2011926178668680720, guid: f0bf8365741371249a5403a673422695, type: 3}
       propertyPath: m_LocalPosition.z
@@ -373,9 +372,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2011926178668680721, guid: f0bf8365741371249a5403a673422695, type: 3}
+      propertyPath: startPos.x
+      value: 34.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2011926178668680721, guid: f0bf8365741371249a5403a673422695, type: 3}
+      propertyPath: startPos.y
+      value: 17.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 2011926178668680721, guid: f0bf8365741371249a5403a673422695, type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 2011926178668680721, guid: f0bf8365741371249a5403a673422695, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 2011926178668680723, guid: f0bf8365741371249a5403a673422695, type: 3}
       propertyPath: m_Name
       value: Follow Player
@@ -602,7 +609,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &747182254
 GameObject:
@@ -694,7 +701,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1541173300
 GameObject:
@@ -748,5 +755,5 @@ Transform:
   m_Children:
   - {fileID: 747182255}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

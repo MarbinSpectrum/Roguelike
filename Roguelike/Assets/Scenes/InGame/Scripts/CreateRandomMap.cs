@@ -10,10 +10,10 @@ using Sirenix.Utilities;
 ////////////////////////////////////////////////////////////////////////////////
 public class CreateRandomMap : CreateMap
 {
+    [SerializeField] private MapType mapType;
     private uint mapWidth;
     private uint mapHeight;
-    [SerializeField]
-    private List<TextAsset> mapDatas;
+    private TextAsset[] mapDatas;
 
     private TileType[,] GetTileTypes(CustomMapData pCustomMapData)
     {
@@ -46,16 +46,34 @@ public class CreateRandomMap : CreateMap
     }
 
     ////////////////////////////////////////////////////////////////////////////////
-    /// : 타일맵 생성
+    /// : 타일맵 생성 // pVisitRooms에 포함되지 않은 방만 출현되도록 구현
     ////////////////////////////////////////////////////////////////////////////////
     public override IEnumerator runCreateGameMap()
     {
-        int randomIdx = Random.Range(0, mapDatas.Count);
+        MapManager mapManager = MapManager.instance;
+        List<int> visitRooms = mapManager.GetVisitRoomIdx();
 
-        CustomMapData customMapData = MyLib.Json.JsonToOject<CustomMapData>(mapDatas[randomIdx].text);
+
+        mapDatas = Resources.LoadAll<TextAsset>("MapDatas/" + mapType.ToString());
+
+        
+        List<int> roomIdx = new List<int>();
+        for(int i = 0; i < mapDatas.Length; i++)
+        {
+            if (visitRooms.Contains(i))
+                continue;
+            roomIdx.Add(i);
+        }
+
+        int randomIdx = Random.Range(0, roomIdx.Count);
+        int mapIdx = roomIdx[randomIdx];
+
+        mapManager.SetNowRoomIdx(mapIdx);
+        CustomMapData customMapData = MyLib.Json.JsonToOject<CustomMapData>(mapDatas[mapIdx].text);
 
         if (customMapData == null)
             yield break;
+
 
         mapWidth = customMapData.roomW;
         mapHeight = customMapData.roomH;

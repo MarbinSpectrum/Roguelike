@@ -17,6 +17,7 @@ public class MiniMap : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     public IEnumerator runCreateMiniMap()
     {
+#if MiniMap
         MapManager mapManager = MapManager.instance;
         mapTexture = new Texture2D(mapManager.arrayW, mapManager.arrayH);
        
@@ -24,7 +25,7 @@ public class MiniMap : MonoBehaviour
             for (int j = 0; j < mapManager.arrayH; j++)
                 mapTexture.SetPixel(i, j, new Color(0, 0, 0, 0.5f));
         mapTexture.Apply();
-
+#endif
         yield break;
     }
 
@@ -33,6 +34,7 @@ public class MiniMap : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     public void UpdateMiniMapPos(Vector2Int pPos)
     {
+#if MiniMap
         MapManager mapManager = MapManager.instance;
         CharacterManager characterManager = CharacterManager.instance;
          Vector2Int cPos = characterManager.CharactorGamePos();
@@ -52,6 +54,7 @@ public class MiniMap : MonoBehaviour
             mapTexture.SetPixel(pPos.x, pPos.y, new Color(0.5f, 0.5f, 0.5f, 1f));
         }
         mapTexture.Apply();
+#endif
     }
 
     ////////////////////////////////////////////////////////////////////////////////

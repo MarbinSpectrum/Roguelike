@@ -12,6 +12,19 @@ public class GameManager : DontDestroySingleton<GameManager>
 {
     public static bool gunBenchAct = false;
 
+    private static PlayData PlayData;
+    public static PlayData playData
+    {
+        get
+        {
+            if(PlayData == null)
+            {
+                PlayData = LoadPlayData();
+            }
+            return PlayData;
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     /// : 게임시작
     ////////////////////////////////////////////////////////////////////////////////
@@ -22,6 +35,8 @@ public class GameManager : DontDestroySingleton<GameManager>
 
     public IEnumerator runStartGame()
     {
+        PlayData = LoadPlayData();   //플레이 데이터 로드
+
         SoundManager.StopBGM();
 
         yield return languageMgr.runLoadData(); //언어 데이터 로드
@@ -30,6 +45,7 @@ public class GameManager : DontDestroySingleton<GameManager>
         totalUI.ShowCreateMap(true);
 
         MapManager mapManager = MapManager.instance;
+        mapManager.SetVisitRoomIdx(playData.visitRoomIdx);
         yield return mapManager.runCreateTileMap(); //맵 생성
 
         Vector2Int createPos = mapManager.GetRandomStartPos();
@@ -68,7 +84,7 @@ public class GameManager : DontDestroySingleton<GameManager>
     ////////////////////////////////////////////////////////////////////////////////
     public static void SavePlayData()
     {
-        PlayData playData = new PlayData(inventoryMgr, characterMgr);
+        PlayData playData = new PlayData(0);
         string jsonData = Json.ObjectToJson(playData);
 
         if (Application.isEditor)
@@ -103,6 +119,8 @@ public class GameManager : DontDestroySingleton<GameManager>
         }
 
         gunBenchAct = playData.gunBenchAct;
+
+        Random.InitState(playData.randomSeed);
 
         return playData;
     }

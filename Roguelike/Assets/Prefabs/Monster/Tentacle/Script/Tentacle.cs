@@ -48,6 +48,8 @@ public class Tentacle : MonsterObj
                 sleep = false;
                 if(sleepEffect != null)
                     sleepEffect.SetActive(false);
+                if (awakeEffect != null)
+                    awakeEffect.SetActive(true);
             }
             return;
         }

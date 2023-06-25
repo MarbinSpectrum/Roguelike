@@ -10,7 +10,11 @@ public class PlayData
     //1.플레이어 스텟
     //2.인벤토리 아이템
     //3.현재 스테이지
+    //4.이벤트 활성화여부
+    //5.시드
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 플레이어 스텟
     public uint level;
 
     public int baseMaxHp;
@@ -29,43 +33,62 @@ public class PlayData
     public int maxBullet;
     public int nowBullet;
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 인벤토리 아이템
     public List<ItemObjData> etcItem = new List<ItemObjData>();
     public List<ItemObjData> weaponItem = new List<ItemObjData>();
     public List<ItemObjData> accessaryItem = new List<ItemObjData>();
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 현재 스테이지
+    public string stageName;
+    public List<int> visitRoomIdx = new List<int>();    //방문했던 방 Idx
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 이벤트 활성화여부
     public bool gunBenchAct;
 
-    public string stageName;
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // 시드
+    public int randomSeed;
 
-    public PlayData(InventoryManager pInv, CharacterManager pCha)
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// : InventoryManager와 CharacterManager를 통해서 플레이어 정보를 생성한다.
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    public PlayData(int pSave)
     {
         MapManager mapManager = MapManager.instance;
 
-        if (pInv == null || pCha == null)
-        {
-            return;
-        }
-        level = pCha.nowLevel;
-        baseMaxHp = pCha.baseMaxHp;
-        nowHp = pCha.nowHp;
-        maxExp = pCha.maxExp;
-        nowExp = pCha.nowExp;
-        basePow = pCha.basePow;
-        baseBalance = pCha.baseBalance;
-        baseCriPer = pCha.baseCriPer;
-        baseCriDamage = pCha.baseCriDamage;
-        maxBullet = pCha.maxBullet;
-        nowBullet = pCha.nowBullet;
+        level = Mgr.characterMgr.nowLevel;
+        baseMaxHp = Mgr.characterMgr.baseMaxHp;
+        nowHp = Mgr.characterMgr.nowHp;
+        maxExp = Mgr.characterMgr.maxExp;
+        nowExp = Mgr.characterMgr.nowExp;
+        basePow = Mgr.characterMgr.basePow;
+        baseBalance = Mgr.characterMgr.baseBalance;
+        baseCriPer = Mgr.characterMgr.baseCriPer;
+        baseCriDamage = Mgr.characterMgr.baseCriDamage;
+        maxBullet = Mgr.characterMgr.maxBullet;
+        nowBullet = Mgr.characterMgr.nowBullet;
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        List<ItemObjData> etcitemList = Mgr.inventoryMgr.GetItemList(ItemType.Etc);
+        etcItem = etcitemList;
+        List<ItemObjData> weaponitemList = Mgr.inventoryMgr.GetItemList(ItemType.Weapon);
+        weaponItem = weaponitemList;
+        List<ItemObjData> accessaritemList = Mgr.inventoryMgr.GetItemList(ItemType.Accessary);
+        accessaryItem = accessaritemList;
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
+        stageName = mapManager.mapNameKey;
+        visitRoomIdx = mapManager.GetVisitRoomIdx();
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
         gunBenchAct = GameManager.gunBenchAct;
 
-        List<ItemObjData> etcitemList = pInv.GetItemList(ItemType.Etc);
-        etcItem = etcitemList;
-        List<ItemObjData> weaponitemList = pInv.GetItemList(ItemType.Weapon);
-        weaponItem = weaponitemList;
-        List<ItemObjData> accessaritemList = pInv.GetItemList(ItemType.Accessary);
-        accessaryItem = accessaritemList;
-        stageName = mapManager.mapNameKey;
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
+        randomSeed = Random.seed;
     }
 
     public PlayData(bool pDefault)
@@ -83,9 +106,9 @@ public class PlayData
         baseCriDamage = Mgr.characterMgr.startCriDamage;
         maxBullet = Mgr.characterMgr.startBullet;
         nowBullet = Mgr.characterMgr.startBullet;
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        gunBenchAct = false;
-
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
         //무기 장비 설정
         ItemObjData weaponObjData = Mgr.itemMgr.CreateItemObjData(Mgr.characterMgr.startWeapon);
         if (weaponObjData != null)
@@ -104,6 +127,14 @@ public class PlayData
             accessaryItem.Add(accessaryObjData);
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
         stageName = mapManager.mapNameKey;
+        visitRoomIdx = new List<int>();
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
+        gunBenchAct = false;
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
+        randomSeed = (int)(Time.time) % 10000;
     }
 }

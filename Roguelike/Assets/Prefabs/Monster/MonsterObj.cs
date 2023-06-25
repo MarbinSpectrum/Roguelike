@@ -55,6 +55,7 @@ public abstract class MonsterObj : Mgr
     public Image hpBarImg;
     public Image hpBarBack;
     public GameObject sleepEffect;
+    public GameObject awakeEffect;
     private IEnumerator hitCor;
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -75,8 +76,10 @@ public abstract class MonsterObj : Mgr
         attackDelay = pMonsterData.attackDelay;
         exp = pMonsterData.exp;
 
-        if (sleepEffect != null)
+        if(sleepEffect != null)
             sleepEffect.SetActive(sleep);
+        if (awakeEffect != null)
+            awakeEffect.SetActive(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -124,6 +127,8 @@ public abstract class MonsterObj : Mgr
                 sleep = false;
                 if (sleepEffect != null)
                     sleepEffect.SetActive(false);
+                if (awakeEffect != null)
+                    awakeEffect.SetActive(true);
             }
             return;
         }
@@ -223,6 +228,8 @@ public abstract class MonsterObj : Mgr
             sleep = false;
             if (sleepEffect != null)
                 sleepEffect.SetActive(false);
+            if (awakeEffect != null)
+                awakeEffect.SetActive(true);
         }
 
         if(nowShotGun)

@@ -13,8 +13,8 @@ public class MiniMapUI : MonoBehaviour
     {
         MapManager mapManager = MapManager.instance;
         pTexture2D.filterMode = FilterMode.Point;
-        Sprite sprite = Sprite.Create(pTexture2D, new Rect(0,0, mapManager.arrayW, mapManager.arrayH)
-            , new Vector2(0.5f,0.5f));
+        Sprite sprite = Sprite.Create(pTexture2D, new Rect(0, 0, mapManager.arrayW, mapManager.arrayH)
+            , new Vector2(0.5f, 0.5f));
         mapImg.sprite = sprite;
     }
 }

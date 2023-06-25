@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfDirective xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Directive>
+    <name>ODIN_INSPECTOR</name>
+    <targets>Standalone Android</targets>
+    <enabled>true</enabled>
+    <sortOrder>0</sortOrder>
+  </Directive>
+  <Directive>
+    <name>ODIN_INSPECTOR_3</name>
+    <targets>Standalone Android</targets>
+    <enabled>true</enabled>
+    <sortOrder>1</sortOrder>
+  </Directive>
+  <Directive>
+    <name>UNITY_POST_PROCESSING_STACK_V2</name>
+    <targets>Standalone Android WebGL Metro PS4 XboxOne tvOS</targets>
+    <enabled>true</enabled>
+    <sortOrder>2</sortOrder>
+  </Directive>
+  <Directive>
+    <name>VR_GEARVR</name>
+    <targets>Android</targets>
+    <enabled>false</enabled>
+    <sortOrder>3</sortOrder>
+  </Directive>
+  <Directive>
+    <name>VR_GOOGLEVR</name>
+    <targets>Android</targets>
+    <enabled>true</enabled>
+    <sortOrder>4</sortOrder>
+  </Directive>
+  <Directive>
+    <name>MiniMap</name>
+    <targets>Standalone Android</targets>
+    <enabled>false</enabled>
+    <sortOrder>5</sortOrder>
+  </Directive>
+</ArrayOfDirective>

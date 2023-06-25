@@ -35,19 +35,20 @@ public class MapManager : FieldObjectSingleton<MapManager>
     [SerializeField] private MiniMap miniMap;
     private TileObj[,] tiles;
     private HashSet<Vector2Int> cantMovePos;
+    private List<int> visitRoomIdx = new List<int>();
+    private int nowStageIdx;
 
     ////////////////////////////////////////////////////////////////////////////////
     /// : Start
     ////////////////////////////////////////////////////////////////////////////////
     private void Start()
     {
-
         gameMgr.StartGame();
     }
 
 
     ////////////////////////////////////////////////////////////////////////////////
-    /// : 타일맵을 생성한다.
+    /// : 타일맵을 생성한다. // pVisitRooms에 포함되지 않은 방만 출현되도록 구현
     ////////////////////////////////////////////////////////////////////////////////
     public IEnumerator runCreateTileMap()
     {
@@ -279,5 +280,38 @@ public class MapManager : FieldObjectSingleton<MapManager>
     {
         TotalUI totalUI = TotalUI.instance;
         totalUI.ShowMapName(LanguageManager.GetText(mapNameKey), showName);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 방문한 방의 리스트를 가져오거나 초기화한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public List<int> GetVisitRoomIdx()
+    {
+        return visitRoomIdx;
+    }
+
+    public void SetVisitRoomIdx(List<int> pList)
+    {
+        visitRoomIdx = new List<int>(pList);
+    }
+
+    public void AddVisitRoomIdx(int pRoomIdx)
+    {
+        if (visitRoomIdx.Contains(pRoomIdx))
+            return;
+        visitRoomIdx.Add(pRoomIdx);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 현재 방의 인덱스를 관리한다.
+    ////////////////////////////////////////////////////////////////////////////////
+
+    public int GetNowRoomIdx()
+    {
+        return nowStageIdx;
+    }
+    public void SetNowRoomIdx(int pRoomIdx)
+    {
+        nowStageIdx = pRoomIdx;
     }
 }

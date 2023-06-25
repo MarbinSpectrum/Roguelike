@@ -162,14 +162,16 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
         if (character != null)
         {
             Destroy(character);
+            return;
         }
+
+        PlayData playData = GameManager.playData;
 
         character = Instantiate(catGirl);
 
         character.gameObject.SetActive(true);
         character.SetPos(pX, pY);
 
-        PlayData playData = GameManager.LoadPlayData();
 
         MaxExp = playData.maxExp;
         NowExp = playData.nowExp;

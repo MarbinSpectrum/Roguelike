@@ -485,7 +485,7 @@ public class CatGirl : Mgr
         {
             //탈출구 발견
             //다음 씬으로 이동한다.
-            yield return StageManager.LoadNextScene();
+            yield return StageManager.LoadNextMap();
             yield break;
         }
         else if (mapManager.GetGunBenchPos() == pos && GameManager.gunBenchAct)

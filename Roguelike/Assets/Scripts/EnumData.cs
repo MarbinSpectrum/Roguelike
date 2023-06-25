@@ -263,3 +263,8 @@ public enum Language
     Korea = 100,
     English = 200,
 }
+
+public enum MapType
+{
+    UndergroundDungeon = 100, //지하던전
+}
