@@ -218,23 +218,25 @@ public class CatGirl : Mgr
                 break;
             }
 
-            jarObj = jarMgr.GetJarObj(cPos);
-            if (jarObj != null)
+
+            if (i == 1)
             {
-                //항아리 발견
-                if (i == 1)
+                jarObj = jarMgr.GetJarObj(cPos);
+                if (jarObj != null)
                 {
+                    //항아리 발견
                     //거리가 1밖에안되면 칼로 부순다.
                     useKnife = true;
-                }
-                break;
-            }
+                    break;
 
-            chestObj = chestMgr.GetChestObj(cPos);
-            if (i == 1 && chestObj != null)
-            {
-                //궤작 발견
-                break;
+                }
+
+                chestObj = chestMgr.GetChestObj(cPos);
+                if (chestObj != null)
+                {
+                    //궤작 발견
+                    break;
+                }
             }
         }
 
@@ -455,6 +457,9 @@ public class CatGirl : Mgr
                 animator.SetTrigger("idle");
             }
         }
+
+        //트랩 작동
+        trapMgr.RunTrap();
 
         //해당 위치의 블록을 활성화한다.
         mapManager.ActAreaTile(pos.x, pos.y);

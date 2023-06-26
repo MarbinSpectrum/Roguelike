@@ -53,4 +53,6 @@ public class Mgr : SerializedMonoBehaviour
     }
     public static TorchManager          torchMgr        { get => TorchManager.instance;     }
     public static UIEffectManager       uIEffectMgr     { get => UIEffectManager.instance;  }
+
+    public static TrapManager           trapMgr         { get => TrapManager.instance;      }
 }

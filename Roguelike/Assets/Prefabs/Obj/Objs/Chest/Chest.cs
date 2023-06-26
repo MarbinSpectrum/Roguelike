@@ -5,7 +5,7 @@ using UnityEngine;
 ////////////////////////////////////////////////////////////////////////////////
 /// : 궤작오브젝트, 궤작에서 나오는 아이템과 나올 아이템이 결정된다.
 ////////////////////////////////////////////////////////////////////////////////
-public abstract class Chest : MonoBehaviour
+public abstract class Chest : Mgr
 {
     public Obj chestType;
     public Vector2Int pos;
@@ -30,10 +30,9 @@ public abstract class Chest : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////
     public virtual void MakeChestItem()
     {
-        InventoryManager inventoryManager = InventoryManager.instance;
         HashSet<Item> hasItem = new HashSet<Item>();
 
-        List<ItemObjData> nowAccessary = inventoryManager.GetItemList(ItemType.Accessary);
+        List<ItemObjData> nowAccessary = inventoryMgr.GetItemList(ItemType.Accessary);
         foreach (ItemObjData accessary in nowAccessary)
         {
             //아이템들은 저주가 해제된 상태로 종류를 구분한다.
@@ -64,16 +63,13 @@ public abstract class Chest : MonoBehaviour
 
     public virtual void RemoveChestObj()
     {
-        ChestManager chestManager = ChestManager.instance;
-
         //상자를 없앤다.
         close.SetActive(false);
         open.SetActive(true);
-        chestManager.RemoveChestObj(pos);
+        chestMgr.RemoveChestObj(pos);
 
         //상자 아이템을 생성한다.
         MakeChestItem();
-        ItemManager itemManager = ItemManager.instance;
-        itemManager.CreateItem(pos.x, pos.y, chestItem);
+        itemMgr.CreateItem(pos.x, pos.y, chestItem);
     }
 }

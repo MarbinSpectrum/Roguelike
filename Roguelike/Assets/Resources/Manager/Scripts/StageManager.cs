@@ -54,6 +54,7 @@ public class StageManager : DontDestroySingleton<StageManager>
         chestMgr.RemoveAll_ChestObj();
         torchMgr.RemoveAll_TorchObj();
         itemMgr.RemoveAll_Item();
+        trapMgr.RemoveAll_Trap();
 
         if(mapManager != null)
         {

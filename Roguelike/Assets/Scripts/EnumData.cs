@@ -159,7 +159,7 @@ public enum Obj
     PlayerChest = 725,
     ShopObj = 750,
 
-    
+    Needle_Trap = 800,
 
 
     Slime = 1000,

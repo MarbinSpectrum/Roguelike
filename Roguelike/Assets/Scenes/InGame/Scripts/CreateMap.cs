@@ -144,6 +144,14 @@ public abstract class CreateMap : Mgr
                     EtcObjManager.CreateEtcObj(shopPos[0], pObj);
                 }
                 break;
+
+
+
+
+
+
+
+
             //해당 오브젝트위로 이동할수 없는 오브젝트
             case Obj.Locker0:
             case Obj.Locker1:
@@ -160,11 +168,38 @@ public abstract class CreateMap : Mgr
                     EtcObjManager.CreateEtcObj(new Vector2Int(pX, pY), pObj);
                 }
                 break;
+
+
+
+
+            //가시함정
+            case Obj.Needle_Trap:
+                {
+                    trapMgr.CreateNeedleTrap(pX, pY);
+                }
+                break;
+
+
+
+
             //해당 오브젝트위로 이동할수 있는 오브젝트
             case Obj.StoneDoor:
             case Obj.Shelter_Interior:
                 EtcObjManager.CreateEtcObj(new Vector2Int(pX, pY), pObj);
                 break;
+
+
+
+
+
+
+
+
+
+
+
+
+
             //몬스터 객체 등록
             case Obj.Slime:
             case Obj.Tentacle:
