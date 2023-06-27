@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MyLib;
+using Sirenix.OdinInspector;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// : 캐릭터를 관리하는 매니저
@@ -154,6 +156,27 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
     private int guardian_Ring_idx = 0;
     private int gudrdian_cnt = 0;
 
+    //버튼 입력처리
+    private ButtonInput ButtonInput = ButtonInput.None;
+    [HideInInspector]
+    public ButtonInput buttonInput
+    {
+        set
+        {
+            if (ButtonInput == ButtonInput.None)
+            {
+                ButtonInput = value;
+            }
+        }
+        get
+        {
+            return ButtonInput;
+        }
+    }
+
+    private uint reloadStack = uint.MaxValue;
+    private Vector2Int pos;
+
     ////////////////////////////////////////////////////////////////////////////////
     /// : pX,pY에 해당하는 좌표에 캐릭터를 생성한다.
     ////////////////////////////////////////////////////////////////////////////////
@@ -170,7 +193,10 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
         character = Instantiate(catGirl);
 
         character.gameObject.SetActive(true);
-        character.SetPos(pX, pY);
+        SetPos(pX, pY);
+
+        reloadStack = uint.MaxValue;
+
 
 
         MaxExp = playData.maxExp;
@@ -218,8 +244,447 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
         totalUI.UpdateShield();
         totalUI.UpdateExp();
         totalUI.UpdatePlayerBullet();
-
+        totalUI.ActKeyPad(true);
         canControl = true;
+
+        StartCoroutine(runCatEvent());
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 캐릭터 조작에 따른 이벤트를 처리한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public IEnumerator runCatEvent()
+    {
+        MapManager mapManager = MapManager.instance;
+        TotalUI totalUI = TotalUI.instance;
+
+        GetGoldEffect getGoldEffect = uIEffectMgr.getGoldEffect;
+        DamageEffect damageEffect = uIEffectMgr.damageEffect;
+
+        ItemObjData nowWeapon = inventoryMgr.NowWeapon();
+
+        yield return new WaitUntil(() => (buttonInput != ButtonInput.None)); //버튼 입력이 없는 상태면 대기
+
+        yield return new WaitUntil(() => (characterMgr.canControl == true)); //컨트롤 불가 상태일경우 대기
+
+        int showDic = 0;
+        Vector2Int dic = Vector2Int.zero;
+        Vector3 bulletSpawnPos = character.GetBulletSpawnPos(buttonInput);
+        bool spriteFiipX = false;
+
+        switch (buttonInput)
+        {
+            case ButtonInput.Left:
+                showDic = 0;
+                dic = new Vector2Int(-1, 0);
+                spriteFiipX = true;
+                break;
+            case ButtonInput.Right:
+                showDic = 0;
+                dic = new Vector2Int(+1, 0);
+                spriteFiipX = false;
+                break;
+            case ButtonInput.Up:
+                showDic = 1;
+                dic = new Vector2Int(0, +1);
+                spriteFiipX = false;
+                break;
+            case ButtonInput.Down:
+                showDic = 2;
+                dic = new Vector2Int(0, -1);
+                spriteFiipX = false;
+                break;
+        }
+
+        bool useKnife = false;
+        if (characterMgr.nowBullet == 0)
+        {
+            //총알이 바닥났다. 단검플레이를 위해서
+            //플래그를 적용한다.
+            useKnife = true;
+        }
+
+        int frontShowDic = character.animator.GetInteger("showDic");
+        character.animator.SetInteger("showDic", showDic);
+
+        uint weaponRange = nowWeapon.itemData.range;
+        if (useKnife)
+        {
+            //총알이 바닥났다. 단검으로 플레이한다.
+            //단검의 사거리는 1
+            weaponRange = 1;
+        }
+
+        MonsterObj targetMonster = null;
+        Jar jarObj = null;
+        Chest chestObj = null;
+        for (int i = 1; i <= weaponRange; i++)
+        {
+            //이동 방향에 오브젝트가 존재하는지 검사한다.
+            //공격범위안에 오브젝트가 있으면 해당 객체를 가져온다.
+            Vector2Int cPos = new Vector2Int(pos.x + dic.x * i, pos.y + dic.y * i);
+            if (mapManager.IsWall(cPos.x, cPos.y))
+            {
+                //도중에 벽을 만났다. 탐색중지
+                break;
+            }
+
+            targetMonster = monsterMgr.IsMonster(cPos.x, cPos.y);
+            if (targetMonster != null)
+            {
+                //몬스터 발견
+                break;
+            }
+
+            jarObj = jarMgr.GetJarObj(cPos);
+            if (jarObj != null)
+            {
+                //항아리 발견
+                if(i == 1)
+                {
+                    //거리가 1밖에안되면 칼로 부순다.
+                    useKnife = true;
+                }
+                break;
+
+            }
+
+            if (i == 1)
+            {
+                chestObj = chestMgr.GetChestObj(cPos);
+                if (chestObj != null)
+                {
+                    //궤작 발견
+                    break;
+                }
+            }
+        }
+
+        character.animator.SetBool("useKnife", useKnife);
+
+        //현재무기가 샷건인지 여부 확인
+        bool nowShotGun = ItemManager.IsShotGun(nowWeapon.itemData.item);
+
+        //공격 딜레이 확인
+        //reloadStack이 reloadDelay를 넘어서면 공격가능하다.
+        //reloadStack은 플레이어가 다른 조작을 할때마다 쌓인다.
+        //해당 방식으로 공격의 딜레이를 넣었다.
+        uint reloadDelay = nowWeapon.itemData.reloadDelay;
+        if (useKnife)
+        {
+            //총알이 바닥났다. 단검으로 플레이한다.
+            //공격딜레이는 0
+            reloadDelay = 0;
+        }
+
+        bool canFire = false;
+        if (reloadDelay <= reloadStack)
+        {
+            //발사가능
+            canFire = true;
+        }
+        else
+        {
+            //스택을 더채운다.
+            reloadStack++;
+        }
+
+        if (targetMonster != null)
+        {
+            if (canFire)
+            {
+                //몬스터를 발견했고 공격이 가능한 상태
+
+                reloadStack = 0; //장전스택(공격스택)을 0으로한다.
+
+                if (useKnife)
+                {
+                    //단검으로 공격
+                    character.CharacterFiip(spriteFiipX);
+                    character.animator.SetTrigger("attack");
+                    character.animator.SetBool("shotGun", nowShotGun);
+
+                    int totalDamage = 1;
+                    bool critical = false;
+
+                    yield return new WaitForSeconds(0.1f);
+
+                    targetMonster.Hit((uint)totalDamage, critical);
+
+                    yield return new WaitForSeconds(0.1f);
+                }
+                else
+                {
+                    float gameDis = Vector2.Distance(pos, targetMonster.pos);
+                    float duration = 0.075f * gameDis;
+
+                    Vector3 to = new Vector3(
+                          dic.x == 0 ? bulletSpawnPos.x : targetMonster.pos.x * CreateMap.tileSize,
+                          dic.y == 0 ? bulletSpawnPos.y : targetMonster.pos.y * CreateMap.tileSize, 0);
+
+                    to += new Vector3(
+                        dic.x == 0 ? Random.Range(-1, 1) : 0,
+                        dic.y == 0 ? Random.Range(-1, 1) : 0) * 0.2f;
+
+                    bulletMgr.FireBullet(bulletSpawnPos, to, duration);
+
+                    character.CharacterFiip(spriteFiipX);
+                    character.animator.SetTrigger("attack");
+                    character.animator.SetBool("shotGun", nowShotGun);
+
+                    if (nowShotGun)
+                        CameraVibrate.Vibrate(10, 0.1f, 0.15f);
+                    characterMgr.CostBullet();
+
+                    yield return new WaitForSeconds(duration);
+
+                    int totalDamage = characterMgr.GetTotalDamage();
+                    bool critical = characterMgr.CriticalProcess(ref totalDamage);
+
+                    targetMonster.Hit((uint)totalDamage, critical);
+
+                    float remainTime = Mathf.Max(0, CatGirl.aniTime - duration);
+                    yield return new WaitForSeconds(remainTime);
+                }
+            }
+            else
+            {
+                if (useKnife)
+                {
+                    //공격 불가능이다.
+                    //단검상태이므로 대기
+                    character.CharacterFiip(spriteFiipX);
+                    character.animator.SetTrigger("idle");
+                    yield return new WaitForSeconds(CatGirl.aniTime);
+                }
+                else
+                {
+                    //공격 불가능이다.
+                    //장전 애니메이션 실행
+                    character.CharacterFiip(spriteFiipX);
+                    character.animator.SetTrigger("reload");
+                    yield return new WaitForSeconds(CatGirl.aniTime);
+                }
+            }
+
+            StartCoroutine(monsterMgr.RunMonster());
+
+        }
+        else if (chestObj != null)
+        {
+            chestObj.RemoveChestObj();
+
+            yield return new WaitForSeconds(CatGirl.aniTime);
+        }
+        else if (jarObj != null)
+        {
+            //이동 방향으로 항아리가 존재한다.
+            //항아리를 부순다.
+
+            if (canFire)
+            {
+                reloadStack = 0;
+                if (useKnife)
+                {
+                    //단검으로 공격
+                    character.CharacterFiip(spriteFiipX);
+                    character.animator.SetTrigger("attack");
+                    character.animator.SetBool("shotGun", nowShotGun);
+
+                    yield return new WaitForSeconds(0.1f);
+
+                    jarObj.RemoveJarObj();
+
+                    yield return new WaitForSeconds(0.1f);
+                }
+                else
+                {
+                    float gameDis = Vector2.Distance(pos, jarObj.pos);
+                    float duration = 0.1f * gameDis;
+
+                    Vector3 to = new Vector3(
+                          dic.x == 0 ? bulletSpawnPos.x : jarObj.pos.x * CreateMap.tileSize
+                        , dic.y == 0 ? bulletSpawnPos.y : jarObj.pos.y * CreateMap.tileSize, 0);
+
+                    bulletMgr.FireBullet(bulletSpawnPos, to, duration);
+
+                    character.CharacterFiip(spriteFiipX);
+                    character.animator.SetTrigger("attack");
+                    character.animator.SetBool("shotGun", nowShotGun);
+
+                    if (nowShotGun)
+                        CameraVibrate.Vibrate(10, 0.1f, 0.15f);
+                    characterMgr.CostBullet();
+
+                    yield return new WaitForSeconds(duration);
+
+                    jarObj.RemoveJarObj();
+
+                    float remainTime = Mathf.Max(0, CatGirl.aniTime - duration);
+                    yield return new WaitForSeconds(remainTime);
+                }
+            }
+            else
+            {
+                if (useKnife)
+                {
+                    //공격 불가능이다.
+                    //단검상태이므로 대기
+                    character.CharacterFiip(spriteFiipX);
+                    character.animator.SetTrigger("idle");
+                    yield return new WaitForSeconds(CatGirl.aniTime);
+                }
+                else
+                {
+                    //공격 불가능이다.
+                    //장전 애니메이션 실행
+                    character.CharacterFiip(spriteFiipX);
+                    character.animator.SetTrigger("reload");
+                    yield return new WaitForSeconds(CatGirl.aniTime);
+                }
+            }
+
+            StartCoroutine(monsterMgr.RunMonster());
+        }
+        else if (CanMove(pos.x + dic.x, pos.y + dic.y))
+        {
+            //해당 방향으로 이동가능한지 검사한다.
+            //이동가능하면 이동한다.
+            pos.x += dic.x;
+            pos.y += dic.y;
+            character.CharacterFiip(spriteFiipX);
+            StartCoroutine(monsterMgr.RunMonster());
+            character.animator.SetTrigger("run");
+            Vector3 to = character.transform.position + new Vector3(dic.x * CreateMap.tileSize, dic.y * CreateMap.tileSize, 0);
+            yield return Action2D.MoveTo(character.transform, to, CatGirl.moveDuration);
+            character.animator.SetTrigger("idle");
+        }
+        else
+        {
+            character.CharacterFiip(spriteFiipX);
+            yield return monsterMgr.RunMonster();
+
+            if (frontShowDic != showDic)
+            {
+                character.animator.SetTrigger("idle");
+            }
+        }
+
+        //트랩 작동
+        trapMgr.RunTrap();
+
+        //해당 위치의 블록을 활성화한다.
+        mapManager.ActAreaTile(pos.x, pos.y);
+
+        //해당 위치의 토치를 활성화시킨다.
+        torchMgr.ActAreaTorch(pos.x, pos.y);
+
+        //이동 위치에 아이템이 존재하는지 확인한다.
+        ItemObj itemObj = itemMgr.GetItem(pos.x, pos.y);
+        if (itemObj != null)
+        {
+            //존재하면 아이템을 얻는다.
+            itemObj.GetItem();
+        }
+
+        //미니맵 갱신
+        totalUI.UpdateMiniMap(new Vector2Int(pos.x, pos.y), 4);
+
+        //수호의 링을 사용했다면
+        //이펙트와 함께 수호의 링을 없애준다.
+        characterMgr.UseGuardianRing();
+
+        characterMgr.LevelUpCheck(); //레벨업이 가능한지 검사.
+
+        ButtonInput = ButtonInput.None;
+
+        if (mapManager.GetEndPos() == pos)
+        {
+            //탈출구 발견
+            //다음 씬으로 이동한다.
+
+            totalUI.ActKeyPad(false);
+            yield return StageManager.LoadNextMap();
+            yield break;
+        }
+        else if (mapManager.GetGunBenchPos() == pos && GameManager.gunBenchAct)
+        {
+            //총기 작업대 발견
+            //총기 작업대 UI실행
+            totalUI.ActGunBench(true);
+        }
+        else if (mapManager.GetShopPos() == pos)
+        {
+            //상점 발견
+            //상점 UI실행
+            totalUI.ActShop(true);
+        }
+
+        StartCoroutine(runCatEvent());
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : pX, pY로 이동할 수 있는지 확인한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    private bool CanMove(Vector2Int pPos)
+    {
+        return CanMove(pPos.x, pPos.y);
+    }
+    private bool CanMove(int pX, int pY)
+    {
+        MapManager mapManager = MapManager.instance;
+
+        if (mapManager.IsWall(pX, pY))
+        {
+            return false;
+        }
+        if (monsterMgr.IsMonster(pX, pY))
+        {
+            return false;
+        }
+        if (jarMgr.IsJar(pX, pY))
+        {
+            return false;
+        }
+        if (chestMgr.IsChest(pX, pY))
+        {
+            return false;
+        }
+        if (mapManager.CanMoveGunBench(pos, new Vector2Int(pX, pY)) == false)
+        {
+            return false;
+        }
+        if (mapManager.CanMoveShop(pos, new Vector2Int(pX, pY)) == false)
+        {
+            return false;
+        }
+        if (mapManager.CantMovePos(new Vector2Int(pX, pY)))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 플레이어의 위치를 지정해준다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void SetPos(int pX, int pY)
+    {
+        if (character == null)
+            return;
+        pos.x = pX;
+        pos.y = pY;
+        character.transform.position = new Vector3(pos.x * CreateMap.tileSize, pos.y * CreateMap.tileSize, 0);
+
+        //미니맵 갱신
+        TotalUI totalUI = TotalUI.instance;
+        totalUI.UpdateMiniMap(new Vector2Int(pos.x, pos.y), 4);
+
+        //해당 위치의 블록을 활성화한다.
+        MapManager.instance.ActAreaTile(pos.x, pos.y);
+
+        torchMgr.ActAreaTorch(pos.x, pos.y);
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -231,7 +696,7 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
         {
             return Vector2Int.zero;
         }
-        return character.GetPos();
+        return pos;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -244,16 +709,6 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
             return Vector3.zero;
         }
         return character.transform.position;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    /// : 입력명령 버튼
-    ////////////////////////////////////////////////////////////////////////////////
-    public void CharactorInputButton(ButtonInput pButtonInput)
-    {
-        if (character == null)
-            return;
-        character.buttonInput = pButtonInput;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -488,34 +943,6 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
             NowBullet = MaxBullet;
         TotalUI totalUI = TotalUI.instance;
         totalUI.UpdatePlayerBullet();
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    /// : Update
-    ////////////////////////////////////////////////////////////////////////////////
-    private void Update()
-    {
-        if (KeyPad.actBtn)
-        {
-            if (Input.GetKey(KeyCode.LeftArrow))
-                character.buttonInput = ButtonInput.Left;
-            else if (Input.GetKey(KeyCode.RightArrow))
-                character.buttonInput = ButtonInput.Right;
-            else if (Input.GetKey(KeyCode.UpArrow))
-                character.buttonInput = ButtonInput.Up;
-            else if (Input.GetKey(KeyCode.DownArrow))
-                character.buttonInput = ButtonInput.Down;
-        }
-
-        if (Input.GetKeyUp(KeyCode.LeftArrow))
-            character.buttonInput = ButtonInput.None;
-        else if (Input.GetKeyUp(KeyCode.RightArrow))
-            character.buttonInput = ButtonInput.None;
-        else if (Input.GetKeyUp(KeyCode.UpArrow))
-            character.buttonInput = ButtonInput.None;
-        else if (Input.GetKeyUp(KeyCode.DownArrow))
-            character.buttonInput = ButtonInput.None;
-
     }
 
     ////////////////////////////////////////////////////////////////////////////////

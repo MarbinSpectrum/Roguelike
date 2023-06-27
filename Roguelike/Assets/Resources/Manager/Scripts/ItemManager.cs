@@ -111,7 +111,7 @@ public class ItemManager : DontDestroySingleton<ItemManager>
 
         foreach(Vector2Int pos in posList)
         {
-            Destroy(items[pos]);
+            Destroy(items[pos].gameObject);
             items.Remove(new Vector2Int(pos.x, pos.y));
         }
     }

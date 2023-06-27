@@ -15,6 +15,7 @@ MonoBehaviour:
   item: 500
   itemObj: {fileID: 6730622215486405463, guid: ec217d2dd04872e4ab023e7aef688270, type: 3}
   itemSprite_UI: {fileID: 21300000, guid: 07a136bca3bee2046bc36346d2808652, type: 3}
+  price: 0
   stockItem: 0
   valueMinMax: {x: 0, y: 0}
   itemStatDatas:
@@ -36,6 +37,6 @@ MonoBehaviour:
   frontSprite: {fileID: -1649256847451581581, guid: 75024e77b3696a349b15d085551cdd80, type: 3}
   sideSprite: {fileID: 6805231783222318497, guid: 75024e77b3696a349b15d085551cdd80, type: 3}
   range: 3
-  reloadDelay: 5
+  reloadDelay: 2
   nameKey: MP133_NAME
   explainKey: NORMALGUN_EXPLAIN
