@@ -45,11 +45,7 @@ public class Tentacle : MonsterObj
             {
                 //플레이어가 인식범위까지 들어왔다.
                 //잠에서 깨어난다.
-                sleep = false;
-                if(sleepEffect != null)
-                    sleepEffect.SetActive(false);
-                if (awakeEffect != null)
-                    awakeEffect.SetActive(true);
+                AwakeMonster();
             }
             return;
         }

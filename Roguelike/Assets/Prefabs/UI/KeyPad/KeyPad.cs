@@ -36,6 +36,7 @@ public class KeyPad : Mgr
             StopCoroutine(InputUpdateCor);
             InputUpdateCor = null;
         }
+        keyPadPressButton = pButtonInput;
         if (keyPadPressButton == ButtonInput.None)
             return;
         InputUpdateCor = InputUpdate();

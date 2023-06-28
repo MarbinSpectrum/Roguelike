@@ -80,6 +80,8 @@ public abstract class MonsterObj : Mgr
             sleepEffect.SetActive(sleep);
         if (awakeEffect != null)
             awakeEffect.SetActive(false);
+
+        monsterSpr.material = baseMaterial;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -124,11 +126,7 @@ public abstract class MonsterObj : Mgr
             {
                 //플레이어가 인식범위까지 들어왔다.
                 //잠에서 깨어난다.
-                sleep = false;
-                if (sleepEffect != null)
-                    sleepEffect.SetActive(false);
-                if (awakeEffect != null)
-                    awakeEffect.SetActive(true);
+                AwakeMonster();
             }
             return;
         }
@@ -209,6 +207,21 @@ public abstract class MonsterObj : Mgr
         StartCoroutine(MyLib.Action2D.MoveTo(transform, toPos, 0.2f));
     }
 
+    public virtual void AwakeMonster()
+    {
+        if (sleep == false)
+        {
+            //깨어난다는건 자는 상태여야지만 성립하니까..
+            return;
+        }
+
+        sleep = false;
+        if (sleepEffect != null)
+            sleepEffect.SetActive(false);
+        if (awakeEffect != null)
+            awakeEffect.SetActive(true);
+    }
+
     public virtual void Hit(uint pDamage, bool pCritical)
     {
         CharacterManager characterManager = CharacterManager.instance;
@@ -225,11 +238,7 @@ public abstract class MonsterObj : Mgr
 
         if(sleep)
         {
-            sleep = false;
-            if (sleepEffect != null)
-                sleepEffect.SetActive(false);
-            if (awakeEffect != null)
-                awakeEffect.SetActive(true);
+            AwakeMonster();
         }
 
         if(nowShotGun)

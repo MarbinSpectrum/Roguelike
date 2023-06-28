@@ -20,8 +20,8 @@ public class MonsterManager : DontDestroySingleton<MonsterManager>
     private List<MonsterData> monsterDataList = new List<MonsterData>();
     [SerializeField]
     private int monsterActRange = 10;
-
     private bool initData = false;
+
     ////////////////////////////////////////////////////////////////////////////////
     /// : 몬스터 정보를 초기화한다.
     ////////////////////////////////////////////////////////////////////////////////
@@ -57,6 +57,7 @@ public class MonsterManager : DontDestroySingleton<MonsterManager>
     ////////////////////////////////////////////////////////////////////////////////
     /// : 해당위치로 이동한다고 등록한다.
     ////////////////////////////////////////////////////////////////////////////////
+    public void AddMoveToPos(Vector2Int pPos) => AddMoveToPos(pPos.x, pPos.y);
     public void AddMoveToPos(int pX, int pY)
     {
         moveToPos.Add(new Vector2Int(pX, pY));
@@ -65,6 +66,7 @@ public class MonsterManager : DontDestroySingleton<MonsterManager>
     ////////////////////////////////////////////////////////////////////////////////
     /// : 해당위치가 이동하기로한 위치인지 확인한다.
     ////////////////////////////////////////////////////////////////////////////////
+    public bool IsMoveToPos(Vector2Int pPos) => IsMoveToPos(pPos.x, pPos.y);
     public bool IsMoveToPos(int pX, int pY)
     {
         if (moveToPos.Contains(new Vector2Int(pX, pY)))
@@ -75,13 +77,32 @@ public class MonsterManager : DontDestroySingleton<MonsterManager>
     ////////////////////////////////////////////////////////////////////////////////
     /// : 해당 위치에 몬스터가 있는지 확인한다.
     ////////////////////////////////////////////////////////////////////////////////
-    public MonsterObj IsMonster(int pX,int pY)
+
+    public MonsterObj IsMonster(Vector2Int pPos) => IsMonster(pPos.x, pPos.y);
+    public MonsterObj IsMonster(int pX, int pY)
     {
         foreach(MonsterObj monsterObj in fieldMonster)
             if (monsterObj.alive)
                 if (monsterObj.pos.x == pX && monsterObj.pos.y == pY)
                     return monsterObj;
         return null;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /// : 해당 위치에 몬스터가 있는지 확인한다.
+    ////////////////////////////////////////////////////////////////////////////////
+    public void AwakeMonster(Vector2Int pPos, int pDis) => AwakeMonster(pPos.x, pPos.y, pDis);
+
+    public void AwakeMonster(int pX,int pY,int pDis)
+    {
+        foreach (MonsterObj mObj in fieldMonster)
+        {
+            float distance = Mathf.Abs(pX - mObj.pos.x) + Mathf.Abs(pY - mObj.pos.y);
+            if(pDis > distance)
+            {
+                mObj.AwakeMonster();
+            }
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -251,7 +272,6 @@ public class MonsterManager : DontDestroySingleton<MonsterManager>
                 //몬스터 활성화 범위 밖이다.
                 continue;
             }
-
             runMonsters.Add(monsterObj);
         }
 

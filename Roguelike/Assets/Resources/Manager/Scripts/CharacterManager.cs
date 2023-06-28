@@ -468,7 +468,6 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
             }
 
             StartCoroutine(monsterMgr.RunMonster());
-
         }
         else if (chestObj != null)
         {
@@ -480,7 +479,6 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
         {
             //이동 방향으로 항아리가 존재한다.
             //항아리를 부순다.
-
             if (canFire)
             {
                 reloadStack = 0;
@@ -489,7 +487,6 @@ public class CharacterManager : DontDestroySingleton<CharacterManager>
                     //단검으로 공격
                     character.CharacterFiip(spriteFiipX);
                     character.animator.SetTrigger("attack");
-                    character.animator.SetBool("shotGun", nowShotGun);
 
                     yield return new WaitForSeconds(0.1f);
 

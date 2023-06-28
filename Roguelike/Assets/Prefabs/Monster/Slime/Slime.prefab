@@ -303,7 +303,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -347,6 +347,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e933998e7745c9c468bbac1e07194a94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   hp: 3
   damage: 1
   attackDelay: 0
@@ -355,7 +364,7 @@ MonoBehaviour:
   moveStack: 0
   range: 5
   exp: 0
-  monster: 0
+  monster: 1000
   pos: {x: 0, y: 0}
   alive: 1
   sleep: 1
@@ -365,3 +374,5 @@ MonoBehaviour:
   hitMaterial: {fileID: 0}
   hpBarImg: {fileID: 3762952860091131051}
   hpBarBack: {fileID: 5652532486424557361}
+  sleepEffect: {fileID: 0}
+  awakeEffect: {fileID: 0}
